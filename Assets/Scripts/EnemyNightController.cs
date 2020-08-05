@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour
+public class EnemyNightController : MonoBehaviour
 {
     [SerializeField] Transform player;
-    [SerializeField] float speed = 0.25f;
-    [SerializeField] float health = 100f;
-    [SerializeField] float damageToPlayer = 10f;
+    [SerializeField] float speed = 0.35f;
+    [SerializeField] float health = 120f;
+    [SerializeField] float damageToPlayer = 15f;
     [SerializeField] float detectionDistance = 10f;
-    [SerializeField] float fieldOfVision = 120f;
-    [SerializeField] float attachRange = 0.9f;
-    [SerializeField] float chaseTime = 10f;
+    [SerializeField] float fieldOfVision = 360f;
+    [SerializeField] float attachRange = 1f;
+    [SerializeField] float chaseTime = 20f;
 
     private Animator anim;
     private bool isAlive = true;
@@ -39,6 +39,17 @@ public class EnemyController : MonoBehaviour
 
             FindPlayer(distFromPlayer, angle);
 
+            //attack when in range
+            if(distFromPlayer <= attachRange)
+            {
+                    
+                anim.SetBool("isAttacking", true);                
+            }
+            else
+            {
+                anim.SetBool("isAttacking", false);
+            }
+
             if (playerDetected)
             {
                 //disregard height differences
@@ -47,16 +58,6 @@ public class EnemyController : MonoBehaviour
                 //rotate to look at player
                 this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), 0.1f);
 
-                //attack when in range
-                if(distFromPlayer <= attachRange)
-                {
-                    
-                    anim.SetBool("isAttacking", true);                
-                }
-                else
-                {
-                    anim.SetBool("isAttacking", false);
-                }
 
                 //move closer to attack when detected player
                 if (direction.magnitude > attachRange)
