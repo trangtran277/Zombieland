@@ -8,7 +8,11 @@ public class Resource : PickUpable
     public override void Use()
     {
         base.Use();
-        Debug.Log("You cannot consume resources!");
+        if (!string.IsNullOrEmpty(resourceItem.description))
+        {
+            Debug.Log(resourceItem.description);
+        }
+        
     }
 
     private void Start()
