@@ -4,13 +4,20 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    public Transform player;
+    [SerializeField] Transform player;
+    [SerializeField] float speed = 0.25f;
+    [SerializeField] float health = 100f;
+    [SerializeField] float damageToPlayer = 10f;
+    [SerializeField] float detectionDistance = 10f;
+    [SerializeField] float fieldOfVision = 120f;
+    [SerializeField] float alwaysDectectCircle = 2f;
+    [SerializeField] float attachRange = 0.9f;
+    [SerializeField] float chaseTime = 10f;
+
     private Animator anim;
-    public float speed = 1;
-    public float detectionDistance = 10f;
-    public float fieldOfVision = 120f;
-    public float alwaysDectectCircle = 2f;
-    public float attachRange = 0.9f;
+    private bool isAlive = true;
+    private bool playerDetected = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,40 +27,67 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 direction = player.position - this.transform.position;
-        float angle = Vector3.Angle(direction, this.transform.forward);
-        float distFromPlayer = Vector3.Distance(player.position, this.transform.position);
-
-        if (distFromPlayer < detectionDistance && (angle < fieldOfVision || distFromPlayer < alwaysDectectCircle))
+        if(health <= 0)
         {
-            direction.y = 0;
+            isAlive = false;
+        }
 
-            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), 0.1f);
+        if(isAlive)
+        {       
+            Vector3 direction = player.position - this.transform.position;
+            float angle = Vector3.Angle(direction, this.transform.forward);
+            float distFromPlayer = Vector3.Distance(player.position, this.transform.position);
 
-            if(distFromPlayer <= attachRange)
+            FindPlayer(distFromPlayer, angle);
+
+            if (playerDetected)
             {
-                anim.SetBool("isAttacking", true);                
+                //disregard height differences
+                direction.y = 0;
+
+                //rotate to look at player
+                this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), 0.1f);
+
+                //attack when in range
+                if(distFromPlayer <= attachRange)
+                {
+                    
+                    anim.SetBool("isAttacking", true);                
+                }
+                else
+                {
+                    anim.SetBool("isAttacking", false);
+                }
+
+                //move closer to attack when detected player
+                if (direction.magnitude > attachRange)
+                {
+                    transform.position = Vector3.Lerp(transform.position, player.position, speed * Time.deltaTime);
+                    anim.SetBool("isWalking", true);
+                }
+                else
+                {
+                    anim.SetBool("isWalking", false);
+                }
             }
             else
             {
-            anim.SetBool("isAttacking", false);
-            }
-
-            if (direction.magnitude > attachRange)
-            {
-                //this.transform.Translate(0, 0, 0.5f);
-                transform.position = Vector3.Lerp(transform.position, player.position, speed * Time.deltaTime);
-                anim.SetBool("isWalking", true);
-            }
-            else
-            {
-                //anim.SetBool("isAttacking", true);
                 anim.SetBool("isWalking", false);
             }
-        }
-        else
+        }        
+    }
+
+    private void FindPlayer(float distFromPlayer, float angle)
+    {
+        if (!playerDetected && distFromPlayer < detectionDistance && angle < fieldOfVision)
         {
-            anim.SetBool("isWalking", false);
+            playerDetected = true;
+            Invoke("StopChasing", chaseTime);
         }
+    }
+
+    private void StopChasing()
+    {
+        playerDetected = false;
     }
 }
