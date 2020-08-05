@@ -10,7 +10,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 	public class ThirdPersonUserControl : MonoBehaviour
 	{
 		public GameObject interactionCircle;
-		public float interactionRadius = 0.5f;
+		public float interactionRadius = 0.7f;
 		private ThirdPersonCharacter m_Character; // A reference to the ThirdPersonCharacter on the object
 		private Transform m_Cam;                  // A reference to the main camera in the scenes transform
 		private Vector3 m_CamForward;             // The current forward direction of the camera
@@ -35,6 +35,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 			// get the third person character ( this should never be null due to require component )
 			m_Character = GetComponent<ThirdPersonCharacter>();
+			
 		}
 
 
@@ -100,7 +101,14 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				Interactable interactable = hit.GetComponent<Interactable>();
 				if (interactable != null)
 				{
-					interactionCircle.transform.position = new Vector3(hit.transform.position.x, 0.005f, hit.transform.position.z);
+					Debug.Log(interactable.name);
+					float objectHeight = 0f;
+					MeshFilter meshFilter = hit.GetComponent<MeshFilter>();
+					if(meshFilter != null)
+                    {
+						objectHeight = meshFilter.sharedMesh.bounds.size.y * hit.transform.localScale.y;
+                    }
+					interactionCircle.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y - objectHeight/2 + 0.005f, hit.transform.position.z);
 					interactionCircle.SetActive(true);
 					return interactable;
 				}

@@ -27,6 +27,7 @@ public class Inventory : MonoBehaviour
     public OnItemChanged onItemChangedCallback;
     public int space = 24;
     public List<PickUpable> items = new List<PickUpable>();
+
     public bool AddItem(PickUpable pickUpable)
     {
         if(pickUpable is Equipment)
