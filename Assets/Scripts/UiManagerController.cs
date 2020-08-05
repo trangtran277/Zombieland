@@ -8,7 +8,7 @@ public class UiManagerController : MonoBehaviour
      // Start is called before the first frame update
      public Button bag, attack, run, pick;
      public GameObject human;
-
+     private InventoryUI inventoryUI;
      private Animator ator;
      void Start()
      {
@@ -27,7 +27,7 @@ public class UiManagerController : MonoBehaviour
      }
      public void BagClick()
      {
-
+          //inventoryUI.ToggleInventory();
      }
      public void PickClick()
      {
@@ -35,6 +35,6 @@ public class UiManagerController : MonoBehaviour
      }
      public void AttackClick()
      {
-          
+
      }
 }
