@@ -7,6 +7,12 @@ public class TimerScript : MonoBehaviour
 {
     [SerializeField] Text timerText;
     [SerializeField] float startTime = 10f;
+    [SerializeField] Transform player;
+    [SerializeField] GameObject enemy;
+    [SerializeField] float spawnRange = 20f;
+    [SerializeField] float spawnNumber = 5f;
+    private bool hasSpawned = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,7 +33,27 @@ public class TimerScript : MonoBehaviour
         }
         else
         {
+            if(!hasSpawned)
+            {
+                Spawn();
+                hasSpawned = true;
+            }
             timerText.GetComponent<Text>().color = Color.red;
         }
+    }
+    public void Spawn()
+    {
+        for (int i = 0; i < spawnNumber; i++)
+        {
+            GameObject newEnemy = Instantiate(enemy, RandomizePosition(), Quaternion.identity);
+            newEnemy.GetComponent<EnemyNightController>().player = player.transform;
+        }
+    }
+
+    private Vector3 RandomizePosition()
+    {
+        float x = player.position.x + Random.Range(-spawnRange / 2, spawnRange / 2);
+        float z = player.position.z + Random.Range(-spawnRange / 2, spawnRange / 2);
+        return new Vector3(x, 0f, z);
     }
 }
