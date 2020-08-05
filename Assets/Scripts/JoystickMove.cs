@@ -17,6 +17,6 @@ public class JoystickMove : MonoBehaviour
      }
      void Update()
     {
-          Debug.Log(joystick.Vertical);
+        
      }
 }
