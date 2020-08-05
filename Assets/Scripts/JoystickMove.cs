@@ -5,7 +5,7 @@ using UnityEngine;
 public class JoystickMove : MonoBehaviour
 {
      // Start is called before the first frame update
-     public Joystick joystick;
+     public FixedJoystick joystick;
      private PlayMakerFSM playMakerFSM;
      void Start()
      {
