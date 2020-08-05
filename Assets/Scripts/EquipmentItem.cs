@@ -7,6 +7,7 @@ public class EquipmentItem : ScriptableObject
     public Sprite icon = null;
     public int armor = 0;
     public int damage = 0;
+    public float range = 0f;
     public EquipmentSlot equipmentSlot;
 }
 
