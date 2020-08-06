@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] Transform player;
-    [SerializeField] float speed = 0.25f;
+    [SerializeField] float speed = 0.2f;
     [SerializeField] float health = 100f;
     [SerializeField] float damageToPlayer = 10f;
     [SerializeField] float detectionDistance = 10f;
@@ -16,11 +17,13 @@ public class EnemyController : MonoBehaviour
     private Animator anim;
     private bool isAlive = true;
     private bool playerDetected = false;
+    private NavMeshAgent agent;
 
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
+        agent = GetComponent<NavMeshAgent>();
     }
 
     // Update is called once per frame
@@ -41,14 +44,11 @@ public class EnemyController : MonoBehaviour
 
             if (playerDetected)
             {
-                //disregard height differences
-                direction.y = 0;
-
-                //rotate to look at player
-                this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), 0.1f);
+                agent.destination = player.position;
+                anim.SetBool("isWalking", true);
 
                 //attack when in range
-                if(distFromPlayer <= attachRange)
+                if (distFromPlayer <= attachRange)
                 {
                     
                     anim.SetBool("isAttacking", true);                
@@ -57,20 +57,10 @@ public class EnemyController : MonoBehaviour
                 {
                     anim.SetBool("isAttacking", false);
                 }
-
-                //move closer to attack when detected player
-                if (direction.magnitude > attachRange)
-                {
-                    transform.position = Vector3.Lerp(transform.position, player.position, speed * Time.deltaTime);
-                    anim.SetBool("isWalking", true);
-                }
-                else
-                {
-                    anim.SetBool("isWalking", false);
-                }
             }
             else
             {
+                agent.velocity = Vector3.zero;
                 anim.SetBool("isWalking", false);
             }
         }        

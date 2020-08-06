@@ -2804,7 +2804,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5681765352776491346}
   - component: {fileID: 2329395362232126504}
-  - component: {fileID: 5524832281048861518}
+  - component: {fileID: -6177918353443294626}
+  - component: {fileID: 474249386}
   m_Layer: 0
   m_Name: EnemyMission
   m_TagString: Untagged
@@ -2819,7 +2820,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8683774219026928449}
-  m_LocalRotation: {x: -0, y: -0.514005, z: -0, w: 0.8577872}
+  m_LocalRotation: {x: 0, y: -0.51400536, z: 0, w: 0.857787}
   m_LocalPosition: {x: -7.501663, y: 0, z: 8.279559}
   m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
   m_Children:
@@ -2860,7 +2861,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &5524832281048861518
+--- !u!114 &-6177918353443294626
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2869,17 +2870,39 @@ MonoBehaviour:
   m_GameObject: {fileID: 8683774219026928449}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6096d9c3d6f46f8478ff227041494c09, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c1f7e7119d1f51459b4e6236daf89dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   speed: 0.25
   health: 100
-  damageToPlayer: 15
+  damageToPlayer: 10
   detectionDistance: 10
-  fieldOfVision: 240
-  attachRange: 1
-  chaseTime: 4
+  fieldOfVision: 120
+  attachRange: 0.9
+  chaseTime: 10
+--- !u!195 &474249386
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8683774219026928449}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 1.2
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &8844771802629135955
 GameObject:
   m_ObjectHideFlags: 0
