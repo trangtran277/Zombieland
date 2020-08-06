@@ -2,20 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityStandardAssets.Characters.ThirdPerson;
 
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] public Transform player;
-    [SerializeField] float speed = 0.1f;
-    [SerializeField] public float health = 100;
-    [SerializeField] int damageToPlayer = 5;
+    [SerializeField] float speed = 0.2f;
+    [SerializeField] public float health = 100f;
+    [SerializeField] float damageToPlayer = 10f;
     [SerializeField] float detectionDistance = 10f;
     [SerializeField] float fieldOfVision = 120f;
     [SerializeField] float attachRange = 0.9f;
     [SerializeField] float chaseTime = 10f;
-    public ThirdPersonCharacter thirdPersonCharacter;
 
+    
     private Animator anim;
     private bool isAlive = true;
     private bool playerDetected = false;
@@ -29,7 +28,6 @@ public class EnemyController : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        thirdPersonCharacter = GameObject.FindGameObjectWithTag("Player").GetComponent<ThirdPersonCharacter>();
         anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
     }
@@ -59,8 +57,7 @@ public class EnemyController : MonoBehaviour
                 if (distFromPlayer <= attachRange)
                 {
                     anim.SetBool("isWalking", false);
-                    anim.SetBool("isAttacking", true);
-                    thirdPersonCharacter.health -= damageToPlayer;
+                    anim.SetBool("isAttacking", true);                
                 }
                 else
                 {
