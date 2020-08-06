@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityStandardAssets.Characters.ThirdPerson;
 
 public class UiManagerController : MonoBehaviour
 {
@@ -9,10 +10,17 @@ public class UiManagerController : MonoBehaviour
      public Button bag, attack, run, pick;
 
      //private InventoryUI inventoryUI;
+     public InventoryUI inventoryUI;
+     public ThirdPersonUserControl userControl;
      private Animator ator;
+     private EquipmentManager equipmentManager;
      void Start()
      {
         
+        equipmentManager = EquipmentManager.instance;
+        bag.onClick.AddListener(BagClick);
+        attack.onClick.AddListener(AttackClick);
+        pick.onClick.AddListener(PickClick);
      }
 
      // Update is called once per frame
@@ -27,13 +35,33 @@ public class UiManagerController : MonoBehaviour
      public void BagClick()
      {
         
+        Debug.Log("bag click");
+        inventoryUI.ToggleInventory();
      }
      public void PickClick()
      {
-
-     }
+        Interactable itemFound = userControl.CheckItemAround();
+        if (itemFound != null)
+        {
+                //userControl.interactionCircle.SetActive(false);
+                itemFound.Interact();
+        }
+    }
      public void AttackClick()
      {
-
+        //Debug.Log("Attacked");
+        //play attack animation here
+        int damage = userControl.m_Character.baseDamge;
+        Equipment weapon = EquipmentManager.instance.currentEquipment[(int)EquipmentSlot.Weapon];
+        if (weapon != null)
+        {
+            damage += weapon.equipmentItem.damage;
+        }
+        EnemyController enemy = userControl.CheckEnemyAround();
+        if(enemy != null)
+        {
+            enemy.health -= damage;
+        }
+        
      }
 }

@@ -16,4 +16,5 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 5dc59d48a312429448f2849e9544c9a5, type: 3}
   armor: 0
   damage: 10
+  range: 1
   equipmentSlot: 3
