@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyNightController : MonoBehaviour
 {
-    [SerializeField] Transform player;
+    [SerializeField] public Transform player;
     [SerializeField] float speed = 0.35f;
     [SerializeField] float health = 120f;
     [SerializeField] float damageToPlayer = 15f;
