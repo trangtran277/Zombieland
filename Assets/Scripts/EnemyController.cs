@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityStandardAssets.Characters.ThirdPerson;
 
 public class EnemyController : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] float fieldOfVision = 120f;
     [SerializeField] float attachRange = 0.9f;
     [SerializeField] float chaseTime = 10f;
-
+    public ThirdPersonCharacter thirdPersonCharacter;
     
     private Animator anim;
     private bool isAlive = true;
@@ -28,6 +29,7 @@ public class EnemyController : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        thirdPersonCharacter = GameObject.FindGameObjectWithTag("Player").GetComponent<ThirdPersonCharacter>();
         anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
     }
@@ -48,7 +50,7 @@ public class EnemyController : MonoBehaviour
 
             FindPlayer(distFromPlayer, angle);
 
-            if (playerDetected)
+            if (playerDetected && thirdPersonCharacter.health > 0)
             {
                 agent.destination = player.position;
                 anim.SetBool("isWalking", true);
@@ -57,7 +59,8 @@ public class EnemyController : MonoBehaviour
                 if (distFromPlayer <= attachRange)
                 {
                     anim.SetBool("isWalking", false);
-                    anim.SetBool("isAttacking", true);                
+                    anim.SetBool("isAttacking", true);
+                    Invoke("InflictDamageOnPlayer", 1.5f);
                 }
                 else
                 {
@@ -67,6 +70,7 @@ public class EnemyController : MonoBehaviour
             else
             {
                 agent.velocity = Vector3.zero;
+                anim.SetBool("isAttacking", false);
                 anim.SetBool("isWalking", false);
             }
         }        
@@ -84,5 +88,10 @@ public class EnemyController : MonoBehaviour
     private void StopChasing()
     {
         playerDetected = false;
+    }
+
+    private void InflictDamageOnPlayer()
+    {
+        thirdPersonCharacter.health -= damageToPlayer;
     }
 }
