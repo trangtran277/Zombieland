@@ -40,6 +40,8 @@ public class EnemyController : MonoBehaviour
         if(health <= 0)
         {
             isAlive = false;
+            anim.SetTrigger("isDead");
+            Invoke("DestroyEnemy", 3f);
         }
 
         if(isAlive)
@@ -93,5 +95,10 @@ public class EnemyController : MonoBehaviour
     private void InflictDamageOnPlayer()
     {
         thirdPersonCharacter.health -= damageToPlayer;
+    }
+
+    private void DestroyEnemy()
+    {
+        Destroy(this);
     }
 }
