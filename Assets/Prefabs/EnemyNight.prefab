@@ -1622,6 +1622,7 @@ GameObject:
   - component: {fileID: 1461345138359716342}
   - component: {fileID: -2097647648335560341}
   - component: {fileID: 81566530}
+  - component: {fileID: 279946319}
   m_Layer: 0
   m_Name: EnemyNight
   m_TagString: Untagged
@@ -1697,6 +1698,7 @@ MonoBehaviour:
   fieldOfVision: 120
   attachRange: 1
   chaseTime: 10
+  thirdPersonCharacter: {fileID: 0}
 --- !u!195 &81566530
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1719,6 +1721,19 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!65 &279946319
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5518853138295985823}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 2, z: 1}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &5668589386342390669
 GameObject:
   m_ObjectHideFlags: 0
