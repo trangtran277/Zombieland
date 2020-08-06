@@ -1330,10 +1330,11 @@ MonoBehaviour:
   speed: 0.1
   health: 100
   damageToPlayer: 10
-  detectionDistance: 10
-  fieldOfVision: 120
+  detectionDistance: 8
+  fieldOfVision: 100
   attachRange: 1
   chaseTime: 10
+  thirdPersonCharacter: {fileID: 0}
 --- !u!195 &1624508489
 NavMeshAgent:
   m_ObjectHideFlags: 0

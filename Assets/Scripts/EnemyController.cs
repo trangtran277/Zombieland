@@ -20,6 +20,7 @@ public class EnemyController : MonoBehaviour
     private bool isAlive = true;
     private bool playerDetected = false;
     private NavMeshAgent agent;
+    private float timeToNextAttack;
 
     private void Awake()
     {
@@ -32,6 +33,7 @@ public class EnemyController : MonoBehaviour
         thirdPersonCharacter = GameObject.FindGameObjectWithTag("Player").GetComponent<ThirdPersonCharacter>();
         anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
+        timeToNextAttack = Time.time;
     }
 
     // Update is called once per frame
@@ -41,7 +43,8 @@ public class EnemyController : MonoBehaviour
         {
             isAlive = false;
             anim.SetTrigger("isDead");
-            Invoke("DestroyEnemy", 3f);
+            Invoke("DestroyEnemy", 1.5f);
+            //DestroyEnemy();
         }
 
         if(isAlive)
@@ -62,7 +65,14 @@ public class EnemyController : MonoBehaviour
                 {
                     anim.SetBool("isWalking", false);
                     anim.SetBool("isAttacking", true);
-                    Invoke("InflictDamageOnPlayer", 1.5f);
+                    if(Time.time > timeToNextAttack)
+                    {
+                        timeToNextAttack = Time.time + 1.5f;
+                        thirdPersonCharacter.health -= damageToPlayer;
+                        
+                    }
+                    //Invoke("InflictDamageOnPlayer", 1.5f);
+                    //thirdPersonCharacter.health -= damageToPlayer;
                 }
                 else
                 {
@@ -94,11 +104,14 @@ public class EnemyController : MonoBehaviour
 
     private void InflictDamageOnPlayer()
     {
+        Debug.Log("Minus health");
         thirdPersonCharacter.health -= damageToPlayer;
     }
 
     private void DestroyEnemy()
     {
-        Destroy(this);
+        Destroy(gameObject);
     }
+
+   
 }

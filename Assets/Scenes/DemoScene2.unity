@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1959216544}
-  m_IndirectSpecularColor: {r: 0.40019462, g: 0.47998756, b: 0.59533066, a: 1}
+  m_IndirectSpecularColor: {r: 0.4001946, g: 0.47998714, b: 0.5953306, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &4
 LightmapSettings:
@@ -57545,6 +57545,10 @@ PrefabInstance:
       propertyPath: hearbar
       value: 
       objectReference: {fileID: 1294318580}
+    - target: {fileID: 1790567687, guid: 7737647c22c1fc64a88d5cd030c352ce, type: 3}
+      propertyPath: healthBar
+      value: 
+      objectReference: {fileID: 1294318582}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7737647c22c1fc64a88d5cd030c352ce, type: 3}
 --- !u!4 &1790567688 stripped

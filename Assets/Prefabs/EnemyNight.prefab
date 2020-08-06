@@ -1693,9 +1693,9 @@ MonoBehaviour:
   player: {fileID: 0}
   speed: 0.25
   health: 100
-  damageToPlayer: 10
-  detectionDistance: 10
-  fieldOfVision: 120
+  damageToPlayer: 20
+  detectionDistance: 20
+  fieldOfVision: 180
   attachRange: 1
   chaseTime: 10
   thirdPersonCharacter: {fileID: 0}
@@ -1729,7 +1729,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5518853138295985823}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 2, z: 1}
