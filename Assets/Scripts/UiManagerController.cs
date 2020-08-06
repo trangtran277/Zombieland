@@ -7,12 +7,12 @@ public class UiManagerController : MonoBehaviour
 {
      // Start is called before the first frame update
      public Button bag, attack, run, pick;
-     public GameObject human;
+
      private InventoryUI inventoryUI;
      private Animator ator;
      void Start()
      {
-          ator = human.GetComponent<Animator>();
+
      }
 
      // Update is called once per frame
@@ -22,8 +22,7 @@ public class UiManagerController : MonoBehaviour
      }
      public void RunClick()
      {
-          run.GetComponent<Image>().color = !ator.GetBool("run") ? Color.red : Color.white;
-          ator.SetBool("run", !ator.GetBool("run"));
+
      }
      public void BagClick()
      {
