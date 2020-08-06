@@ -10,7 +10,7 @@ public class TimerScript : MonoBehaviour
     [SerializeField] Transform player;
     [SerializeField] GameObject enemy;
     [SerializeField] float spawnRange = 20f;
-    [SerializeField] float spawnNumber = 5f;
+    [SerializeField] float spawnNumber = 10f;
     private bool hasSpawned = false;
 
     // Start is called before the first frame update
