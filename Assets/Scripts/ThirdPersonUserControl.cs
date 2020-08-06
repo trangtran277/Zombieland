@@ -119,7 +119,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		  public EnemyController CheckEnemyAround()
           {
 			float attackRange = m_Character.attackRange;
-			int damage = m_Character.baseDamge;
+			float damage = m_Character.baseDamge;
 			Equipment weapon = EquipmentManager.instance.currentEquipment[(int)EquipmentSlot.Weapon];
 			if (weapon != null)
 			{
