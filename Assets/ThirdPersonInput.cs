@@ -30,4 +30,9 @@ public class ThirdPersonInput : MonoBehaviour
         Camera.main.transform.rotation = Quaternion.LookRotation(transform.position + Vector3.up * 2f - Camera.main.transform.position, Vector3.up);
           
      }
+    public void Jump()
+    {
+        control.m_Jump = true;
+    }
+    
 }
