@@ -21507,6 +21507,14 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1790567687, guid: 7737647c22c1fc64a88d5cd030c352ce, type: 3}
+      propertyPath: leftJoystick
+      value: 
+      objectReference: {fileID: 2094235834}
+    - target: {fileID: 1790567687, guid: 7737647c22c1fc64a88d5cd030c352ce, type: 3}
+      propertyPath: fixedTouchField
+      value: 
+      objectReference: {fileID: 1840799741}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7737647c22c1fc64a88d5cd030c352ce, type: 3}
 --- !u!1001 &1138967929
@@ -32355,6 +32363,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftJoystick: {fileID: 2094235834}
   fixedTouchField: {fileID: 1840799741}
+  offset: {x: 0, y: 2, z: 4}
 --- !u!1001 &1707453185
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35218,6 +35227,8 @@ MonoBehaviour:
   attack: {fileID: 749144895}
   run: {fileID: 1903365868}
   pick: {fileID: 105900330}
+  inventoryUI: {fileID: 0}
+  userControl: {fileID: 0}
 --- !u!4 &1846652333
 Transform:
   m_ObjectHideFlags: 0
@@ -41049,6 +41060,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f77bacccacc8b47975b780823d305f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentEquipment: []
 --- !u!224 &2104960401 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1673551083561064453, guid: ed4bf577aed4cc9409321725aa476295,

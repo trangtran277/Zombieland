@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using HutongGames.PlayMaker.Actions;
+using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityStandardAssets.Characters.ThirdPerson;
@@ -14,9 +16,16 @@ public class ThirdPersonInput : MonoBehaviour
      protected float cameraAngle;
     protected float cameraAngleSpeed = .2f;
      public Vector3 offset = new Vector3(0f, 2f, 4f);
+
+
+    public GameObject hearbar;
+    private Slider sliderHealth;
+    private Animator animatorThirdperson;
      void Start()
      {
           control = GetComponent<ThirdPersonUserControl>();
+        sliderHealth = hearbar.GetComponent<Slider>();
+        animatorThirdperson = GetComponent<Animator>();
      }
 
      // Update is called once per frame
@@ -30,5 +39,16 @@ public class ThirdPersonInput : MonoBehaviour
         Camera.main.transform.position = transform.position + Quaternion.AngleAxis(cameraAngle,Vector3.up) * offset;
         Camera.main.transform.rotation = Quaternion.LookRotation(transform.position + Vector3.up * 2f - Camera.main.transform.position, Vector3.up);
           
+        if(sliderHealth.value<=0)
+        {
+            animatorThirdperson.SetTrigger("die");
+            StartCoroutine(WaitToSetActiveFalse());
+        }
      }
+    IEnumerator WaitToSetActiveFalse()
+    {
+        yield return new WaitForSeconds(4f);
+        gameObject.SetActive(false);
+
+    }
 }
