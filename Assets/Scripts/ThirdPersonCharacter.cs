@@ -15,8 +15,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		[SerializeField] float m_MoveSpeedMultiplier = 1f;
 		[SerializeField] float m_AnimSpeedMultiplier = 1f;
 		[SerializeField] float m_GroundCheckDistance = 0.1f;
-		public int health = 100;
-		public int baseDamge = 10;
+		public float health = 100;
+		public float baseDamge = 10;
 		public float attackRange = 1f;
 
 		Rigidbody m_Rigidbody;

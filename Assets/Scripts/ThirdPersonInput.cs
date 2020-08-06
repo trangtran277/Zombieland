@@ -12,7 +12,7 @@ public class ThirdPersonInput : MonoBehaviour
      protected ThirdPersonUserControl control;
 
      protected float cameraAngle;
-    protected float cameraAngleSpeed = .2f;
+     protected float cameraAngleSpeed = .2f;
      public Vector3 offset = new Vector3(0f, 2f, 4f);
      void Start()
      {

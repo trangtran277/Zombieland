@@ -47,7 +47,7 @@ public class UiManagerController : MonoBehaviour
      {
         //Debug.Log("Attacked");
         //play attack animation here
-        int damage = userControl.m_Character.baseDamge;
+        float damage = userControl.m_Character.baseDamge;
         Equipment weapon = EquipmentManager.instance.currentEquipment[(int)EquipmentSlot.Weapon];
         if (weapon != null)
         {

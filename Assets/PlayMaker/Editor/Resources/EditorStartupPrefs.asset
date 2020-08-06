@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   welcomeScreenVersion: '1.9.0 '
   playmakerVersion: 
-  showWelcomeScreen: 0
+  showWelcomeScreen: 1
   showUpgradeGuide: 0
-  lastAutoUpdateSignature: 2019.3.4f1__D:/Survival_Git_2/Survival/Assets__0.0.0.0
+  lastAutoUpdateSignature: 2019.3.4f1__C:/2020 Summer/LEAP/Survival/Assets__0.0.0.0
   useLegacyNetworking: 0
