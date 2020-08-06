@@ -2879,7 +2879,7 @@ MonoBehaviour:
   damageToPlayer: 10
   detectionDistance: 10
   fieldOfVision: 120
-  attachRange: 0.9
+  attachRange: 1
   chaseTime: 10
 --- !u!195 &474249386
 NavMeshAgent:

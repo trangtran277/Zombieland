@@ -5,9 +5,9 @@ using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
-    [SerializeField] Transform player;
+    [SerializeField] public Transform player;
     [SerializeField] float speed = 0.2f;
-    [SerializeField] float health = 100f;
+    [SerializeField] public float health = 100f;
     [SerializeField] float damageToPlayer = 10f;
     [SerializeField] float detectionDistance = 10f;
     [SerializeField] float fieldOfVision = 120f;
@@ -19,9 +19,14 @@ public class EnemyController : MonoBehaviour
     private bool playerDetected = false;
     private NavMeshAgent agent;
 
+    private void Awake()
+    {
+        
+    }
     // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
         anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
     }
@@ -50,7 +55,7 @@ public class EnemyController : MonoBehaviour
                 //attack when in range
                 if (distFromPlayer <= attachRange)
                 {
-                    
+                    anim.SetBool("isWalking", false);
                     anim.SetBool("isAttacking", true);                
                 }
                 else

@@ -21,14 +21,12 @@ public class InventoryUI : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.I))
         {
             ToggleInventory();
-            
-
         }
     }
     
     public void ToggleInventory()
     {
-        if (Cursor.lockState == CursorLockMode.Locked)
+        /*if (Cursor.lockState == CursorLockMode.Locked)
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -38,7 +36,7 @@ public class InventoryUI : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-        }
+        }*/
 
         inventoryUI.SetActive(!inventoryUI.activeSelf);
     }
