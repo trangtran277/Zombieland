@@ -21,11 +21,14 @@ public class ThirdPersonInput : MonoBehaviour
     public GameObject hearbar;
     private Slider sliderHealth;
     private Animator animatorThirdperson;
+    private float healthCharacter;
      void Start()
      {
-          control = GetComponent<ThirdPersonUserControl>();
+         control = GetComponent<ThirdPersonUserControl>();
         sliderHealth = hearbar.GetComponent<Slider>();
         animatorThirdperson = GetComponent<Animator>();
+
+        healthCharacter = GetComponent<ThirdPersonCharacter>().health;
      }
 
      // Update is called once per frame
@@ -38,8 +41,10 @@ public class ThirdPersonInput : MonoBehaviour
 
         Camera.main.transform.position = transform.position + Quaternion.AngleAxis(cameraAngle,Vector3.up) * offset;
         Camera.main.transform.rotation = Quaternion.LookRotation(transform.position + Vector3.up * 2f - Camera.main.transform.position, Vector3.up);
-          
-        if(sliderHealth.value<=0)
+
+        healthCharacter = GetComponent<ThirdPersonCharacter>().health;
+        sliderHealth.value = healthCharacter;
+        if (healthCharacter<=0)
         {
             animatorThirdperson.SetTrigger("die");
             StartCoroutine(WaitToSetActiveFalse());
