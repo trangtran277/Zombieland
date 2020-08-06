@@ -12,7 +12,8 @@ public class ThirdPersonInput : MonoBehaviour
      protected ThirdPersonUserControl control;
 
      protected float cameraAngle;
-     protected float cameraAngleSpeed = .2f;
+    protected float cameraAngleSpeed = .2f;
+     public Vector3 offset = new Vector3(0f, 2f, 4f);
      void Start()
      {
           control = GetComponent<ThirdPersonUserControl>();
@@ -26,7 +27,7 @@ public class ThirdPersonInput : MonoBehaviour
 
           cameraAngle += fixedTouchField.TouchDist.x * cameraAngleSpeed;
 
-        Camera.main.transform.position = transform.position + Quaternion.AngleAxis(cameraAngle,Vector3.up) * new Vector3(0, 3, 4);
+        Camera.main.transform.position = transform.position + Quaternion.AngleAxis(cameraAngle,Vector3.up) * offset;
         Camera.main.transform.rotation = Quaternion.LookRotation(transform.position + Vector3.up * 2f - Camera.main.transform.position, Vector3.up);
           
      }
