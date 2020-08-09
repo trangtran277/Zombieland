@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using HutongGames.PlayMaker.Actions;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,17 +8,20 @@ using UnityStandardAssets.Characters.ThirdPerson;
 public class UiManagerController : MonoBehaviour
 {
      // Start is called before the first frame update
-     public Button bag, attack, run, pick;
+     public Button bag, attack, run, pick,steal;
      public InventoryUI inventoryUI;
      public ThirdPersonUserControl userControl;
      private Animator ator;
      private EquipmentManager equipmentManager;
+    public GameObject human;
      void Start()
      {
+        ator = human.GetComponent<Animator>();
         equipmentManager = EquipmentManager.instance;
         bag.onClick.AddListener(BagClick);
         attack.onClick.AddListener(AttackClick);
         pick.onClick.AddListener(PickClick);
+        steal.onClick.AddListener(StealClick);
      }
 
      // Update is called once per frame
@@ -36,6 +40,7 @@ public class UiManagerController : MonoBehaviour
      }
      public void PickClick()
      {
+        Debug.Log("click pick");
         Interactable itemFound = userControl.CheckItemAround();
         if (itemFound != null)
         {
@@ -45,6 +50,8 @@ public class UiManagerController : MonoBehaviour
     }
      public void AttackClick()
      {
+        Debug.Log("click attack");
+        ator.SetTrigger("attack");
         //Debug.Log("Attacked");
         //play attack animation here
         float damage = userControl.m_Character.baseDamge;
@@ -60,4 +67,9 @@ public class UiManagerController : MonoBehaviour
         }
         
      }
+    public void StealClick()
+    {
+        userControl.crouchswt = !userControl.crouchswt;
+        Debug.Log("click steak");
+    }
 }

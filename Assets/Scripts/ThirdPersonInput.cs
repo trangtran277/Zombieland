@@ -1,4 +1,5 @@
-﻿using HutongGames.PlayMaker.Actions;
+﻿using Cinemachine;
+using HutongGames.PlayMaker.Actions;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
@@ -23,6 +24,9 @@ public class ThirdPersonInput : MonoBehaviour
     public HealthBar healthBar;
     private Animator animatorThirdperson;
     private float healthCharacter;
+    public GameObject cam;
+    private CinemachineFreeLook cinemachineFreeLook;
+    private Transform transformCinemachineFreeLook;
      void Start()
      {
          control = GetComponent<ThirdPersonUserControl>();
@@ -31,6 +35,8 @@ public class ThirdPersonInput : MonoBehaviour
         
         healthCharacter = GetComponent<ThirdPersonCharacter>().health;
         healthBar.SetMaxHealth(healthCharacter);
+        cinemachineFreeLook = cam.GetComponent<CinemachineFreeLook>();
+        transformCinemachineFreeLook = cam.GetComponent<Transform>();
      }
 
      // Update is called once per frame
@@ -41,9 +47,12 @@ public class ThirdPersonInput : MonoBehaviour
 
           cameraAngle += fixedTouchField.TouchDist.x * cameraAngleSpeed;
 
-        Camera.main.transform.position = transform.position + Quaternion.AngleAxis(cameraAngle,Vector3.up) * offset;
-        Camera.main.transform.rotation = Quaternion.LookRotation(transform.position + Vector3.up * 2f - Camera.main.transform.position, Vector3.up);
+        /*transformCinemachineFreeLook.position = transform.position + Quaternion.AngleAxis(cameraAngle, Vector3.up) * offset;*/
+        cinemachineFreeLook.m_XAxis.Value = cameraAngle;
 
+        /*Camera.main.transform.position = transform.position + Quaternion.AngleAxis(cameraAngle, Vector3.up) * offset;
+        Camera.main.transform.rotation = Quaternion.LookRotation(transform.position + Vector3.up * 2f - Camera.main.transform.position, Vector3.up);
+*/
         healthCharacter = GetComponent<ThirdPersonCharacter>().health;
         //sliderHealth.value = healthCharacter;
         healthBar.SetHealth(healthCharacter);
@@ -51,6 +60,7 @@ public class ThirdPersonInput : MonoBehaviour
         {
             animatorThirdperson.SetTrigger("die");
             StartCoroutine(WaitToSetActiveFalse());
+
         }
      }
     IEnumerator WaitToSetActiveFalse()
@@ -59,4 +69,5 @@ public class ThirdPersonInput : MonoBehaviour
         gameObject.SetActive(false);
 
     }
+
 }
