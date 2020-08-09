@@ -12,9 +12,9 @@ public class UiManagerController : MonoBehaviour
      public ThirdPersonUserControl userControl;
      private Animator ator;
      private EquipmentManager equipmentManager;
-     void Start()
+     void Awake()
      {
-        equipmentManager = EquipmentManager.instance;
+        //equipmentManager = EquipmentManager.instance;
         bag.onClick.AddListener(BagClick);
         attack.onClick.AddListener(AttackClick);
         pick.onClick.AddListener(PickClick);
@@ -36,18 +36,18 @@ public class UiManagerController : MonoBehaviour
      }
      public void PickClick()
      {
-        Interactable itemFound = userControl.CheckItemAround();
+        Debug.Log("PickClick");
+        IInteractable itemFound = userControl.CheckItemAround();
         if (itemFound != null)
         {
-                //userControl.interactionCircle.SetActive(false);
-                itemFound.Interact();
+            itemFound.Interact();
         }
     }
      public void AttackClick()
      {
         //Debug.Log("Attacked");
         //play attack animation here
-        float damage = userControl.m_Character.baseDamge;
+        /*float damage = userControl.m_Character.baseDamge;
         Equipment weapon = EquipmentManager.instance.currentEquipment[(int)EquipmentSlot.Weapon];
         if (weapon != null)
         {
@@ -57,7 +57,7 @@ public class UiManagerController : MonoBehaviour
         if(enemy != null)
         {
             enemy.health -= damage;
-        }
+        }*/
         
      }
 }

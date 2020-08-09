@@ -2,25 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CraftBlueprint : PickUpable
+public class ThingsToInteract : Interactable
 {
-    public Blueprint blueprint;
-    public List<PickUpable> input = new List<PickUpable>();
+    /*public List<PickUpable> input = new List<PickUpable>();
     public List<PickUpable> output = new List<PickUpable>();
-    public override void Use()
+    public override void Interact()
     {
-        base.Use();
+        base.Interact();
         List<PickUpable> enough = new List<PickUpable>();
         bool isEnough = true;
-        foreach (var inItem in input)
+        foreach(var inItem in input)
         {
             PickUpable itemFound = Inventory.instance.items.Find(i => i.GetName().Equals(inItem.GetName()));
-            if (itemFound != null)
+            if(itemFound != null)
             {
-                if (itemFound.number >= inItem.number)
+                if(itemFound.number >= inItem.number)
                 {
                     enough.Add(itemFound);
-                    continue;
+                    continue;              
                 }
                 else
                 {
@@ -37,10 +36,10 @@ public class CraftBlueprint : PickUpable
 
         if (isEnough)
         {
-            for (int i = 0; i < enough.Count; i++)
+            for(int i=0; i < enough.Count; i++)
             {
                 enough[i].number -= input[i].number;
-                if (enough[i].number == 0)
+                if(enough[i].number == 0)
                 {
                     enough[i].RemoveFromInventory();
                 }
@@ -50,7 +49,7 @@ public class CraftBlueprint : PickUpable
                 }
             }
 
-            foreach (var outItem in output)
+            foreach(var outItem in output)
             {
                 Inventory.instance.AddItem(outItem);
             }
@@ -59,20 +58,6 @@ public class CraftBlueprint : PickUpable
         {
             Debug.Log("Not enough resources");
         }
-    }
+    }*/
 
-    public override string GetName()
-    {
-        return base.GetName() + blueprint.name;
-    }
-
-    public override int GetMaxNumber()
-    {
-        return base.GetMaxNumber() + blueprint.maxNumber;
-    }
-
-    public override Sprite GetSprite()
-    {
-        return blueprint.icon;
-    }
 }

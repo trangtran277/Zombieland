@@ -10,7 +10,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 	 public class ThirdPersonUserControl : MonoBehaviour
 	 {
 		  public GameObject interactionCircle;
-		  public float interactionRadius = 0.5f;
+		  public float interactionRadius = 1f;
 		  public ThirdPersonCharacter m_Character; // A reference to the ThirdPersonCharacter on the object
 		  private Transform m_Cam;                  // A reference to the main camera in the scenes transform
 		  private Vector3 m_CamForward;             // The current forward direction of the camera
@@ -83,17 +83,17 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			   m_Jump = false;
 
 			   CheckItemAround();
-			   CheckEnemyAround();
+			   //CheckEnemyAround();
 
 			   
 		  }
 
-		  public Interactable CheckItemAround()
+		  public IInteractable CheckItemAround()
 		  {
 			   Collider[] hits = Physics.OverlapSphere(transform.position, interactionRadius);
 			   foreach (Collider hit in hits)
 			   {
-					Interactable interactable = hit.GetComponent<Interactable>();
+					IInteractable interactable = hit.GetComponent<IInteractable>();
 					if (interactable != null)
 					{
 						 float objectHeight = 0f;
@@ -118,7 +118,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 		  public EnemyController CheckEnemyAround()
           {
-			float attackRange = m_Character.attackRange;
+			/*float attackRange = m_Character.attackRange;
 			float damage = m_Character.baseDamge;
 			Equipment weapon = EquipmentManager.instance.currentEquipment[(int)EquipmentSlot.Weapon];
 			if (weapon != null)
@@ -135,7 +135,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				{
 					return enemy;
 				}
-			}
+			}*/
 			return null;
 		  }
 	 }
