@@ -5,6 +5,12 @@ using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
+    public static InventoryUI instance;
+    private void Awake()
+    {
+        if (instance != null) return;
+        instance = this;
+    }
     Inventory inventory;
     public Transform itemsParent;
     InventorySlot[] inventorySlots;
@@ -15,6 +21,10 @@ public class InventoryUI : MonoBehaviour
     public Button discardButton;
     public GameObject notesUI;
     public GameObject objectivesUI;
+    public GameObject notesTitle;
+    public GameObject objectivesTitle;
+    public GameObject interactionDes;
+    public GameObject interactionTitle;
     public InventorySlot equipmentSlot;
     public GameObject inventoryUI;
     InventorySlot currentSelected = null;
@@ -26,7 +36,7 @@ public class InventoryUI : MonoBehaviour
         inventorySlots = itemsParent.GetComponentsInChildren<InventorySlot>();
     }
 
-    public void ToggleInventory()
+    public void ToggleInventory(int type = 0)
     {
         if (currentSelected != null)
         {
@@ -34,8 +44,26 @@ public class InventoryUI : MonoBehaviour
             currentSelected = null;
             UpdateSelectedItem(null);
         }
-            
+        notesUI.SetActive(false);
+        objectivesUI.SetActive(false);
+        interactionDes.SetActive(false);
+        interactionTitle.SetActive(false);
+        if (Time.timeScale == 1)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
         inventoryUI.SetActive(!inventoryUI.activeSelf);
+        if(type == 1)
+        {
+            notesTitle.SetActive(false);
+            objectivesTitle.SetActive(false);
+            interactionDes.SetActive(true);
+            interactionTitle.SetActive(true);
+        }
     }
     void UpdateInventoryUI()
     {
@@ -94,7 +122,10 @@ public class InventoryUI : MonoBehaviour
             else
                 useButton.GetComponentInChildren<Text>().text = "Use";
             useButton.interactable = true;
-            discardButton.interactable = true;
+            if(item is MissionItem)
+                discardButton.interactable = false;
+            else
+                discardButton.interactable = true;
             itemDesIcon.sprite = item.item.icon;
             itemDesName.text = item.item.name;
             itemDes.text = item.item.description;

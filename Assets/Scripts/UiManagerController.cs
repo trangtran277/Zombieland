@@ -6,19 +6,27 @@ using UnityStandardAssets.Characters.ThirdPerson;
 
 public class UiManagerController : MonoBehaviour
 {
-     // Start is called before the first frame update
-     public Button bag, attack, run, pick;
-     public InventoryUI inventoryUI;
-     public ThirdPersonUserControl userControl;
-     private Animator ator;
-     private EquipmentManager equipmentManager;
-     void Awake()
+    public Button bag, attack, run, pick;
+    public InventoryUI inventoryUI;
+    public ThirdPersonUserControl userControl;
+    private Animator ator;
+    public ThingsToInteract curInteract;
+    public static UiManagerController instance;
+    private void Awake()
+    {
+        if (instance != null) return;
+        instance = this;
+        bag.onClick.AddListener(BagClick);
+        attack.onClick.AddListener(AttackClick);
+        pick.onClick.AddListener(PickClick);
+    }
+     /*void Awake()
      {
         //equipmentManager = EquipmentManager.instance;
         bag.onClick.AddListener(BagClick);
         attack.onClick.AddListener(AttackClick);
         pick.onClick.AddListener(PickClick);
-     }
+     }*/
 
      // Update is called once per frame
      void Update()
@@ -40,6 +48,8 @@ public class UiManagerController : MonoBehaviour
         IInteractable itemFound = userControl.CheckItemAround();
         if (itemFound != null)
         {
+            if (itemFound is ThingsToInteract)
+                curInteract = itemFound as ThingsToInteract;
             itemFound.Interact();
         }
     }

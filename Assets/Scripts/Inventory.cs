@@ -93,7 +93,7 @@ public class Inventory : MonoBehaviour
         items.Remove(collectibles);
         if (onItemChangedCallback != null)
             onItemChangedCallback.Invoke();
-        if(collectibles != EquipmentManager.instance.currentEquipment[3])
+        if(collectibles != EquipmentManager.instance.currentEquipment[3] && !(collectibles is MissionItem))
             Destroy(collectibles.gameObject);
     }
 }
