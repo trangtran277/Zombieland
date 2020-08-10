@@ -56,7 +56,7 @@ public class UiManagerController : MonoBehaviour
         EnemyController enemy = userControl.CheckEnemyAround();
         if(enemy != null)
         {
-            enemy.health -= damage;
+            enemy.isAlive = false;
         }
         
      }

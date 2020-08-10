@@ -8,29 +8,27 @@ public class EnemyController : MonoBehaviour
 {
     [SerializeField] public Transform player;
     [SerializeField] float speed = 0.2f;
-    [SerializeField] public float health = 100f;
-    [SerializeField] float damageToPlayer = 10f;
+    [SerializeField] float damageToPlayer = 1f;
     [SerializeField] float detectionDistance = 10f;
     [SerializeField] float fieldOfVision = 120f;
-    [SerializeField] float attachRange = 0.9f;
+    [SerializeField] float playerDetectTime = 5f;
     [SerializeField] float chaseTime = 10f;
+    [SerializeField] float attachRange = 0.9f;
     public ThirdPersonCharacter thirdPersonCharacter;
+    public bool isAlive = true;
     
     private Animator anim;
-    private bool isAlive = true;
     private bool playerDetected = false;
     private NavMeshAgent agent;
     private float timeToNextAttack;
+    private float chaseBeginTime;
+    private bool waitedBeforeChase = false;
 
-    private void Awake()
-    {
-        
-    }
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
-        thirdPersonCharacter = GameObject.FindGameObjectWithTag("Player").GetComponent<ThirdPersonCharacter>();
+        if (player == null) { player = GameObject.FindGameObjectWithTag("Player").transform; }
+        if (thirdPersonCharacter == null) { thirdPersonCharacter = GameObject.FindGameObjectWithTag("Player").GetComponent<ThirdPersonCharacter>(); }
         anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         timeToNextAttack = Time.time;
@@ -39,15 +37,13 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(health <= 0)
+        if(!isAlive)
         {
             isAlive = false;
             anim.SetTrigger("isDead");
-            Invoke("DestroyEnemy", 1.5f);
-            //DestroyEnemy();
+            Invoke("DestroyEnemy", 3f);
         }
-
-        if(isAlive)
+        else
         {       
             Vector3 direction = player.position - this.transform.position;
             float angle = Vector3.Angle(direction, this.transform.forward);
@@ -55,7 +51,7 @@ public class EnemyController : MonoBehaviour
 
             FindPlayer(distFromPlayer, angle);
 
-            if (playerDetected && thirdPersonCharacter.health > 0)
+            if (playerDetected && Time.time >= chaseBeginTime && distFromPlayer < detectionDistance && angle < fieldOfVision && thirdPersonCharacter.health > 0)
             {
                 agent.destination = player.position;
                 anim.SetBool("isWalking", true);
@@ -69,10 +65,7 @@ public class EnemyController : MonoBehaviour
                     {
                         timeToNextAttack = Time.time + 1.5f;
                         thirdPersonCharacter.health -= damageToPlayer;
-                        
                     }
-                    //Invoke("InflictDamageOnPlayer", 1.5f);
-                    //thirdPersonCharacter.health -= damageToPlayer;
                 }
                 else
                 {
@@ -93,13 +86,17 @@ public class EnemyController : MonoBehaviour
         if (!playerDetected && distFromPlayer < detectionDistance && angle < fieldOfVision)
         {
             playerDetected = true;
-            Invoke("StopChasing", chaseTime);
+            chaseBeginTime = Time.time + playerDetectTime;
+            Invoke("StopChasing", chaseTime + playerDetectTime); //still chase chaseTime after chasing started
+            Debug.Log("Dected player");
         }
+        Debug.Log("Attempt but did not detect player");
     }
 
     private void StopChasing()
     {
         playerDetected = false;
+        waitedBeforeChase = false;
     }
 
     private void InflictDamageOnPlayer()
@@ -112,6 +109,4 @@ public class EnemyController : MonoBehaviour
     {
         Destroy(gameObject);
     }
-
-   
 }
