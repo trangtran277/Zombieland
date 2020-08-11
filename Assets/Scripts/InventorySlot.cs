@@ -4,23 +4,30 @@ using UnityEngine.UI;
 
 public class InventorySlot : MonoBehaviour
 {
-    PickUpable item;
+    public Collectibles item;
     public Image icon;
-    public Button removeButton;
+    //public Button removeButton;
     public GameObject numberPanel;
+    //public Image itemDesIcon;
+    //public Text itemDesName;
+    //public Text itemDes;
+    //public Button useButton;
+    //public Button discardButton;
     //public Text numberText;
-    public void AddItem(PickUpable pickUpable)
+    public void AddItem(Collectibles collectibles)
     {
-        item = pickUpable;
-        icon.sprite = pickUpable.GetSprite();
+        item = collectibles;
+        icon.sprite = collectibles.item.icon;
         icon.preserveAspect = true;
         icon.enabled = true;
-        removeButton.interactable = true;
-        numberPanel.GetComponent<Image>().enabled = true;
+        //removeButton.interactable = true;
         
-        numberPanel.GetComponentInChildren<Text>().text = pickUpable.number.ToString();
-        numberPanel.GetComponentInChildren<Text>().enabled = true;
-
+        if(collectibles is Consumable)
+        {
+            numberPanel.GetComponent<Image>().enabled = true;
+            numberPanel.GetComponentInChildren<Text>().text = collectibles.number.ToString();
+            numberPanel.GetComponentInChildren<Text>().enabled = true;
+        }    
     }
 
     public void ClearSlot()
@@ -28,14 +35,16 @@ public class InventorySlot : MonoBehaviour
         item = null;
         icon.sprite = null;
         icon.enabled = false;
-        removeButton.interactable = false;
+        //removeButton.interactable = false;
         numberPanel.GetComponent<Image>().enabled = false;
         numberPanel.GetComponentInChildren<Text>().enabled = false;
     }
 
-    public void OnRemoveButton()
+    /*public void OnDiscardButton()
     {
         Inventory.instance.RemoveItem(item);
+        useButton.interactable = false;
+        discardButton.interactable = false;
     }
 
     public void UseItem()
@@ -43,6 +52,17 @@ public class InventorySlot : MonoBehaviour
         if(item != null)
         {
             item.Use();
+            if(item == null)
+            {
+                useButton.interactable = false;
+                discardButton.interactable = false;
+            }
         }
+
+    }*/
+
+    public void OnItemPressed()
+    {
+        GetComponentInParent<InventoryUI>().OnInventorySlotPressed(this); 
     }
 }

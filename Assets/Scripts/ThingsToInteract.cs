@@ -1,63 +1,112 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class ThingsToInteract : Interactable
+public class ThingsToInteract : MonoBehaviour, IInteractable
 {
-    public List<PickUpable> input = new List<PickUpable>();
-    public List<PickUpable> output = new List<PickUpable>();
-    public override void Interact()
+    public new string name; 
+    public List<Collectibles> input = new List<Collectibles>();
+    public List<Collectibles> output = new List<Collectibles>();
+    public List<Collectibles> collected = new List<Collectibles>();
+    public string result;
+    public Sprite icon;
+    InventoryUI inventoryUI;
+    InteractionDes interactionDes;
+    public bool completed = false;
+
+    void Start()
     {
-        base.Interact();
-        List<PickUpable> enough = new List<PickUpable>();
-        bool isEnough = true;
-        foreach(var inItem in input)
-        {
-            PickUpable itemFound = Inventory.instance.items.Find(i => i.GetName().Equals(inItem.GetName()));
-            if(itemFound != null)
-            {
-                if(itemFound.number >= inItem.number)
-                {
-                    enough.Add(itemFound);
-                    continue;              
-                }
-                else
-                {
-                    isEnough = false;
-                    break;
-                }
-            }
-            else
-            {
-                isEnough = false;
-                break;
-            }
-        }
+        inventoryUI = InventoryUI.instance;
+        interactionDes = inventoryUI.interactionDes.GetComponent<InteractionDes>();
+    }
+    public void Interact()
+    {
+        inventoryUI.ToggleInventory(1);
+        UpdateInteractionUI();
+    }
 
-        if (isEnough)
+    public void UpdateInteractionUI()
+    {
+        Debug.Log("Interaction update");
+        interactionDes.itemIcon.sprite = icon;
+        interactionDes.itemName.text = name;
+        if (input.Count > 0)
         {
-            for(int i=0; i < enough.Count; i++)
+            if (input.Count == 1)
             {
-                enough[i].number -= input[i].number;
-                if(enough[i].number == 0)
-                {
-                    enough[i].RemoveFromInventory();
-                }
-                else
-                {
-                    Inventory.instance.ItemChanged(enough[i], enough[i].number);
-                }
+                interactionDes.inputIcons[0].transform.parent.gameObject.SetActive(true);
+                interactionDes.inputIcons[0].sprite = input[0].item.icon;
+                interactionDes.inputIcons[1].transform.parent.gameObject.SetActive(false);
+                interactionDes.inputIcons[2].transform.parent.gameObject.SetActive(false);
             }
-
-            foreach(var outItem in output)
+            if (input.Count == 2)
             {
-                Inventory.instance.AddItem(outItem);
+                interactionDes.inputIcons[0].transform.parent.gameObject.SetActive(true);
+                interactionDes.inputIcons[0].sprite = input[0].item.icon;
+                interactionDes.inputIcons[1].transform.parent.gameObject.SetActive(true);
+                interactionDes.inputIcons[1].sprite = input[1].item.icon;
+                interactionDes.inputIcons[2].transform.parent.gameObject.SetActive(false);
+            }
+            if (input.Count == 3)
+            {
+                interactionDes.inputIcons[0].transform.parent.gameObject.SetActive(true);
+                interactionDes.inputIcons[0].sprite = input[0].item.icon;
+                interactionDes.inputIcons[1].transform.parent.gameObject.SetActive(true);
+                interactionDes.inputIcons[1].sprite = input[1].item.icon;
+                interactionDes.inputIcons[2].transform.parent.gameObject.SetActive(true);
+                interactionDes.inputIcons[2].sprite = input[2].item.icon;
             }
         }
         else
         {
-            Debug.Log("Not enough resources");
+            interactionDes.inputIcons[0].transform.parent.gameObject.SetActive(false);
+            interactionDes.inputIcons[1].transform.parent.gameObject.SetActive(false);
+            interactionDes.inputIcons[2].transform.parent.gameObject.SetActive(false);
+        }
+
+        for (int i = 0; i < input.Count; i++)
+        {
+            if (collected.Contains(input[i]))
+            {
+                interactionDes.inputIcons[i].color = new Color32(126, 118, 118, 255);
+            }
+            else
+            {
+                interactionDes.inputIcons[i].color = new Color32(255, 255, 255, 255);
+            }
+        }
+
+        if (output.Count > 0)
+        {
+            interactionDes.resText.gameObject.SetActive(false);
+            interactionDes.toGetText.gameObject.SetActive(true);
+            interactionDes.outputIcon.gameObject.transform.parent.gameObject.SetActive(true);
+            interactionDes.outputIcon.sprite = output[0].item.icon;
+            if (completed)
+            {
+                interactionDes.outputIcon.color = new Color32(126, 118, 118, 255);
+            }
+        }
+        else
+        {
+            interactionDes.resText.gameObject.SetActive(true);
+            interactionDes.resText.text = result;
+            interactionDes.toGetText.gameObject.SetActive(false);
+            interactionDes.outputIcon.gameObject.transform.parent.gameObject.SetActive(false);
         }
     }
 
+    public void OnCompleted()
+    {
+        inventoryUI.ToggleInventory();
+        if (output.Count > 0)
+        {
+            Inventory.instance.AddItem(output[0]);
+        }
+        else
+        {
+            Debug.Log("Completed");
+        }
+    } 
 }

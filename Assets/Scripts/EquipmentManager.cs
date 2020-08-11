@@ -28,17 +28,14 @@ public class EquipmentManager : MonoBehaviour
 
     public void Equip(Equipment equipment)
     {
-        int slotIndex = (int)equipment.equipmentItem.equipmentSlot;
+        int slotIndex = 3;
         Equipment oldItem = null;
-        //Debug.Log("Equipment Manager " + currentEquipment[slotIndex]);
-        //Debug.Log("test");
         if (currentEquipment[slotIndex] != null)
         {
             oldItem = currentEquipment[slotIndex];
             Inventory.instance.AddItem(oldItem);
         }
-
-       
+   
         currentEquipment[slotIndex] = equipment;
         Inventory.instance.RemoveItem(equipment);
         if (onEquipmentChanged != null)

@@ -1,56 +1,188 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
+    public static InventoryUI instance;
+    private void Awake()
+    {
+        if (instance != null) return;
+        instance = this;
+    }
     Inventory inventory;
     public Transform itemsParent;
     InventorySlot[] inventorySlots;
+    public Image itemDesIcon;
+    public Text itemDesName;
+    public Text itemDes;
+    public Button useButton;
+    public Button discardButton;
+    public GameObject notesUI;
+    public GameObject objectivesUI;
+    public GameObject notesTitle;
+    public GameObject objectivesTitle;
+    public GameObject interactionDes;
+    public GameObject interactionTitle;
+    public InventorySlot equipmentSlot;
     public GameObject inventoryUI;
+    InventorySlot currentSelected = null;
     void Start()
     {
         inventory = Inventory.instance;
-        inventory.onItemChangedCallback += UpdateUI;
+        inventory.onItemChangedCallback += UpdateInventoryUI;
+        EquipmentManager.instance.onEquipmentChanged += UpdateEquipmentSlot;
         inventorySlots = itemsParent.GetComponentsInChildren<InventorySlot>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ToggleInventory(int type = 0)
     {
-        if(Input.GetKeyDown(KeyCode.I))
+        if (currentSelected != null)
         {
-            ToggleInventory();
+            currentSelected.GetComponentInChildren<Image>().color = new Color32(255, 255, 255, 255);
+            currentSelected = null;
+            UpdateSelectedItem(null);
         }
-    }
-    
-    public void ToggleInventory()
-    {
-        /*if (Cursor.lockState == CursorLockMode.Locked)
+        notesUI.SetActive(false);
+        objectivesUI.SetActive(false);
+        interactionDes.SetActive(false);
+        interactionTitle.SetActive(false);
+        if (Time.timeScale == 1)
         {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            Time.timeScale = 0;
         }
-
         else
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }*/
-
+            Time.timeScale = 1;
+        }
         inventoryUI.SetActive(!inventoryUI.activeSelf);
+        if(type == 1)
+        {
+            notesTitle.SetActive(false);
+            objectivesTitle.SetActive(false);
+            interactionDes.SetActive(true);
+            interactionTitle.SetActive(true);
+        }
     }
-    void UpdateUI()
+    void UpdateInventoryUI()
     {
         int i = 0;
         foreach(var item in inventory.items)
         {
+            inventorySlots[i].ClearSlot();
             inventorySlots[i].AddItem(item);
             i++;
         }
-        for(int j=i; j < inventorySlots.Length; j++)
+        for(int j = i; j < inventorySlots.Length; j++)
         {
-                inventorySlots[i].ClearSlot();
+            if (j == i)
+            {
+                if(inventorySlots[j].item != null)
+                {
+                    currentSelected.GetComponentInChildren<Image>().color = new Color32(255, 255, 255, 255);
+                    
+                    currentSelected = null;
+                    UpdateSelectedItem(null);
+                }
+            }
+            inventorySlots[i].ClearSlot();
         }
+    }
+
+    public void UpdateEquipmentSlot(Equipment newEquip, Equipment oldEquip)
+    {
+        if (newEquip == null)
+            equipmentSlot.ClearSlot();
+        else
+            equipmentSlot.AddItem(newEquip);
+    }
+    public void OnInventorySlotPressed(InventorySlot inventorySlot)
+    {
+        if(currentSelected != null)
+            currentSelected.GetComponentInChildren<Image>().color = new Color32(255, 255, 255, 255);
+        inventorySlot.GetComponentInChildren<Image>().color = new Color32(162, 157, 157, 255);
+        currentSelected = inventorySlot;
+        Collectibles selectedItem = currentSelected.item;
+        UpdateSelectedItem(selectedItem);
+
+    }
+
+    public void UpdateSelectedItem(Collectibles item)
+    {
+        if (item != null)
+        {
+            if(item is Equipment)
+            {
+                if (item == EquipmentManager.instance.currentEquipment[3])
+                    useButton.GetComponentInChildren<Text>().text = "Unequip";
+                else
+                    useButton.GetComponentInChildren<Text>().text = "Equip";
+            }
+            else
+                useButton.GetComponentInChildren<Text>().text = "Use";
+            useButton.interactable = true;
+            if(item is MissionItem)
+                discardButton.interactable = false;
+            else
+                discardButton.interactable = true;
+            itemDesIcon.sprite = item.item.icon;
+            itemDesName.text = item.item.name;
+            itemDes.text = item.item.description;
+            itemDesIcon.enabled = true;
+            itemDesName.enabled = true;
+            itemDes.enabled = true;
+        }
+        else
+        {
+            useButton.interactable = false;
+            discardButton.interactable = false;
+            itemDesIcon.sprite = null;
+            itemDesName.text = null;
+            itemDes.text = null;
+            itemDesIcon.enabled = false;
+            itemDesName.enabled = false;
+            itemDes.enabled = false;
+        }
+    }
+
+    public void OnButtonUse()
+    {
+        if (useButton.GetComponentInChildren<Text>().text.Equals("Unequip"))
+        {
+            Debug.Log("unequip");
+            EquipmentManager.instance.Unequip(3);
+            currentSelected.GetComponentInChildren<Image>().color = new Color32(255, 255, 255, 255);
+            currentSelected = null;
+            UpdateSelectedItem(null);
+        }
+        else
+            currentSelected.item.Use();
+    }
+
+    public void OnButtonDiscard()
+    {
+        EquipmentManager equipmentManager = EquipmentManager.instance;
+        if (currentSelected.item == equipmentManager.currentEquipment[3])
+        {
+            equipmentManager.currentEquipment[3] = null;
+            Destroy(currentSelected.item.gameObject);
+            currentSelected.GetComponentInChildren<Image>().color = new Color32(255, 255, 255, 255);
+            currentSelected = null;
+            UpdateSelectedItem(null);
+            UpdateEquipmentSlot(null, null);
+        }
+        else
+            currentSelected.item.RemoveFromInventory();
+    }
+
+    public void ToggleNotesUI()
+    {
+        notesUI.SetActive(!notesUI.activeSelf);
+    }
+
+    public void ToggleObjectivesUI()
+    {
+        objectivesUI.SetActive(!objectivesUI.activeSelf);
     }
 }
