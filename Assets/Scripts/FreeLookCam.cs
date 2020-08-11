@@ -21,13 +21,14 @@ namespace UnityStandardAssets.Cameras
         [SerializeField] private bool m_LockCursor = false;                   // Whether the cursor should be hidden and locked.
         [SerializeField] private bool m_VerticalAutoReturn = false;           // set wether or not the vertical axis should auto return
 
+
+        public FixedTouchField fixedTouchField;
         private float m_LookAngle;                    // The rig's y axis rotation.
         private float m_TiltAngle;                    // The pivot's x axis rotation.
         private const float k_LookDistance = 100f;    // How far in front of the pivot the character's look target is.
 		private Vector3 m_PivotEulers;
 		private Quaternion m_PivotTargetRot;
-		private Quaternion m_TransformTargetRot;
-
+		private Quaternion m_TransformTargetRot; 
         protected override void Awake()
         {
             base.Awake();
@@ -73,8 +74,11 @@ namespace UnityStandardAssets.Cameras
 			return;
 
             // Read the user input
-            var x = CrossPlatformInputManager.GetAxis("Mouse X");
-            var y = CrossPlatformInputManager.GetAxis("Mouse Y");
+            /*var x = CrossPlatformInputManager.GetAxis("Mouse X");
+            var y = CrossPlatformInputManager.GetAxis("Mouse Y");*/
+            var x = fixedTouchField.TouchDist.x;
+            //var y = fixedTouchField.TouchDist.y;
+            var y = 0;
 
             // Adjust the look angle by an amount proportional to the turn speed and horizontal input.
             m_LookAngle += x*m_TurnSpeed;

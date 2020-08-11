@@ -69,7 +69,8 @@ public class UiManagerController : MonoBehaviour
      }
     public void StealClick()
     {
-        userControl.crouchswt = !userControl.crouchswt;
+        //userControl.crouchswt = !userControl.crouchswt;
         Debug.Log("click steak");
+        ator.SetBool("crouch", !ator.GetBool("crouch"));
     }
 }

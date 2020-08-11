@@ -101,6 +101,7 @@ namespace UnityStandardAssets.Cameras
             if (hitSomething)
             {
                 Debug.DrawRay(m_Ray.origin, -m_Pivot.forward*(targetDist + sphereCastRadius), Color.red);
+                Debug.Log("camera hit something");
             }
 
             // hit something so move the camera to a better position
