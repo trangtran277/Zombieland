@@ -21,8 +21,9 @@ public class EnemyController : MonoBehaviour
     private bool playerDetected = false;
     private NavMeshAgent agent;
     private float timeToNextAttack;
-    private float chaseBeginTime;
-    private bool waitedBeforeChase = false;
+    private float stopTime = 0;
+    private bool chasePlayer = false;
+    private float timer = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -51,7 +52,26 @@ public class EnemyController : MonoBehaviour
 
             FindPlayer(distFromPlayer, angle);
 
-            if (playerDetected && Time.time >= chaseBeginTime && distFromPlayer < detectionDistance && angle < fieldOfVision && thirdPersonCharacter.health > 0)
+            if(playerDetected && !chasePlayer)
+            {
+                if(timer < playerDetectTime)
+                {
+                    timer += Time.deltaTime;
+                }
+                else
+                {
+                    chasePlayer = true;
+                    timer = 0;
+                    stopTime = Time.time + chaseTime;
+                }
+            }
+
+            if(!playerDetected)
+            {
+                timer = 0;
+            }
+
+            if (chasePlayer && Time.time < stopTime && thirdPersonCharacter.health > 0)
             {
                 agent.destination = player.position;
                 anim.SetBool("isWalking", true);
@@ -74,6 +94,7 @@ public class EnemyController : MonoBehaviour
             }
             else
             {
+                chasePlayer = false;
                 agent.velocity = Vector3.zero;
                 anim.SetBool("isAttacking", false);
                 anim.SetBool("isWalking", false);
@@ -86,17 +107,18 @@ public class EnemyController : MonoBehaviour
         if (!playerDetected && distFromPlayer < detectionDistance && angle < fieldOfVision)
         {
             playerDetected = true;
-            chaseBeginTime = Time.time + playerDetectTime;
             Invoke("StopChasing", chaseTime + playerDetectTime); //still chase chaseTime after chasing started
             Debug.Log("Dected player");
         }
-        Debug.Log("Attempt but did not detect player");
+        else
+        {
+            playerDetected = false;
+        }
     }
 
     private void StopChasing()
     {
         playerDetected = false;
-        waitedBeforeChase = false;
     }
 
     private void InflictDamageOnPlayer()
