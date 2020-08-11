@@ -6,25 +6,52 @@ using UnityEngine.UI;
 public class TimerScript : MonoBehaviour
 {
     [SerializeField] Text timerText;
-    [SerializeField] float startNightTime = 10f;
+    //[SerializeField] float startNightTime = 10f;
     [SerializeField] Transform player;
     [SerializeField] GameObject enemy;
     [SerializeField] float spawnNumber = 10f;
     [SerializeField] Transform centerPos;
     [SerializeField] float radius;
+    public LightingManager lighting;
+    public GameObject nightWarning;
 
     private bool hasSpawned = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        startNightTime *= 60;
+        //startNightTime *= 60;
     }
 
     // Update is called once per frame
     void Update()
     {
-        float timer = Time.timeSinceLevelLoad;
+        float curTime = lighting.TimeOfDay;
+        int hour = (int)curTime;
+        int minute = (int)((curTime-(int)curTime)*60);
+        string displayHour = hour < 10 ? "0" + hour : "" + hour;
+        string displayMin = minute < 10 ? "0" + minute : "" + minute;
+        timerText.text = displayHour + " : " + displayMin;
+
+        if (curTime >= 18 && curTime < 19)
+            nightWarning.SetActive(true);
+        else
+            nightWarning.SetActive(false);
+
+        if (curTime >= 19 || curTime < 5)
+        {
+            timerText.color = Color.red;
+            if (!hasSpawned)
+            {
+                Spawn();
+                hasSpawned = true;
+            }
+        }
+        else
+        {
+            timerText.color = Color.black;
+        }
+        /*float timer = Time.timeSinceLevelLoad;
         int minute = (int)timer / 60;
         int sec = (int)timer % 60;
         string displayMin = minute < 10 ? "0" + minute : "" + minute;
@@ -38,7 +65,7 @@ public class TimerScript : MonoBehaviour
                 Spawn();
                 hasSpawned = true;
             }
-        }
+        }*/
     }
     public void Spawn()
     {

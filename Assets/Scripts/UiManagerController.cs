@@ -6,24 +6,27 @@ using UnityStandardAssets.Characters.ThirdPerson;
 
 public class UiManagerController : MonoBehaviour
 {
-     // Start is called before the first frame update
-     public Button bag, attack, run, pick;
+    #region Singleton
+    public static UiManagerController instance;
+    private void Awake()
+    {
+        if (instance != null) return;
+        instance = this;
+    }
+    #endregion
+
+    public Button bag, attack, run, pick;
      public InventoryUI inventoryUI;
      public ThirdPersonUserControl userControl;
      private Animator ator;
      private EquipmentManager equipmentManager;
-     void Start()
+    public ThingsToInteract curInteract;
+    void Start()
      {
         equipmentManager = EquipmentManager.instance;
         bag.onClick.AddListener(BagClick);
         attack.onClick.AddListener(AttackClick);
         pick.onClick.AddListener(PickClick);
-     }
-
-     // Update is called once per frame
-     void Update()
-     {
-
      }
      public void RunClick()
      {
@@ -36,18 +39,20 @@ public class UiManagerController : MonoBehaviour
      }
      public void PickClick()
      {
-        Interactable itemFound = userControl.CheckItemAround();
+        IInteractable itemFound = userControl.CheckItemAround();
         if (itemFound != null)
         {
-                //userControl.interactionCircle.SetActive(false);
-                itemFound.Interact();
+            //userControl.interactionCircle.SetActive(false);
+            if (itemFound is ThingsToInteract)
+                curInteract = itemFound as ThingsToInteract;
+            itemFound.Interact();
         }
     }
      public void AttackClick()
      {
         //Debug.Log("Attacked");
         //play attack animation here
-        float damage = userControl.m_Character.baseDamge;
+        /*float damage = userControl.m_Character.baseDamge;
         Equipment weapon = EquipmentManager.instance.currentEquipment[(int)EquipmentSlot.Weapon];
         if (weapon != null)
         {
@@ -57,7 +62,7 @@ public class UiManagerController : MonoBehaviour
         if(enemy != null)
         {
             enemy.isAlive = false;
-        }
+        }*/
         
      }
 }

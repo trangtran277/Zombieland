@@ -24105,11 +24105,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timerText: {fileID: 512333855}
-  startTime: 10
   player: {fileID: 755889695}
   enemy: {fileID: 5518853138295985823, guid: 4b2ca4062e5663c4fab07be08c0da963, type: 3}
-  spawnRange: 20
   spawnNumber: 10
+  centerPos: {fileID: 755889695}
+  radius: 10
+  lighting: {fileID: 839056084}
+  nightWarning: {fileID: 992565224}
 --- !u!114 &512333855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45740,7 +45742,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9622642, g: 0.94864726, b: 0.94864726, a: 1}
+  m_Color: {r: 0.6901961, g: 0.6901961, b: 0.6901961, a: 0.27058825}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -73616,8 +73618,7 @@ MonoBehaviour:
   name: Maingate
   input:
   - {fileID: 287470272}
-  output:
-  - {fileID: 2110550464}
+  output: []
   collected: []
   result: ' To unlock this'
   icon: {fileID: 21300000, guid: 3d65b2988478e8149a6aef0663a28e43, type: 3}
