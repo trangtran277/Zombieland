@@ -18,6 +18,8 @@ public class ThirdPersonInput : MonoBehaviour
      protected float cameraAngleSpeed = .2f;
      public Vector3 offset = new Vector3(0f, 2f, 4f);
 
+    //public EquipmentManager equipmentManager;
+    public GameObject riu;
 
     //public GameObject hearbar;
     //private Slider sliderHealth;
@@ -42,7 +44,16 @@ public class ThirdPersonInput : MonoBehaviour
      // Update is called once per frame
      void Update()
      {
-          control.Hinput = leftJoystick.Horizontal;
+        /*if (EquipmentManager.instance.currentEquipment[3] != null)
+        {
+            riu.SetActive(true);
+        }
+        else
+        {
+            riu.SetActive(false);
+        }*/
+
+        control.Hinput = leftJoystick.Horizontal;
           control.Vinput = leftJoystick.Vertical;
 
           cameraAngle += fixedTouchField.TouchDist.x * cameraAngleSpeed;

@@ -1,6 +1,7 @@
 ﻿using HutongGames.PlayMaker.Actions;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityStandardAssets.Characters.ThirdPerson;
@@ -14,6 +15,9 @@ public class UiManagerController : MonoBehaviour
      private Animator ator;
      private EquipmentManager equipmentManager;
     public GameObject human;
+
+    public GameObject weapon;
+
      void Start()
      {
         ator = human.GetComponent<Animator>();
@@ -50,23 +54,27 @@ public class UiManagerController : MonoBehaviour
     }
      public void AttackClick()
      {
-        Debug.Log("click attack");
-        ator.SetTrigger("attack");
-        //Debug.Log("Attacked");
-        //play attack animation here
-        float damage = userControl.m_Character.baseDamge;
-        Equipment weapon = EquipmentManager.instance.currentEquipment[(int)EquipmentSlot.Weapon];
-        if (weapon != null)
+        if(weapon.activeInHierarchy)
         {
-            damage += weapon.equipmentItem.damage;
-        }
-        EnemyController enemy = userControl.CheckEnemyAround();
-        if(enemy != null)
-        {
-            enemy.health -= damage;
+            Debug.Log("ok");
+            if (ator.GetBool("crouch")) 
+            {
+                ator.SetTrigger("sitAttack");
+                weapon.GetComponent<BoxCollider>().enabled = true;
+            }else
+            {
+                ator.SetTrigger("standAttack");
+                weapon.GetComponent<BoxCollider>().enabled = true;
+            }
+            
         }
         
      }
+    IEnumerable WaitOneHitWeapon()
+    {
+        yield return new WaitForSeconds(1.367f);
+        ator.SetBool("sitAttack", false);
+    }
     public void StealClick()
     {
         //userControl.crouchswt = !userControl.crouchswt;
