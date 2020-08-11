@@ -9,8 +9,9 @@ public class TimerScript : MonoBehaviour
     [SerializeField] float startTime = 10f;
     [SerializeField] Transform player;
     [SerializeField] GameObject enemy;
-    [SerializeField] float spawnRange = 20f;
     [SerializeField] float spawnNumber = 10f;
+    [SerializeField] Transform centerPos;
+    [SerializeField] float radius;
     private bool hasSpawned = false;
 
     // Start is called before the first frame update
@@ -53,8 +54,8 @@ public class TimerScript : MonoBehaviour
 
     private Vector3 RandomizePosition()
     {
-        float x = player.position.x + Random.Range(-spawnRange / 2, spawnRange / 2);
-        float z = player.position.z + Random.Range(-spawnRange / 2, spawnRange / 2);
+        float x = centerPos.position.x + Random.Range(- radius, radius);
+        float z = centerPos.position.z + Random.Range(- radius, radius);
         return new Vector3(x, 0f, z);
     }
 }
