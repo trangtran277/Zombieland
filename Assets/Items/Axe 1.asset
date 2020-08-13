@@ -15,4 +15,4 @@ MonoBehaviour:
   name: Axe
   icon: {fileID: 21300000, guid: 5dc59d48a312429448f2849e9544c9a5, type: 3}
   description: Can be equiped. Can kill zombie instatly but breaks after 1 use
-  maxNumberPerSlot: 0
+  maxNumberPerSlot: 1

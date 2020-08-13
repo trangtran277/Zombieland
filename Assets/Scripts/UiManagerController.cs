@@ -6,32 +6,27 @@ using UnityStandardAssets.Characters.ThirdPerson;
 
 public class UiManagerController : MonoBehaviour
 {
-    public Button bag, attack, run, pick;
-    public InventoryUI inventoryUI;
-    public ThirdPersonUserControl userControl;
-    private Animator ator;
-    public ThingsToInteract curInteract;
+    #region Singleton
     public static UiManagerController instance;
     private void Awake()
     {
         if (instance != null) return;
         instance = this;
-        bag.onClick.AddListener(BagClick);
-        attack.onClick.AddListener(AttackClick);
-        pick.onClick.AddListener(PickClick);
     }
-     /*void Awake()
+    #endregion
+
+    public Button bag, attack, run, pick;
+     public InventoryUI inventoryUI;
+     public ThirdPersonUserControl userControl;
+     private Animator ator;
+     private EquipmentManager equipmentManager;
+    public ThingsToInteract curInteract;
+    void Start()
      {
-        //equipmentManager = EquipmentManager.instance;
+        equipmentManager = EquipmentManager.instance;
         bag.onClick.AddListener(BagClick);
         attack.onClick.AddListener(AttackClick);
         pick.onClick.AddListener(PickClick);
-     }*/
-
-     // Update is called once per frame
-     void Update()
-     {
-
      }
      public void RunClick()
      {
@@ -44,10 +39,10 @@ public class UiManagerController : MonoBehaviour
      }
      public void PickClick()
      {
-        Debug.Log("PickClick");
         IInteractable itemFound = userControl.CheckItemAround();
         if (itemFound != null)
         {
+            //userControl.interactionCircle.SetActive(false);
             if (itemFound is ThingsToInteract)
                 curInteract = itemFound as ThingsToInteract;
             itemFound.Interact();
