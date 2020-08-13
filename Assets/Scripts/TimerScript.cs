@@ -16,6 +16,7 @@ public class TimerScript : MonoBehaviour
     public GameObject nightWarning;
 
     private bool hasSpawned = false;
+    private bool hasRemoved = false;
 
     // Start is called before the first frame update
     void Start()
@@ -45,10 +46,15 @@ public class TimerScript : MonoBehaviour
                 Spawn();
                 hasSpawned = true;
             }
-        }
+        } 
         else
         {
             timerText.color = Color.black;
+            if (hasSpawned && !hasRemoved)
+            {
+                Remove();
+                hasRemoved = true;
+            }
         }
         /*float timer = Time.timeSinceLevelLoad;
         int minute = (int)timer / 60;
@@ -72,13 +78,22 @@ public class TimerScript : MonoBehaviour
         {
             //GameObject newEnemy = Instantiate(enemy, RandomizePosition(), Quaternion.identity);
             //newEnemy.GetComponent<EnemyController>().player = player.transform;
-            GameObject pickUp = ObjectPooler.SharedInstance.GetPooledObject();
-            if (pickUp != null)
+            GameObject nightEnemy = ObjectPooler.SharedInstance.GetPooledObject();
+            if (nightEnemy != null)
             {
-                pickUp.transform.position = RandomizePosition();
-                pickUp.transform.rotation = Quaternion.identity;
-                pickUp.SetActive(true);
+                nightEnemy.transform.position = RandomizePosition();
+                nightEnemy.transform.rotation = Quaternion.identity;
+                nightEnemy.SetActive(true);
             }
+        }
+    }
+
+    public void Remove()
+    {
+        List<GameObject> objectPool = ObjectPooler.SharedInstance.pooledObjects;
+        foreach (GameObject obj in objectPool)
+        {
+            obj.SetActive(false);
         }
     }
 
