@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using HutongGames.PlayMaker.Actions;
+using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityStandardAssets.Characters.ThirdPerson;
@@ -15,30 +17,34 @@ public class UiManagerController : MonoBehaviour
     }
     #endregion
 
-    public Button bag, attack, run, pick;
-     public InventoryUI inventoryUI;
-     public ThirdPersonUserControl userControl;
-     private Animator ator;
-     private EquipmentManager equipmentManager;
+    public Button bag, attack, run, pick, steal;
+    public InventoryUI inventoryUI;
+    public ThirdPersonUserControl userControl;
+    private Animator ator;
+    private EquipmentManager equipmentManager;
     public ThingsToInteract curInteract;
+    public GameObject human;
+    public GameObject weapon;
     void Start()
-     {
+    {
+        ator = human.GetComponent<Animator>();
         equipmentManager = EquipmentManager.instance;
         bag.onClick.AddListener(BagClick);
         attack.onClick.AddListener(AttackClick);
         pick.onClick.AddListener(PickClick);
-     }
-     public void RunClick()
-     {
+        steal.onClick.AddListener(StealClick);
+    }
+    public void RunClick()
+    {
 
-     }
-     public void BagClick()
-     {
+    }
+    public void BagClick()
+    {
         Debug.Log("bag click");
         inventoryUI.ToggleInventory();
-     }
-     public void PickClick()
-     {
+    }
+    public void PickClick()
+    {
         IInteractable itemFound = userControl.CheckItemAround();
         if (itemFound != null)
         {
@@ -65,4 +71,15 @@ public class UiManagerController : MonoBehaviour
         }
         }*/        
      }
+    IEnumerable WaitOneHitWeapon()
+    {
+        yield return new WaitForSeconds(1.367f);
+        ator.SetBool("sitAttack", false);
+    }
+    public void StealClick()
+    {
+        //userControl.crouchswt = !userControl.crouchswt;
+        Debug.Log("click steak");
+        ator.SetBool("crouch", !ator.GetBool("crouch"));
+    }
 }

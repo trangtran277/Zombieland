@@ -20,8 +20,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		  public bool m_Jump;
 		  [HideInInspector]
 		  public float Vinput, Hinput;                    // the world-relative desired move direction, calculated from the camForward and user input.
-		  //public UiManagerController UIcontroller;
-
+														  //public UiManagerController UIcontroller;
+		public bool crouchswt;
 		  private void Start()
 		  {
 			   //Cursor.lockState = CursorLockMode.Locked;
@@ -50,18 +50,19 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			   }
 		  }
 
-
+		
 		  // Fixed update is called in sync with physics
 		  private void FixedUpdate()
 		  {
-			   /*if(EventSystem.current.IsPointerOverGameObject())
-			{
-				return;
-			}*/
-			   // read inputs
-			   //float h = CrossPlatformInputManager.GetAxis("Horizontal");
-			   //float v = CrossPlatformInputManager.GetAxis("Vertical");
-			   bool crouch = Input.GetKey(KeyCode.C);
+			/*if(EventSystem.current.IsPointerOverGameObject())
+		 {
+			 return;
+		 }*/
+			// read inputs
+			//float h = CrossPlatformInputManager.GetAxis("Horizontal");
+			//float v = CrossPlatformInputManager.GetAxis("Vertical");
+			bool crouch = Input.GetKey(KeyCode.C);
+				//bool crouch = crouchswt;
 
 			   // calculate move direction to pass to character
 			   if (m_Cam != null)
