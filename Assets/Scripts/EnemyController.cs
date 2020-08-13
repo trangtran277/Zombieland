@@ -63,7 +63,7 @@ public class EnemyController : MonoBehaviour
             // Debug.Log("go here");
             Vector3 direction = player.position - this.transform.position;
             float angle = Vector3.Angle(direction, this.transform.forward);
-            float distFromPlayer = Vector3.Distance(player.position, this.transform.position);
+            float distFromPlayer = Vector3.Distance(player.position, this.transform.position)-1;
             // Debug.Log(agent.destination);
 
             if (distFromPlayer <= detectionDistance)

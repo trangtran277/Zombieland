@@ -29,6 +29,7 @@ public class ThirdPersonInput : MonoBehaviour
     public GameObject cam;
     private CinemachineFreeLook cinemachineFreeLook;
     private Transform transformCinemachineFreeLook;
+
      void Start()
      {
          control = GetComponent<ThirdPersonUserControl>();

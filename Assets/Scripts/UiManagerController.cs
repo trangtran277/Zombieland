@@ -56,7 +56,7 @@ public class UiManagerController : MonoBehaviour
     }
      public void AttackClick()
      {
-        //Debug.Log("Attacked");
+        Debug.Log("Attacked");
         //play attack animation here
         if (weapon.activeInHierarchy)
         {
