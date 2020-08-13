@@ -32,7 +32,6 @@ public class TimerScript : MonoBehaviour
         string displayHour = hour < 10 ? "0" + hour : "" + hour;
         string displayMin = minute < 10 ? "0" + minute : "" + minute;
         timerText.text = displayHour + " : " + displayMin;
-
         if (curTime >= 18 && curTime < 19)
             nightWarning.SetActive(true);
         else
