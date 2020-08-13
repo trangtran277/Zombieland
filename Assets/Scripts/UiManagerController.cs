@@ -58,14 +58,22 @@ public class UiManagerController : MonoBehaviour
      {
         //Debug.Log("Attacked");
         //play attack animation here
-        if(ator.GetBool("crouch"))
+        if (weapon.activeInHierarchy)
         {
-            ator.SetBool("sitAttack", true);
-        }else 
-        {
-            ator.SetBool("standAttack", true);
+            Debug.Log("ok");
+            if (ator.GetBool("crouch"))
+            {
+                ator.SetTrigger("sitAttack");
+                weapon.GetComponent<BoxCollider>().enabled = true;
+            }
+            else
+            {
+                ator.SetTrigger("standAttack");
+                weapon.GetComponent<BoxCollider>().enabled = true;
+            }
+
         }
-     }
+    }
     IEnumerable WaitOneHitWeapon()
     {
         yield return new WaitForSeconds(1.367f);
