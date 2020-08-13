@@ -28,7 +28,8 @@ public class WeaponOneHitZombie : MonoBehaviour
         {
             if (GetComponent<BoxCollider>().enabled)
             {
-                Destroy(other.gameObject);
+                //Destroy(other.gameObject);
+                other.gameObject.GetComponent<EnemyController>().isAlive = false;
                 GameObject.FindGameObjectsWithTag("Weapon")[0].SetActive(false);
             }
             else

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using HutongGames.PlayMaker.Actions;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
@@ -10,7 +11,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] public Transform player;
     [SerializeField] float speed = 0.2f;
     [SerializeField] float damageToPlayer = 1f;
-    [SerializeField] float detectionDistance = 10f;
+    [SerializeField] float detectionDistance = 1f;
     [SerializeField] float fieldOfVision = 120f;
     [SerializeField] float playerDetectTime = 5f;
     [SerializeField] float chaseTime = 10f;
@@ -26,7 +27,9 @@ public class EnemyController : MonoBehaviour
     private bool chasePlayer = false;
     private float timer = 0;
     private float healthofPlayer;
-    private bool playerAlive = true;
+    public bool playerAlive = true;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -40,7 +43,7 @@ public class EnemyController : MonoBehaviour
         {
             thirdPersonCharacter = GameObject.FindGameObjectWithTag("Player").GetComponent<ThirdPersonCharacter>();
         }
-        anim = GetComponent<Animator>();
+        anim = this.GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         timeToNextAttack = Time.time;
     }
@@ -63,58 +66,72 @@ public class EnemyController : MonoBehaviour
             // Debug.Log("go here");
             Vector3 direction = player.position - this.transform.position;
             float angle = Vector3.Angle(direction, this.transform.forward);
-            float distFromPlayer = Vector3.Distance(player.position, this.transform.position)-1;
-            // Debug.Log(agent.destination);
+            float distFromPlayer = Vector3.Distance(player.position,this.transform.position);
 
-            if (distFromPlayer <= detectionDistance)
+            Debug.Log(FindPlayer(this.transform));
+
+            if (distFromPlayer <= detectionDistance && FindPlayer(this.transform))
             {
+                agent.enabled = true;
                 //canh bao vao tam cua zombie o day
-
-
-                if (distFromPlayer <= agent.stoppingDistance)
+                if(!DetectionManager.instance.isNearDetected)
                 {
-                    //attack
-                    FaceTarget();
-                    agent.velocity = Vector3.zero;
-                    
-                    anim.SetBool("isWalking", false);
-                    if(playerAlive)
-                    healthofPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<ThirdPersonCharacter>().health;
-                    if(healthofPlayer>0)
-                    anim.SetBool("isAttacking", true);
-                    else
-                    {                      
-                        anim.SetBool("isAttacking", false);
-                        anim.SetBool("isWalking", false);
-                        playerAlive = false;
-                    }
-                    
+                    DetectionManager.instance.isNearDetected = true;
+                    DetectionManager.instance.SetDitection(true);
                 }
-                else
-                {
-                    anim.SetBool("isWalking", true);
-                    anim.SetBool("isAttacking", false);
-                }
-
+                
                 if (angle <= fieldOfVision / 2)
                 {
+                    GetComponent<BoxCollider>().isTrigger = false;
                     //bat canh bao bi zombie duoi
+                    if (!DetectionManager.instance.isBeingChased)
+                    {
+                        DetectionManager.instance.isBeingChased = true;
+                        DetectionManager.instance.SetChase(true);
+                        DetectionManager.instance.isNearDetected = false;
+                        DetectionManager.instance.SetDitection(false);
+                    }
                     //follow
                     anim.SetBool("isWalking", true);
                     agent.destination = player.position;
                     FaceTarget();
-                }else
+                    if(playerAlive)
+                    healthofPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<ThirdPersonCharacter>().health;
+                    if (distFromPlayer <= agent.stoppingDistance)
+                    {
+                        //attack
+                        FaceTarget();
+                        anim.SetBool("isWalking", false);
+
+                        if (healthofPlayer > 0)
+                            anim.SetBool("isAttacking", true);
+                    }
+                    else if(healthofPlayer>0)
+                    {
+                        anim.SetBool("isAttacking", false);
+                        anim.SetBool("isWalking", true);
+                    }
+                }
+                else
                 {
+                    GetComponent<BoxCollider>().isTrigger = true;
+                    agent.enabled = false;
+                    anim.SetBool("isWalking", false);
                     // ra khoi tam
                     // tat canh bao bi zombie duoi o day
-                    anim.SetBool("isWalking", false);
+                    if (DetectionManager.instance.isBeingChased)
+                    {
+                        DetectionManager.instance.isBeingChased = false;
+                        DetectionManager.instance.SetChase(false);
+                    }
+                    
                 }
             }else
             {
-                //tat canh bao vao tam cua zombie
+                GetComponent<BoxCollider>().isTrigger = true;
+                anim.SetBool("isWalking", false);
+
             }
-
-
 
 
 
@@ -167,6 +184,17 @@ public class EnemyController : MonoBehaviour
             }*/
         }
     }
+    private void FixedUpdate()
+    {
+        if(GameObject.FindGameObjectWithTag("Player"))
+        healthofPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<ThirdPersonCharacter>().health;
+        if(healthofPlayer<=0)
+        {
+            anim.SetBool("isWalking", false);
+            anim.SetBool("isAttacking", false);
+            playerAlive = false;
+        }
+    }
     void FaceTarget()
     {
         Vector3 direction = (player.position - transform.position).normalized;
@@ -202,5 +230,21 @@ public class EnemyController : MonoBehaviour
     private void DestroyEnemy()
     {
         Destroy(gameObject);
+    }
+    private bool FindPlayer(Transform target)
+    {
+        RaycastHit hit;
+        for (float x=-1f;x<=1f;x+=0.2f)
+        {
+            if (Physics.Raycast(target.position, target.TransformDirection(new Vector3(x, 0f, 1f)), out hit, detectionDistance + 50))
+            {
+                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+                if (hit.collider.gameObject.CompareTag("Player"))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

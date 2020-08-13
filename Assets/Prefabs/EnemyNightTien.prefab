@@ -1682,7 +1682,7 @@ GameObject:
   - component: {fileID: 8437798271777883848}
   m_Layer: 0
   m_Name: EnemyNightTien
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1749,7 +1749,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -1768,8 +1768,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 2, z: 0.7921738}
-  m_Center: {x: 2.4251978e-10, y: 1, z: -0.103913106}
+  m_Size: {x: 1, y: 1.8485003, z: 0.5693966}
+  m_Center: {x: -6.071139e-10, y: 0.9242501, z: -0.048864603}
 --- !u!114 &8437798271777883848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1785,13 +1785,14 @@ MonoBehaviour:
   player: {fileID: 0}
   speed: 0.2
   damageToPlayer: 1
-  detectionDistance: 10
+  detectionDistance: 5
   fieldOfVision: 120
   playerDetectTime: 5
-  chaseTime: 10
+  chaseTime: 7
   attachRange: 0.9
   thirdPersonCharacter: {fileID: 0}
   isAlive: 1
+  playerAlive: 1
 --- !u!1 &5668589386342390669
 GameObject:
   m_ObjectHideFlags: 0

@@ -54,6 +54,8 @@ public class ThirdPersonInput : MonoBehaviour
             riu.SetActive(false);
         }*/
 
+        
+
         control.Hinput = leftJoystick.Horizontal;
           control.Vinput = leftJoystick.Vertical;
 

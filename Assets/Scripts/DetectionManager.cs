@@ -18,15 +18,15 @@ public class DetectionManager : MonoBehaviour
     public GameObject detectWarning;
     public GameObject chaseWarning;
 
-    private void Update()
+   /* void Update()
     {
-        if (!chaseWarning.activeSelf && isNearDetected)
+        *//*if (!chaseWarning.activeInHierarchy && isNearDetected)
         {
             detectWarning.SetActive(true);
         }
         else if (isBeingChased)
         {
-            if (detectWarning.activeSelf)
+            if (detectWarning.activeInHierarchy)
             {
                 detectWarning.SetActive(false);
             }
@@ -36,6 +36,31 @@ public class DetectionManager : MonoBehaviour
         {
             detectWarning.SetActive(false);
             chaseWarning.SetActive(false);
+        }*//*
+        if(isNearDetected)
+        {
+            detectWarning.SetActive(true);
         }
+        else
+        {
+            detectWarning.SetActive(false);
+        }
+        if (isBeingChased)
+        {
+            chaseWarning.SetActive(true);
+        }
+        else
+        {
+            chaseWarning.SetActive(false);
+        }
+
+    }*/
+    public void SetDitection(bool state)
+    {
+        detectWarning.SetActive(state);
+    }
+    public void SetChase(bool state1)
+    {
+        chaseWarning.SetActive(state1);
     }
 }
