@@ -44,9 +44,15 @@ public class TimerScript : MonoBehaviour
     {
         for (int i = 0; i < spawnNumber; i++)
         {
-            GameObject newEnemy = Instantiate(enemy, RandomizePosition(), Quaternion.identity);
-            newEnemy.GetComponent<EnemyController>().player = player.transform;
-         
+            //GameObject newEnemy = Instantiate(enemy, RandomizePosition(), Quaternion.identity);
+            //newEnemy.GetComponent<EnemyController>().player = player.transform;
+            GameObject pickUp = ObjectPooler.SharedInstance.GetPooledObject();
+            if (pickUp != null)
+            {
+                pickUp.transform.position = RandomizePosition();
+                pickUp.transform.rotation = Quaternion.identity;
+                pickUp.SetActive(true);
+            }
         }
     }
 
