@@ -29,7 +29,6 @@ namespace UnityStandardAssets.Cameras
 		private Vector3 m_PivotEulers;
 		private Quaternion m_PivotTargetRot;
 		private Quaternion m_TransformTargetRot;
-        public FixedTouchField fixedTouchField;
 
         protected override void Awake()
         {
