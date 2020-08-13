@@ -58,18 +58,13 @@ public class UiManagerController : MonoBehaviour
      {
         //Debug.Log("Attacked");
         //play attack animation here
-        /*float damage = userControl.m_Character.baseDamge;
-        Equipment weapon = EquipmentManager.instance.currentEquipment[(int)EquipmentSlot.Weapon];
-        if (weapon != null)
+        if(ator.GetBool("crouch"))
         {
-            damage += weapon.equipmentItem.damage;
-        }
-        EnemyController enemy = userControl.CheckEnemyAround();
-        if(enemy != null)
+            ator.SetBool("sitAttack", true);
+        }else 
         {
-            enemy.isAlive = false;
+            ator.SetBool("standAttack", true);
         }
-        }*/        
      }
     IEnumerable WaitOneHitWeapon()
     {
