@@ -57,8 +57,8 @@ public class ThirdPersonInput : MonoBehaviour
 
         
 
-        control.Hinput = leftJoystick.Horizontal;
-        control.Vinput = leftJoystick.Vertical;
+        control.Hinput = leftJoystick.Horizontal * 1.5f;
+        control.Vinput = leftJoystick.Vertical * 1.5f;
 
           //cameraAngle += fixedTouchField.TouchDist.x * cameraAngleSpeed;
 
