@@ -42,6 +42,7 @@ public class MissionManager : MonoBehaviour
     IEnumerator ExitGame()
     {
         yield return new WaitForSeconds(1.5f);
+        //Debug.Log("exit");
         Application.Quit();
     }
 }

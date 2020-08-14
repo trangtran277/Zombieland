@@ -15,8 +15,8 @@ public class ThirdPersonInput : MonoBehaviour
      protected ThirdPersonUserControl control;
 
      protected float cameraAngle;
-     protected float cameraAngleSpeed = .2f;
-     public Vector3 offset = new Vector3(0f, 2f, 4f);
+     protected float cameraAngleSpeed = .5f;
+     //public Vector3 offset = new Vector3(0f, 2f, 4f);
 
     //public EquipmentManager equipmentManager;
     public GameObject riu;
@@ -27,8 +27,8 @@ public class ThirdPersonInput : MonoBehaviour
     private Animator animatorThirdperson;
     private float healthCharacter;
     public GameObject cam;
-    private CinemachineFreeLook cinemachineFreeLook;
-    private Transform transformCinemachineFreeLook;
+    //private CinemachineFreeLook cinemachineFreeLook;
+    //private Transform transformCinemachineFreeLook;
 
      void Start()
      {
@@ -36,33 +36,34 @@ public class ThirdPersonInput : MonoBehaviour
         //sliderHealth = hearbar.GetComponent<Slider>();
         animatorThirdperson = GetComponent<Animator>();
         
-        healthCharacter = GetComponent<ThirdPersonCharacter>().health;
-        healthBar.SetMaxHealth(healthCharacter);
-        cinemachineFreeLook = cam.GetComponent<CinemachineFreeLook>();
-        transformCinemachineFreeLook = cam.GetComponent<Transform>();
+        //healthCharacter = GetComponent<ThirdPersonCharacter>().health;
+        healthBar.SetMaxHealth(GetComponent<ThirdPersonCharacter>().maxhealth);
+        //healthCharacter = 60;
+        //cinemachineFreeLook = cam.GetComponent<CinemachineFreeLook>();
+        //transformCinemachineFreeLook = cam.GetComponent<Transform>();
      }
 
      // Update is called once per frame
      void Update()
      {
-        /*if (EquipmentManager.instance.currentEquipment[3] != null)
+        if (EquipmentManager.instance.currentEquipment[3] != null)
         {
             riu.SetActive(true);
         }
         else
         {
             riu.SetActive(false);
-        }*/
+        }
 
         
 
         control.Hinput = leftJoystick.Horizontal;
-          control.Vinput = leftJoystick.Vertical;
+        control.Vinput = leftJoystick.Vertical;
 
-          cameraAngle += fixedTouchField.TouchDist.x * cameraAngleSpeed;
+          //cameraAngle += fixedTouchField.TouchDist.x * cameraAngleSpeed;
 
         /*transformCinemachineFreeLook.position = transform.position + Quaternion.AngleAxis(cameraAngle, Vector3.up) * offset;*/
-        cinemachineFreeLook.m_XAxis.Value = cameraAngle;
+        //cinemachineFreeLook.m_XAxis.Value = cameraAngle;
 
         /*Camera.main.transform.position = transform.position + Quaternion.AngleAxis(cameraAngle, Vector3.up) * offset;
         Camera.main.transform.rotation = Quaternion.LookRotation(transform.position + Vector3.up * 2f - Camera.main.transform.position, Vector3.up);

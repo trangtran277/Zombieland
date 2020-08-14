@@ -34,13 +34,25 @@ public class UiManagerController : MonoBehaviour
         pick.onClick.AddListener(PickClick);
         steal.onClick.AddListener(StealClick);
     }
+
+    private void Update()
+    {
+        if(equipmentManager.currentEquipment[3] == null)
+        {
+            attack.interactable = false;
+        }
+        else
+        {
+            attack.interactable = true;
+        }
+    }
     public void RunClick()
     {
 
     }
     public void BagClick()
     {
-        Debug.Log("bag click");
+        //Debug.Log("bag click");
         inventoryUI.ToggleInventory();
     }
     public void PickClick()
@@ -60,7 +72,7 @@ public class UiManagerController : MonoBehaviour
         //play attack animation here
         if (weapon.activeInHierarchy)
         {
-            Debug.Log("ok");
+            //Debug.Log("ok");
             if (ator.GetBool("crouch"))
             {
                 ator.SetTrigger("sitAttack");
@@ -82,7 +94,18 @@ public class UiManagerController : MonoBehaviour
     public void StealClick()
     {
         //userControl.crouchswt = !userControl.crouchswt;
-        Debug.Log("click steak");
+        //Debug.Log("click steak");
+        if (!ator.GetBool("crouch"))
+        {
+            userControl.GetComponent<CapsuleCollider>().height = 2.5f;
+            userControl.GetComponent<CapsuleCollider>().center = new Vector3(-0.01751587f, 1f, 0.02719201f);
+        }
+        else
+        {
+            userControl.GetComponent<CapsuleCollider>().height = 5f;
+            userControl.GetComponent<CapsuleCollider>().center = new Vector3(-0.01751587f, 2.4f, 0.02719201f);
+        }
+        
         ator.SetBool("crouch", !ator.GetBool("crouch"));
     }
 }
