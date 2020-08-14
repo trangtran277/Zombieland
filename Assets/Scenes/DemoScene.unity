@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1959216544}
-  m_IndirectSpecularColor: {r: 0.4001946, g: 0.47998714, b: 0.5953306, a: 1}
+  m_IndirectSpecularColor: {r: 0.40019462, g: 0.47998756, b: 0.59533066, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &4
 LightmapSettings:
@@ -15994,11 +15994,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timerText: {fileID: 512333855}
-  startTime: 0.1
+  startNightTime: 0.25
   player: {fileID: 1790567688}
   enemy: {fileID: 5518853138295985823, guid: 4b2ca4062e5663c4fab07be08c0da963, type: 3}
-  spawnRange: 20
   spawnNumber: 10
+  centerPos: {fileID: 0}
+  radius: 35
 --- !u!114 &512333855
 MonoBehaviour:
   m_ObjectHideFlags: 0

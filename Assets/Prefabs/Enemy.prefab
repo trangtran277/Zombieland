@@ -1261,7 +1261,7 @@ GameObject:
   - component: {fileID: 127958107}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1328,13 +1328,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   speed: 0.1
-  health: 100
   damageToPlayer: 10
   detectionDistance: 8
   fieldOfVision: 100
-  attachRange: 1
+  playerDetectTime: 5
   chaseTime: 10
+  attachRange: 1
   thirdPersonCharacter: {fileID: 0}
+  isAlive: 1
 --- !u!195 &1624508489
 NavMeshAgent:
   m_ObjectHideFlags: 0

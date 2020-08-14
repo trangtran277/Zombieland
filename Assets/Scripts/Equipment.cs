@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Equipment : PickUpable
+public class Equipment : Collectibles
 {
-    public EquipmentItem equipmentItem;
+    //public EquipmentItem equipmentItem;
     public override void Use()
     {
-        base.Use();
+        //base.Use();
         EquipmentManager.instance.Equip(this);
-        Debug.Log(equipmentItem.name + "Equiped");
     }
 
-    public override string GetName()
+    /*public override string GetName()
     {
         return base.GetName() + equipmentItem.name;
     }
@@ -25,11 +24,5 @@ public class Equipment : PickUpable
     public override Sprite GetSprite()
     {
         return equipmentItem.icon;
-    }
-
-    /*public override void PickUp()
-    {
-        if (Inventory.instance.AddItem(this))
-            Destroy(gameObject);
     }*/
 }

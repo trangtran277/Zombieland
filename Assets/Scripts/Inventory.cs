@@ -3,16 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using UnityEngine;
 
-/*public struct InventoryItem
-{
-    public Item item;
-    public int number;
-    public InventoryItem(Item newitem, int newnumber)
-    {
-        item = newitem;
-        number = newnumber;
-    }
-}*/
+
 public class Inventory : MonoBehaviour
 {
     #region Singleton
@@ -25,42 +16,38 @@ public class Inventory : MonoBehaviour
     #endregion
     public delegate void OnItemChanged();
     public OnItemChanged onItemChangedCallback;
-    public int space = 24;
-    public List<PickUpable> items = new List<PickUpable>();
+    public int space = 12;
+    public List<Collectibles> items = new List<Collectibles>();
 
-    public bool AddItem(PickUpable pickUpable)
+    public bool AddItem(Collectibles collectibles)
     {
-        if(pickUpable is Equipment)
+        if(collectibles is Equipment || collectibles is MissionItem)
         {
-            //Debug.Log("Im equipment");
             if (items.Count >= space)
             {
                 Debug.Log("Inventory full");
                 return false;
             }
-            items.Add(pickUpable);
+            items.Add(collectibles);
+            Debug.Log("Item added");
             if(onItemChangedCallback != null)
+            {
                 onItemChangedCallback.Invoke();
+                Debug.Log("callback");
+            }
+                
         }
         else
         {
-            PickUpable itemInInventory = null;
-            //if (items.Count > 0)
-                //itemInInventory = items[0]; //= items.FindLast(i => i.GetName().Equals(pickUpable.GetName()));
-            foreach (var item in items)
-            {
-                if (item.GetName().Equals(pickUpable.GetName()))
-                {
-                    itemInInventory = item;
-                }                   
-            }
+            Collectibles itemInInventory = null;
+            itemInInventory = items.FindLast(i => i.item.name.Equals(collectibles.item.name));
             if (itemInInventory != null)
             {
-               
-                if(itemInInventory.number + pickUpable.number > pickUpable.GetMaxNumber())
+                int maxNumberInSlot = itemInInventory.item.maxNumberPerSlot;
+                if (itemInInventory.number + collectibles.number > maxNumberInSlot)
                 {
-                    pickUpable.number = itemInInventory.number + pickUpable.number - pickUpable.GetMaxNumber();
-                    itemInInventory.number = pickUpable.GetMaxNumber();
+                    collectibles.number = itemInInventory.number + collectibles.number - maxNumberInSlot;
+                    itemInInventory.number = maxNumberInSlot;
                     if (onItemChangedCallback != null)
                         onItemChangedCallback.Invoke();
                     if (items.Count >= space)
@@ -68,13 +55,13 @@ public class Inventory : MonoBehaviour
                         Debug.Log("Inventory full");
                         return false;
                     }
-                    items.Add(pickUpable);
+                    items.Add(collectibles);
                     if (onItemChangedCallback != null)
                         onItemChangedCallback.Invoke();
                 }
                 else
                 {
-                    itemInInventory.number += pickUpable.number;
+                    itemInInventory.number += collectibles.number;
                     if (onItemChangedCallback != null)
                         onItemChangedCallback.Invoke();
                 }
@@ -86,29 +73,27 @@ public class Inventory : MonoBehaviour
                     Debug.Log("Inventory full");
                     return false;
                 }
-                items.Add(pickUpable);
+                items.Add(collectibles);
                 if (onItemChangedCallback != null)
                     onItemChangedCallback.Invoke();
             }
         }
-        //foreach (var item in items)
-          //  Debug.Log(item.GetName());
         return true;
            
     }
 
-    public void ItemChanged(PickUpable pickUpable, float newNumber)
+    public void ItemChanged()
     {
-        //PickUpable itemInInventory = items.Find(i => i.GetName() == pickUpable.GetName());
-        //itemInInventory.number = newNumber;
         if (onItemChangedCallback != null)
             onItemChangedCallback.Invoke();
     }
 
-    public void RemoveItem(PickUpable pickUpable)
+    public void RemoveItem(Collectibles collectibles)
     {
-        items.Remove(pickUpable);
+        items.Remove(collectibles);
         if (onItemChangedCallback != null)
             onItemChangedCallback.Invoke();
+        if(collectibles != EquipmentManager.instance.currentEquipment[3] && !(collectibles is MissionItem))
+            Destroy(collectibles.gameObject);
     }
 }

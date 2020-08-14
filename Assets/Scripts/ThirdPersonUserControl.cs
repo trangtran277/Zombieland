@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace UnityStandardAssets.Characters.ThirdPerson
 {
@@ -9,8 +10,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 	 [RequireComponent(typeof(ThirdPersonCharacter))]
 	 public class ThirdPersonUserControl : MonoBehaviour
 	 {
-		  public GameObject interactionCircle;
-		  public float interactionRadius = 0.5f;
+		  //public GameObject interactionCircle;
+		  public Button interactionButton;
+		  public float interactionRadius = 1f;
 		  public ThirdPersonCharacter m_Character; // A reference to the ThirdPersonCharacter on the object
 		  private Transform m_Cam;                  // A reference to the main camera in the scenes transform
 		  private Vector3 m_CamForward;             // The current forward direction of the camera
@@ -18,8 +20,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		  public bool m_Jump;
 		  [HideInInspector]
 		  public float Vinput, Hinput;                    // the world-relative desired move direction, calculated from the camForward and user input.
-		  //public UiManagerController UIcontroller;
-
+														  //public UiManagerController UIcontroller;
+		public bool crouchswt;
 		  private void Start()
 		  {
 			   //Cursor.lockState = CursorLockMode.Locked;
@@ -48,18 +50,19 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			   }
 		  }
 
-
+		
 		  // Fixed update is called in sync with physics
 		  private void FixedUpdate()
 		  {
-			   /*if(EventSystem.current.IsPointerOverGameObject())
-			{
-				return;
-			}*/
-			   // read inputs
-			   //float h = CrossPlatformInputManager.GetAxis("Horizontal");
-			   //float v = CrossPlatformInputManager.GetAxis("Vertical");
-			   bool crouch = Input.GetKey(KeyCode.C);
+			/*if(EventSystem.current.IsPointerOverGameObject())
+		 {
+			 return;
+		 }*/
+			// read inputs
+			//float h = CrossPlatformInputManager.GetAxis("Horizontal");
+			//float v = CrossPlatformInputManager.GetAxis("Vertical");
+			bool crouch = Input.GetKey(KeyCode.C);
+				//bool crouch = crouchswt;
 
 			   // calculate move direction to pass to character
 			   if (m_Cam != null)
@@ -83,42 +86,50 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			   m_Jump = false;
 
 			   CheckItemAround();
-			   CheckEnemyAround();
+			   //CheckEnemyAround();
 
 			   
 		  }
 
-		  public Interactable CheckItemAround()
+		  public IInteractable CheckItemAround()
 		  {
 			   Collider[] hits = Physics.OverlapSphere(transform.position, interactionRadius);
 			   foreach (Collider hit in hits)
 			   {
-					Interactable interactable = hit.GetComponent<Interactable>();
+					IInteractable interactable = hit.GetComponent<IInteractable>();
 					if (interactable != null)
 					{
-						 float objectHeight = 0f;
+						 /*float objectHeight = 0f;
 						 MeshFilter mesh = hit.GetComponent<MeshFilter>();
 						 if(mesh != null)
 						 {
 							objectHeight = mesh.sharedMesh.bounds.size.y * hit.transform.localScale.y;
-						 }
-						 
-						 interactionCircle.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y - objectHeight/2 + 0.005f, hit.transform.position.z);
-						 interactionCircle.SetActive(true);
+						 }*/
+
+					     //interactionCircle.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y - objectHeight/2 + 0.005f, hit.transform.position.z);
+					     //interactionCircle.SetActive(true);
+						 if(interactable is Bed)
+                    {
+						interactionButton.GetComponentInChildren<Text>().text = "Sleep";
+                    }
+					     interactionButton.interactable = true;
 						 return interactable;
 					}
 			   }
 
-			   if (interactionCircle.activeSelf)
-			   {
-					interactionCircle.SetActive(false);
-			   }
+			/*if (interactionCircle.activeSelf)
+			{
+				 interactionCircle.SetActive(false);
+			}*/
+			interactionButton.GetComponentInChildren<Text>().text = "Interact";
+			if (interactionButton.interactable == true)
+				interactionButton.interactable = false;
 			   return null;
 		  }
 
 		  public EnemyController CheckEnemyAround()
           {
-			float attackRange = m_Character.attackRange;
+			/*float attackRange = m_Character.attackRange;
 			float damage = m_Character.baseDamge;
 			Equipment weapon = EquipmentManager.instance.currentEquipment[(int)EquipmentSlot.Weapon];
 			if (weapon != null)
@@ -135,7 +146,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				{
 					return enemy;
 				}
-			}
+			}*/
 			return null;
 		  }
 	 }

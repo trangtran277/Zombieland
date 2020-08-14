@@ -1,28 +1,36 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.Characters.ThirdPerson;
 
-public class Consumable : PickUpable
+public class Consumable : Collectibles
 {
-    public ConsumableItem consumableItem;
+    //public ConsumableItem consumableItem;
 
-    private void Start()
+    /*private void Start()
     {
         if (consumableItem.name.Equals("Berries"))
             number = (int)Random.Range(3, 5);
-    }
+    }*/
+    public int healAmount = 30; 
     public override void Use()
     {
-        base.Use();
+        //base.Use();
         number--;
         if (number <= 0)
             RemoveFromInventory();
         else
-            Inventory.instance.ItemChanged(this, number);
-        consumableItem.TakeEffect();
+            Inventory.instance.ItemChanged();
+        TakeEffect();
     }
 
-    public override string GetName()
+    private void TakeEffect()
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<ThirdPersonCharacter>().health += healAmount;
+    }
+
+    /*public override string GetName()
     {
         return base.GetName() + consumableItem.name;
     }
@@ -35,11 +43,5 @@ public class Consumable : PickUpable
     public override Sprite GetSprite()
     {
         return consumableItem.icon;
-    }
-
-    /*public override void PickUp()
-    {
-        if (Inventory.instance.AddItem(this))
-            Destroy(gameObject);
     }*/
 }

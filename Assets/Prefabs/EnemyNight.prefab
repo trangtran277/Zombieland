@@ -1625,7 +1625,7 @@ GameObject:
   - component: {fileID: 279946319}
   m_Layer: 0
   m_Name: EnemyNight
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1692,13 +1692,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   speed: 0.25
-  health: 100
   damageToPlayer: 20
   detectionDistance: 20
   fieldOfVision: 180
-  attachRange: 1
+  playerDetectTime: 5
   chaseTime: 10
+  attachRange: 1
   thirdPersonCharacter: {fileID: 0}
+  isAlive: 1
 --- !u!195 &81566530
 NavMeshAgent:
   m_ObjectHideFlags: 0
