@@ -91,6 +91,7 @@ namespace UnityStandardAssets.Cameras
                       m_Hits[i].collider.attachedRigidbody.CompareTag(dontClipTag)))
                 {
                     // change the nearest collision to latest
+                 
                     nearest = m_Hits[i].distance;
                     targetDist = -m_Pivot.InverseTransformPoint(m_Hits[i].point).z;
                     hitSomething = true;
