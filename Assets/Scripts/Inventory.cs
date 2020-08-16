@@ -29,11 +29,11 @@ public class Inventory : MonoBehaviour
                 return false;
             }
             items.Add(collectibles);
-            Debug.Log("Item added");
+            //Debug.Log("Item added");
             if(onItemChangedCallback != null)
             {
                 onItemChangedCallback.Invoke();
-                Debug.Log("callback");
+                //Debug.Log("callback");
             }
                 
         }

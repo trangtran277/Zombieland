@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Medkit
   icon: {fileID: 7887931619765706173, guid: 15fd5c58d6a4a7e45ab41be2d004095d, type: 3}
-  description: Use to restore 40HP
+  description: Restore 40HP
   maxNumberPerSlot: 1

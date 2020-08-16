@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Collectibles : MonoBehaviour, IInteractable
 {
@@ -22,7 +23,7 @@ public class Collectibles : MonoBehaviour, IInteractable
                 Destroy(gameObject);
                 return;
             }
-            
+            Destroy(GetComponent<cakeslice.Outline>());
             var components = GetComponents(typeof(Component));
             foreach (var comp in components)
             {

@@ -10,7 +10,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 	 [RequireComponent(typeof(ThirdPersonCharacter))]
 	 public class ThirdPersonUserControl : MonoBehaviour
 	 {
-		  //public GameObject interactionCircle;
+		//public GameObject interactionCircle;
+		  public GameObject collectButton;
 		  public Button interactionButton;
 		  public float interactionRadius = 1f;
 		  public ThirdPersonCharacter m_Character; // A reference to the ThirdPersonCharacter on the object
@@ -109,10 +110,13 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 					     //interactionCircle.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y - objectHeight/2 + 0.005f, hit.transform.position.z);
 					     //interactionCircle.SetActive(true);
 						 if(interactable is Bed)
-                    {
-						interactionButton.GetComponentInChildren<Text>().text = "Sleep";
-                    }
+						 {
+							interactionButton.GetComponentInChildren<Text>().text = "Sleep";
+						 }
 					     interactionButton.interactable = true;
+						 collectButton.SetActive(true);
+					     Vector3 pos = Camera.main.WorldToScreenPoint(hit.transform.position);
+					     collectButton.transform.position = pos;
 						 return interactable;
 					}
 			   }
@@ -121,9 +125,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			{
 				 interactionCircle.SetActive(false);
 			}*/
-			interactionButton.GetComponentInChildren<Text>().text = "Interact";
-			if (interactionButton.interactable == true)
-				interactionButton.interactable = false;
+			   interactionButton.GetComponentInChildren<Text>().text = "Interact";
+			   if(interactionButton.interactable == true)
+					interactionButton.interactable = false;
 			   return null;
 		  }
 
