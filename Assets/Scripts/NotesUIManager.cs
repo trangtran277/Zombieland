@@ -13,6 +13,7 @@ public class NotesUIManager : MonoBehaviour
         instance = this;
     }
     #endregion
+    public GameObject noteUI;
     public GameObject noteReadingUI;
     public Text readingContent;
     public LayoutGroup noteListUI;
@@ -37,5 +38,18 @@ public class NotesUIManager : MonoBehaviour
                 curCount++;
             }
         }
+    }
+
+    public void ToggleNoteUI()
+    {
+        if (Time.timeScale == 1)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
+        noteUI.SetActive(!noteUI.activeSelf);
     }
 }

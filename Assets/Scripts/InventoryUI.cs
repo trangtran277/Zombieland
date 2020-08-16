@@ -14,15 +14,16 @@ public class InventoryUI : MonoBehaviour
     Inventory inventory;
     public Transform itemsParent;
     InventorySlot[] inventorySlots;
+    public GameObject itemDesUI;
     public Image itemDesIcon;
     public Text itemDesName;
     public Text itemDes;
     public Button useButton;
     public Button discardButton;
-    public GameObject notesUI;
-    public GameObject objectivesUI;
-    public GameObject notesTitle;
-    public GameObject objectivesTitle;
+    //public GameObject notesUI;
+    //public GameObject objectivesUI;
+    //public GameObject notesTitle;
+    //public GameObject objectivesTitle;
     public GameObject interactionDes;
     public GameObject interactionTitle;
     public InventorySlot equipmentSlot;
@@ -44,8 +45,8 @@ public class InventoryUI : MonoBehaviour
             currentSelected = null;
             UpdateSelectedItem(null);
         }
-        notesUI.SetActive(false);
-        objectivesUI.SetActive(false);
+        //notesUI.SetActive(false);
+        //objectivesUI.SetActive(false);
         interactionDes.SetActive(false);
         interactionTitle.SetActive(false);
         if (Time.timeScale == 1)
@@ -59,8 +60,8 @@ public class InventoryUI : MonoBehaviour
         inventoryUI.SetActive(!inventoryUI.activeSelf);
         if(type == 1)
         {
-            notesTitle.SetActive(false);
-            objectivesTitle.SetActive(false);
+            //notesTitle.SetActive(false);
+            //objectivesTitle.SetActive(false);
             interactionDes.SetActive(true);
             interactionTitle.SetActive(true);
         }
@@ -100,7 +101,9 @@ public class InventoryUI : MonoBehaviour
     public void OnInventorySlotPressed(InventorySlot inventorySlot)
     {
         if(currentSelected != null)
+        {
             currentSelected.GetComponentInChildren<Image>().color = new Color32(255, 255, 255, 255);
+        }    
         inventorySlot.GetComponentInChildren<Image>().color = new Color32(162, 157, 157, 255);
         currentSelected = inventorySlot;
         Collectibles selectedItem = currentSelected.item;
@@ -126,23 +129,26 @@ public class InventoryUI : MonoBehaviour
                 discardButton.interactable = false;
             else
                 discardButton.interactable = true;
+            itemDesUI.SetActive(true);
             itemDesIcon.sprite = item.item.icon;
             itemDesName.text = item.item.name;
             itemDes.text = item.item.description;
-            itemDesIcon.enabled = true;
-            itemDesName.enabled = true;
-            itemDes.enabled = true;
+            //itemDesIcon.enabled = true;
+            //itemDesName.enabled = true;
+            //itemDes.enabled = true;
         }
         else
         {
+            itemDesUI.SetActive(false);
+            useButton.GetComponentInChildren<Text>().text = "Use";
             useButton.interactable = false;
             discardButton.interactable = false;
-            itemDesIcon.sprite = null;
+            /*itemDesIcon.sprite = null;
             itemDesName.text = null;
             itemDes.text = null;
             itemDesIcon.enabled = false;
             itemDesName.enabled = false;
-            itemDes.enabled = false;
+            itemDes.enabled = false;*/
         }
     }
 
@@ -150,7 +156,7 @@ public class InventoryUI : MonoBehaviour
     {
         if (useButton.GetComponentInChildren<Text>().text.Equals("Unequip"))
         {
-            Debug.Log("unequip");
+            //Debug.Log("unequip");
             EquipmentManager.instance.Unequip(3);
             currentSelected.GetComponentInChildren<Image>().color = new Color32(255, 255, 255, 255);
             currentSelected = null;
@@ -174,15 +180,5 @@ public class InventoryUI : MonoBehaviour
         }
         else
             currentSelected.item.RemoveFromInventory();
-    }
-
-    public void ToggleNotesUI()
-    {
-        notesUI.SetActive(!notesUI.activeSelf);
-    }
-
-    public void ToggleObjectivesUI()
-    {
-        objectivesUI.SetActive(!objectivesUI.activeSelf);
     }
 }
