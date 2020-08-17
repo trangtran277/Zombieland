@@ -17,7 +17,7 @@ public class UiManagerController : MonoBehaviour
     }
     #endregion
 
-    public Button bag, attack, run, pick, steal;
+    public Button bag, attack, run, interact, crouch, collect;
     public InventoryUI inventoryUI;
     public ThirdPersonUserControl userControl;
     private Animator ator;
@@ -31,8 +31,9 @@ public class UiManagerController : MonoBehaviour
         equipmentManager = EquipmentManager.instance;
         bag.onClick.AddListener(BagClick);
         attack.onClick.AddListener(AttackClick);
-        pick.onClick.AddListener(PickClick);
-        steal.onClick.AddListener(StealClick);
+        interact.onClick.AddListener(InteractClick);
+        crouch.onClick.AddListener(CrouchClick);
+        collect.onClick.AddListener(InteractClick);
     }
 
     private void Update()
@@ -55,7 +56,7 @@ public class UiManagerController : MonoBehaviour
         //Debug.Log("bag click");
         inventoryUI.ToggleInventory();
     }
-    public void PickClick()
+    public void InteractClick()
     {
         IInteractable itemFound = userControl.CheckItemAround();
         if (itemFound != null)
@@ -65,6 +66,7 @@ public class UiManagerController : MonoBehaviour
                 curInteract = itemFound as ThingsToInteract;
             itemFound.Interact();
         }
+        collect.gameObject.SetActive(false);
     }
      public void AttackClick()
      {
@@ -91,7 +93,7 @@ public class UiManagerController : MonoBehaviour
         yield return new WaitForSeconds(1.367f);
         ator.SetBool("sitAttack", false);
     }
-    public void StealClick()
+    public void CrouchClick()
     {
         //userControl.crouchswt = !userControl.crouchswt;
         //Debug.Log("click steak");
