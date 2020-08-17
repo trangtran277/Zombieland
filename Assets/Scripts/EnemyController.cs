@@ -74,11 +74,7 @@ public class EnemyController : MonoBehaviour
             {
                 agent.enabled = true;
                 //canh bao vao tam cua zombie o day
-                if(!DetectionManager.instance.isNearDetected)
-                {
-                    DetectionManager.instance.isNearDetected = true;
-                    DetectionManager.instance.SetDitection(true);
-                }
+                
                 
                 if (angle <= fieldOfVision / 2)
                 {
@@ -126,7 +122,8 @@ public class EnemyController : MonoBehaviour
                     }
                     
                 }
-            }else
+            }
+            else if (distFromPlayer <= detectionDistance)
             {
                 GetComponent<BoxCollider>().isTrigger = true;
                 anim.SetBool("isWalking", false);
