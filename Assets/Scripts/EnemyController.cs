@@ -11,9 +11,9 @@ public class EnemyController : MonoBehaviour
     [SerializeField] public Transform player;
     [SerializeField] float speed = 0.2f;
     [SerializeField] float damageToPlayer = 1f;
-    [SerializeField] float detectionDistance = 1f;
+    [SerializeField] float detectionDistance = 10f;
     [SerializeField] float fieldOfVision = 120f;
-    [SerializeField] float playerDetectTime = 5f;
+    [SerializeField] float playerDetectTime = 8f;
     [SerializeField] float chaseTime = 10f;
     [SerializeField] float attachRange = 0.9f;
     public ThirdPersonCharacter thirdPersonCharacter;
@@ -29,12 +29,14 @@ public class EnemyController : MonoBehaviour
     private float healthofPlayer;
     public bool playerAlive = true;
 
+    public Transform[] PatrolPoints;
+    bool checkZombieFollow = false;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        healthofPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<ThirdPersonCharacter>().health;
+        //healthofPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<ThirdPersonCharacter>().health;
         if (player == null)
         {
             player = GameObject.FindGameObjectWithTag("Player").transform; 
@@ -51,9 +53,14 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //player = GameObject.FindGameObjectWithTag("Player").transform;
         //Debug.Log(healthofPlayer);
-        
+        EnemyControl();
+
+
+    }
+    void EnemyControl()
+    {
         if (!isAlive)
         {
             isAlive = false;
@@ -62,24 +69,44 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            
+
             // Debug.Log("go here");
             Vector3 direction = player.position - this.transform.position;
             float angle = Vector3.Angle(direction, this.transform.forward);
-            float distFromPlayer = Vector3.Distance(player.position,this.transform.position);
+            float distFromPlayer = Vector3.Distance(player.position, this.transform.position);
 
-            Debug.Log(FindPlayer(this.transform));
+            if (distFromPlayer > detectionDistance)
+            {
+                agent.destination = this.transform.position;
+                anim.SetBool("isWalking", false);
+                anim.SetBool("isAttacking", false);
+                if (checkZombieFollow)
+                {
+                    DetectionManager.instance.SetChase(false);
+                    DetectionManager.instance.isBeingChased = false;
+                    checkZombieFollow = false;
+                }
+            }
+            if (angle > fieldOfVision / 2)
+            {
+                agent.destination = this.transform.position;
+                anim.SetBool("isWalking", false);
+                anim.SetBool("isAttacking", false);
+                if (checkZombieFollow)
+                {
+                    DetectionManager.instance.SetChase(false);
+                    DetectionManager.instance.isBeingChased = false;
+                    checkZombieFollow = false;
+                }
+            }
 
             if (distFromPlayer <= detectionDistance && FindPlayer(this.transform))
             {
-                agent.enabled = true;
-                //canh bao vao tam cua zombie o day
-                
-                
+                //
                 if (angle <= fieldOfVision / 2)
                 {
-                    GetComponent<BoxCollider>().isTrigger = false;
-                    //bat canh bao bi zombie duoi
+                    agent.destination = player.position;
+                    checkZombieFollow = true;
                     if (!DetectionManager.instance.isBeingChased)
                     {
                         DetectionManager.instance.isBeingChased = true;
@@ -87,98 +114,32 @@ public class EnemyController : MonoBehaviour
                         DetectionManager.instance.isNearDetected = false;
                         DetectionManager.instance.SetDitection(false);
                     }
-                    //follow
-                    anim.SetBool("isWalking", true);
-                    agent.destination = player.position;
                     FaceTarget();
-                    if(playerAlive)
-                    healthofPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<ThirdPersonCharacter>().health;
-                    if (distFromPlayer <= agent.stoppingDistance)
+                    anim.SetBool("isWalking", true);
+
+                    if (Vector3.Distance(player.position, this.transform.position) <= agent.stoppingDistance)
                     {
-                        //attack
                         FaceTarget();
                         anim.SetBool("isWalking", false);
-
-                        if (healthofPlayer > 0)
-                            anim.SetBool("isAttacking", true);
+                        anim.SetBool("isAttacking", true);
                     }
-                    else if(healthofPlayer>0)
+                    else
                     {
+                        FaceTarget();
                         anim.SetBool("isAttacking", false);
                         anim.SetBool("isWalking", true);
                     }
                 }
                 else
                 {
-                    GetComponent<BoxCollider>().isTrigger = true;
-                    agent.enabled = false;
-                    anim.SetBool("isWalking", false);
-                    // ra khoi tam
-                    // tat canh bao bi zombie duoi o day
-                    if (DetectionManager.instance.isBeingChased)
+                    if (anim.GetBool("isWalking"))
                     {
-                        DetectionManager.instance.isBeingChased = false;
-                        DetectionManager.instance.SetChase(false);
-                    }
-                    
-                }
-            }
-            else if (distFromPlayer <= detectionDistance)
-            {
-                GetComponent<BoxCollider>().isTrigger = true;
-                anim.SetBool("isWalking", false);
-
-            }
-
-
-
-            /*if(playerDetected && !chasePlayer)
-            {
-                if(timer < playerDetectTime)
-                {
-                    timer += Time.deltaTime;
-                }
-                else
-                {
-                    chasePlayer = true;
-                    timer = 0;
-                    stopTime = Time.time + chaseTime;
-                }
-            }
-
-            if(!playerDetected)
-            {
-                timer = 0;
-            }
-
-            if (chasePlayer && Time.time < stopTime && thirdPersonCharacter.health > 0)
-            {
-                agent.destination = player.position;
-                anim.SetBool("isWalking", true);
-
-                //attack when in range
-                if (distFromPlayer <= attachRange)
-                {
-                    anim.SetBool("isWalking", false);
-                    anim.SetBool("isAttacking", true);
-                    if(Time.time > timeToNextAttack)
-                    {
-                        timeToNextAttack = Time.time + 1.5f;
-                        thirdPersonCharacter.health -= damageToPlayer;
+                        agent.destination = this.transform.position;
+                        anim.SetBool("isWalking", false);
+                        anim.SetBool("isAttacking", false);
                     }
                 }
-                else
-                {
-                    anim.SetBool("isAttacking", false);
-                }
             }
-            else
-            {
-                chasePlayer = false;
-                agent.velocity = Vector3.zero;
-                anim.SetBool("isAttacking", false);
-                anim.SetBool("isWalking", false);
-            }*/
         }
     }
     private void FixedUpdate()
@@ -194,36 +155,10 @@ public class EnemyController : MonoBehaviour
     }
     void FaceTarget()
     {
-        Vector3 direction = (player.position - transform.position).normalized;
+        Vector3 direction = (player.position - this.transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+        this.transform.rotation = Quaternion.Slerp(this.transform.rotation, lookRotation, Time.deltaTime * 5f);
     }
-    private void FindPlayer(float distFromPlayer, float angle)
-    {
-        if (!playerDetected && distFromPlayer < detectionDistance && angle < fieldOfVision/2)
-        {
-            Debug.Log("Dected player");
-            playerDetected = true;
-            //Invoke("StopChasing", chaseTime + playerDetectTime); //still chase chaseTime after chasing started
-            
-        }
-        else
-        {
-            playerDetected = false;
-        }
-    }
-
-    /*private void StopChasing()
-    {
-        playerDetected = false;
-    }
-
-    private void InflictDamageOnPlayer()
-    {
-        Debug.Log("Minus health");
-        thirdPersonCharacter.health -= damageToPlayer;
-    }
-    */
     private void DestroyEnemy()
     {
         Destroy(gameObject);

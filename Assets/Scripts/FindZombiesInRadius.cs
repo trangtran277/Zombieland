@@ -10,7 +10,7 @@ public class FindZombiesInRadius : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!FindZombies(player.transform.position,5f))
+        if(!FindZombies(player.transform.position,10f))
         {
             if (DetectionManager.instance.isNearDetected)
             {
@@ -24,6 +24,7 @@ public class FindZombiesInRadius : MonoBehaviour
             }
         }else
         {
+            
             if(!DetectionManager.instance.isBeingChased)
             {
                 DetectionManager.instance.isNearDetected = true;
@@ -37,7 +38,7 @@ public class FindZombiesInRadius : MonoBehaviour
         foreach (var hitCollider in hitColliders)
         {
             //hitCollider.SendMessage("AddDamage");
-            Debug.Log(hitCollider.gameObject.name);
+            //Debug.Log(hitCollider.gameObject.name);
             if(hitCollider.gameObject.CompareTag("Enemy"))
             {
                 return true;
