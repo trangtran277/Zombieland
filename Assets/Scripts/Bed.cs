@@ -5,25 +5,43 @@ using UnityEngine;
 public class Bed : MonoBehaviour, IInteractable
 {
     public LightingManager lighting;
-    float curTime;
-    public GameObject stopInput;
+    public CanvasGroup canvasGroup;
     public void Interact()
     {
-        Time.timeScale = 50f;
-        stopInput.SetActive(true);
+        canvasGroup.gameObject.SetActive(true);
+        StartCoroutine(FadeUI(0, 1));
     }
 
-    void Update()
+    IEnumerator FadeUI(float start, float end, float lerpTime = 2f)
     {
-        curTime = lighting.TimeOfDay;
-        if(curTime > 4.85f && curTime <=5f) 
+        float timeStartLerping = Time.time;
+        float timeSinceStarted = Time.time - timeStartLerping;
+        float percentageComplete = timeSinceStarted / lerpTime;
+
+        while(percentageComplete < 1)
         {
-            if(Time.timeScale > 1f)
-            {
-                Time.timeScale = 1f;
-                //lighting.TimeOfDay = 5f;
-                stopInput.SetActive(false);
-            }
+            timeSinceStarted = Time.time - timeStartLerping;
+            percentageComplete = timeSinceStarted / lerpTime;
+
+            float currentValue = Mathf.Lerp(start, end, percentageComplete);
+            canvasGroup.alpha = currentValue;
+            yield return new WaitForEndOfFrame();
         }
+        lighting.TimeOfDay = 5f;
+
+        timeStartLerping = Time.time;
+        timeSinceStarted = Time.time - timeStartLerping;
+        percentageComplete = timeSinceStarted / lerpTime;
+        while (percentageComplete < 1)
+        {
+            timeSinceStarted = Time.time - timeStartLerping;
+            percentageComplete = timeSinceStarted / lerpTime;
+
+            float currentValue = Mathf.Lerp(end, start, percentageComplete);
+            canvasGroup.alpha = currentValue;
+            yield return new WaitForEndOfFrame();
+        }
+        canvasGroup.gameObject.SetActive(false);
+
     }
 }
