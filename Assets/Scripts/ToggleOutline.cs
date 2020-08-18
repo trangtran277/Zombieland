@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class ToggleOutline : MonoBehaviour
 {
     cakeslice.Outline outline;
-    float maxRange = 10f;
+    public float maxRange = 50f;
     RaycastHit hit;
 
     private void Start()

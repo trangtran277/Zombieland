@@ -29,11 +29,9 @@ public class Inventory : MonoBehaviour
                 return false;
             }
             items.Add(collectibles);
-            //Debug.Log("Item added");
             if(onItemChangedCallback != null)
             {
                 onItemChangedCallback.Invoke();
-                //Debug.Log("callback");
             }
                 
         }
@@ -78,6 +76,7 @@ public class Inventory : MonoBehaviour
                     onItemChangedCallback.Invoke();
             }
         }
+        CollectedItemUI.instance.collectedItems.Enqueue(collectibles);
         return true;
            
     }

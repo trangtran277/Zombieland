@@ -17,7 +17,8 @@ public class UiManagerController : MonoBehaviour
     }
     #endregion
 
-    public Button bag, attack, run, interact, crouch, collect;
+    public Button bag, attack, run, crouch, collect; //interact
+    public Sprite attackSprite, collectSprite, sleepSprite, readSprite;
     public InventoryUI inventoryUI;
     public ThirdPersonUserControl userControl;
     private Animator ator;
@@ -31,14 +32,40 @@ public class UiManagerController : MonoBehaviour
         equipmentManager = EquipmentManager.instance;
         bag.onClick.AddListener(BagClick);
         attack.onClick.AddListener(AttackClick);
-        interact.onClick.AddListener(InteractClick);
+        //interact.onClick.AddListener(InteractClick);
         crouch.onClick.AddListener(CrouchClick);
-        collect.onClick.AddListener(InteractClick);
+        collect.onClick.AddListener(AttackClick);
     }
 
     private void Update()
     {
-        if(equipmentManager.currentEquipment[3] == null)
+        IInteractable itemFound = userControl.CheckItemAround();
+        if (itemFound != null)
+        {
+            if (itemFound is ThingsToInteract)
+            {
+                //curInteract = itemFound as ThingsToInteract;
+                attack.GetComponentsInChildren<Image>()[1].sprite = collectSprite;
+            }
+            if(itemFound is Collectibles)
+            {
+                attack.GetComponentsInChildren<Image>()[1].sprite = collectSprite ;
+            }
+            if(itemFound is Bed)
+            {
+                attack.GetComponentsInChildren<Image>()[1].sprite = sleepSprite;
+            }
+            if (itemFound is NoteObject)
+            {
+                attack.GetComponentsInChildren<Image>()[1].sprite = readSprite;
+            }
+        }
+        else
+        {
+            attack.GetComponentsInChildren<Image>()[1].sprite = attackSprite;
+        }
+
+        if (equipmentManager.currentEquipment[3] == null && attack.GetComponentsInChildren<Image>()[1].sprite == attackSprite)
         {
             attack.interactable = false;
         }
@@ -47,13 +74,9 @@ public class UiManagerController : MonoBehaviour
             attack.interactable = true;
         }
     }
-    public void RunClick()
-    {
-
-    }
+  
     public void BagClick()
     {
-        //Debug.Log("bag click");
         inventoryUI.ToggleInventory();
     }
     public void InteractClick()
@@ -70,23 +93,33 @@ public class UiManagerController : MonoBehaviour
     }
      public void AttackClick()
      {
-        Debug.Log("Attacked");
-        //play attack animation here
-        if (weapon.activeInHierarchy)
+        IInteractable itemFound = userControl.CheckItemAround();
+        if (itemFound != null)
         {
-            //Debug.Log("ok");
-            if (ator.GetBool("crouch"))
-            {
-                ator.SetTrigger("sitAttack");
-                weapon.GetComponent<BoxCollider>().enabled = true;
-            }
-            else
-            {
-                ator.SetTrigger("standAttack");
-                weapon.GetComponent<BoxCollider>().enabled = true;
-            }
-
+            if (itemFound is ThingsToInteract)
+                curInteract = itemFound as ThingsToInteract;
+            itemFound.Interact();
+            collect.gameObject.SetActive(false);
         }
+        else 
+        {
+            if (weapon.activeInHierarchy)
+            {
+                if (ator.GetBool("crouch"))
+                {
+                    ator.SetTrigger("sitAttack");
+                    weapon.GetComponent<BoxCollider>().enabled = true;
+                }
+                else
+                {
+                    ator.SetTrigger("standAttack");
+                    weapon.GetComponent<BoxCollider>().enabled = true;
+                }
+
+            }
+        }
+
+        
     }
     IEnumerable WaitOneHitWeapon()
     {
@@ -96,7 +129,6 @@ public class UiManagerController : MonoBehaviour
     public void CrouchClick()
     {
         //userControl.crouchswt = !userControl.crouchswt;
-        //Debug.Log("click steak");
         if (!ator.GetBool("crouch"))
         {
             userControl.GetComponent<CapsuleCollider>().height = 2.5f;

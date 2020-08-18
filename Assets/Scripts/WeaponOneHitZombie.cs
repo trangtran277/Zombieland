@@ -20,7 +20,7 @@ public class WeaponOneHitZombie : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(animator.GetCurrentAnimatorStateInfo(0).IsName("sitAttck"));
+        //Debug.Log(animator.GetCurrentAnimatorStateInfo(0).IsName("sitAttck"));
         // neu ma dg danh va riu trung thi moi chet zombie
         
 

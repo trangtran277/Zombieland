@@ -12,7 +12,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 	 {
 		//public GameObject interactionCircle;
 		  public GameObject collectButton;
-		  public Button interactionButton;
+		  //public Button interactionButton;
 		  public float interactionRadius = 1f;
 		  public ThirdPersonCharacter m_Character; // A reference to the ThirdPersonCharacter on the object
 		  private Transform m_Cam;                  // A reference to the main camera in the scenes transform
@@ -106,12 +106,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 					     //interactionCircle.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y - objectHeight/2 + 0.005f, hit.transform.position.z);
 					     //interactionCircle.SetActive(true);
-						 if(interactable is Bed)
-						 {
-							interactionButton.GetComponentInChildren<Text>().text = "Sleep";
-						 }
+						 
 					     
-					     interactionButton.interactable = true;
+					     //interactionButton.interactable = true;
 						 collectButton.SetActive(true);
 					     Vector3 pos = Camera.main.WorldToScreenPoint(hit.transform.position);
 					     collectButton.transform.position = new Vector3(pos.x, pos.y + 15f, pos.z);
@@ -119,7 +116,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 					     {
 						     collectButton.GetComponentInChildren<Text>().text = "(Tap) Read";
 					     }
-                         else
+						 else if (interactable is Bed)
+						 {
+							 collectButton.GetComponentInChildren<Text>().text = "(Tap) Sleep";
+						 }
+						 else
                          {
 						     collectButton.GetComponentInChildren<Text>().text = "(Tap) Collect";
 					     }
@@ -132,9 +133,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				 interactionCircle.SetActive(false);
 			}*/
 			   collectButton.SetActive(false);
-			   interactionButton.GetComponentInChildren<Text>().text = "Interact";
-			   if(interactionButton.interactable == true)
-					interactionButton.interactable = false;
+			   //interactionButton.GetComponentInChildren<Text>().text = "Interact";
+			   //if(interactionButton.interactable == true)
+					//interactionButton.interactable = false;
 			   return null;
 		  }
 
