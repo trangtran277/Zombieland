@@ -82,6 +82,7 @@ public class EnemyControlPatrolPath : MonoBehaviour
                     DetectionManager.instance.isBeingChased = false;
                     checkZombieFollow = false;
                 }
+                anim.SetBool("isWalk", true);
                 agent.destination = PatrolPoints[index].position;
             }
             if (angle > fieldOfVision / 2)
@@ -95,6 +96,7 @@ public class EnemyControlPatrolPath : MonoBehaviour
                     DetectionManager.instance.isBeingChased = false;
                     checkZombieFollow = false;
                 }
+                anim.SetBool("isWalk", true);
                 agent.destination = PatrolPoints[index].position;
             }
 
