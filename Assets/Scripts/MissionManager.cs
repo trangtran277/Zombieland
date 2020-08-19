@@ -1,44 +1,176 @@
-﻿using System.Collections;
+﻿using CompassNavigatorPro;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MissionManager : MonoBehaviour
 {
-    public GameObject Gate1;
-    public GameObject Gate2;
-    public Text curMission;
-    bool gate1Completed = false;
-    bool gate2Completed = false;
+    public Text dialog;
+    public GameObject note1;
+    public GameObject eastGate;
+    public CompassProPOI eastGatePOI;
+    public CompassProPOI parkingLotStorePOI;
+    public Collectibles keyCardF;
+    public bool isTriggerEastGate = false;
+    public bool isTriggerWestGate = false;
+    public GameObject westGate;
+    public Collectibles keyCardA;
+    public Collectibles keyCardB;
+    public Collectibles keyCardC;
+    public CompassProPOI westGatePOI;
+    public Text mainMisson;
+    public Text subMission;
+    public Image icon;
+    Inventory inventory;
+    bool hasKeyA = false;
+    bool hasKeyB = false;
+    bool hasKeyC = false;
 
     private void Start()
     {
-       
-        curMission.text = "Open the North Gate";
+        inventory = Inventory.instance;
+        mainMisson.text = "Unknown";
+        subMission.text = "Read the note";
+        
     }
 
     private void Update()
     {
-        if (!gate1Completed && Gate1.GetComponent<ThingsToInteract>().completed)
+        //eastGatePOI = eastGate.GetComponentInChildren<CompassProPOI>();
+        if (note1 == null && eastGatePOI != null)
         {
-            Transform[] doorGate1 = Gate1.GetComponentsInChildren<Transform>();
-            doorGate1[1].Rotate(0f, 90f, 0f);
-            doorGate1[2].Rotate(0f, -90f, 0f);
-            Gate1.GetComponent<BoxCollider>().enabled = false;
-            curMission.text = "Open the South Gate";
-            gate1Completed = true;
+            mainMisson.text = "Get out of this place";
+            subMission.text = "Check out the East Gate";
+            if (eastGatePOI != null)
+                eastGatePOI.enabled = true;
         }
-        if (!gate2Completed && Gate2.GetComponent<ThingsToInteract>().completed)
+
+        if (eastGatePOI != null && eastGatePOI.enabled)
         {
-            Transform[] doorGate2 = Gate2.GetComponentsInChildren<Transform>();
-            doorGate2[1].Rotate(0f, 90f, 0f);
-            doorGate2[2].Rotate(0f, -90f, 0f);
-            Gate2.GetComponent<BoxCollider>().enabled = false;
-            gate2Completed = true;
+            if (eastGatePOI.isVisited)
+            {
+                Destroy(eastGatePOI.gameObject);
+                
+                if (parkingLotStorePOI != null)
+                    parkingLotStorePOI.enabled = true;
+                subMission.text = "Get to the parking lot store";
+            }
+        }
+
+        if(parkingLotStorePOI != null && parkingLotStorePOI.enabled)
+        {
+            if (parkingLotStorePOI.isVisited)
+            {
+                Destroy(parkingLotStorePOI.gameObject);
+                subMission.text = "Search the store for the key card";
+            }
+        }
+
+        if(parkingLotStorePOI == null && inventory.items.Contains(keyCardF))
+        {
+            subMission.text = "Unlock the East Gate";
+            icon.enabled = false;
+        }
+
+        if (!isTriggerEastGate)
+        {
+            isTriggerWestGate = false;
+            westGate.GetComponent<ThingsToInteract>().enabled = false;
+            westGate.GetComponent<ToggleOutline>().enabled = false;
+            westGate.GetComponent<cakeslice.Outline>().enabled = false;
+        }
+        if (isTriggerEastGate)
+        {
+            if(dialog.text.Equals("You: Hey! That's maybe the East Gate"))
+            {
+                dialog.transform.parent.gameObject.SetActive(true);
+                dialog.text = "You: Damn! A dead end. There maybe another gate somewhere";
+                StartCoroutine(DisableTip());
+
+                subMission.text = "Find for another gate";
+
+                westGate.GetComponent<ThingsToInteract>().enabled = true;
+                westGate.GetComponent<ToggleOutline>().enabled = true;
+                westGate.GetComponent<cakeslice.Outline>().enabled = true;
+            }
+            
+            
+        }
+
+        if (inventory.items.Contains(keyCardA))
+        {
+            hasKeyA = true;
+        }
+        if (inventory.items.Contains(keyCardB))
+        {
+            hasKeyB = true;
+        }
+        if (inventory.items.Contains(keyCardC))
+        {
+            hasKeyC = true;
+        }
+        if (isTriggerEastGate && isTriggerWestGate)
+        {
+            if(hasKeyA && hasKeyB && hasKeyC)
+            {
+                icon.enabled = true;
+                subMission.text = "Unlock the West Gate";
+                westGatePOI.enabled = true;
+                hasKeyA = false;
+}
+            else
+            {
+                if (dialog.text.Equals("You: Damn! A dead end. There maybe another gate somewhere"))
+                {
+                    dialog.transform.parent.gameObject.SetActive(true);
+                    dialog.text = "You: Gotta find the key cards";
+                    StartCoroutine(DisableTip());
+                    subMission.text = "Search the whole area for the key cards";
+                    icon.enabled = false;
+                }    
+            }  
+        }
+
+        if (eastGate.GetComponent<ThingsToInteract>().completed)
+        {
+            Transform[] transforms = eastGate.GetComponentsInChildren<Transform>();
+            transforms[1].Rotate(new Vector3(0, 90f, 0));
+            transforms[2].Rotate(new Vector3(0, -90f, 0));
+            eastGate.GetComponent<ThingsToInteract>().completed = false;
+            eastGate.GetComponent<ThingsToInteract>().enabled = false;
+            eastGate.GetComponent<ToggleOutline>().enabled = false;
+            eastGate.GetComponent<cakeslice.Outline>().enabled = false;
+            eastGate.GetComponent<BoxCollider>().enabled = false;
+           
+        }
+
+        if (westGate.GetComponent<ThingsToInteract>().completed)
+        {
+            Transform[] transforms = westGate.GetComponentsInChildren<Transform>();
+            transforms[1].Rotate(new Vector3(0, 90f, 0));
+            transforms[2].Rotate(new Vector3(0, -90f, 0));
+            westGate.GetComponent<ThingsToInteract>().completed = false;
+            westGate.GetComponent<ThingsToInteract>().enabled = false;
+            westGate.GetComponent<ToggleOutline>().enabled = false;
+            westGate.GetComponent<cakeslice.Outline>().enabled = false;
+            westGate.GetComponent<BoxCollider>().enabled = false;
+            mainMisson.text = "Completed";
+            subMission.enabled = false;
+            icon.enabled = false;
+            westGatePOI.enabled = false;
+
             StartCoroutine(ExitGame());
         }
-    }
 
+
+
+    }
+    IEnumerator DisableTip()
+    {
+        yield return new WaitForSeconds(3f);
+        dialog.transform.parent.gameObject.SetActive(false);
+    }
     IEnumerator ExitGame()
     {
         yield return new WaitForSeconds(1.5f);

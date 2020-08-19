@@ -28,7 +28,7 @@ public class ThingsToInteract : MonoBehaviour, IInteractable
 
     public void UpdateInteractionUI()
     {
-        Debug.Log("Interaction update");
+        //Debug.Log("Interaction update");
         interactionDes.itemIcon.sprite = icon;
         interactionDes.itemName.text = name;
         if (input.Count > 0)

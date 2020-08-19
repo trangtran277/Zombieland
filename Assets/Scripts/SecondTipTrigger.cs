@@ -22,6 +22,6 @@ public class SecondTipTrigger : MonoBehaviour
     IEnumerator DisableTip()
     {
         yield return new WaitForSeconds(3f);
-        Destroy(secondTip);
+        secondTip.SetActive(false);
     }
 }

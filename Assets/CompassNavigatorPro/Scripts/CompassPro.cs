@@ -46,7 +46,7 @@ namespace CompassNavigatorPro
 		}
 
 		[SerializeField]
-		float _visitedDistance = 25f;
+		float _visitedDistance = 5f;
 
 		/// <summary>
 		/// Gets or sets the minimum distance required to consider a POI as visited. Once the player gets near this POI below this distance, the POI will be marked as visited.

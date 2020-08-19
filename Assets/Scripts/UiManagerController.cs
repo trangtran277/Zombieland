@@ -99,7 +99,7 @@ public class UiManagerController : MonoBehaviour
             if (itemFound is ThingsToInteract)
                 curInteract = itemFound as ThingsToInteract;
             itemFound.Interact();
-            collect.gameObject.SetActive(false);
+            
         }
         else 
         {

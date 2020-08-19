@@ -120,6 +120,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 						 {
 							 collectButton.GetComponentInChildren<Text>().text = "(Tap) Sleep";
 						 }
+						 else if (interactable is ThingsToInteract)
+						 {
+							 collectButton.GetComponentInChildren<Text>().text = "(Tap) Interact";
+						 }
 						 else
                          {
 						     collectButton.GetComponentInChildren<Text>().text = "(Tap) Collect";
