@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityScript.Macros;
+//using UnityScript.Macros;
 using UnityStandardAssets.Characters.ThirdPerson;
 
 public class EnemeControlPatrolPath : MonoBehaviour

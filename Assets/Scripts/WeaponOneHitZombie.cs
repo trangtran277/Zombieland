@@ -31,6 +31,7 @@ public class WeaponOneHitZombie : MonoBehaviour
                 //Destroy(other.gameObject);
                 other.gameObject.GetComponent<EnemyControlPatrolPath>().isAlive = false;
                 Destroy(EquipmentManager.instance.currentEquipment[3]);
+                InventoryUI.instance.UpdateEquipmentSlot(null, null);
                 //GameObject.FindGameObjectsWithTag("Weapon")[0].SetActive(false);
                 
             }

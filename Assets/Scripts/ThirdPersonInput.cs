@@ -26,9 +26,9 @@ public class ThirdPersonInput : MonoBehaviour
     public HealthBar healthBar;
     private Animator animatorThirdperson;
     private float healthCharacter;
-    public GameObject cam;
-    private CinemachineFreeLook cinemachineFreeLook;
-    private Transform transformCinemachineFreeLook;
+    //public GameObject cam;
+    //private CinemachineFreeLook cinemachineFreeLook;
+    //private Transform transformCinemachineFreeLook;
 
     void Start()
      {
@@ -39,8 +39,8 @@ public class ThirdPersonInput : MonoBehaviour
         //healthCharacter = GetComponent<ThirdPersonCharacter>().health;
         healthBar.SetMaxHealth(GetComponent<ThirdPersonCharacter>().maxhealth);
         //healthCharacter = 60;
-        cinemachineFreeLook = cam.GetComponent<CinemachineFreeLook>();
-        transformCinemachineFreeLook = cam.GetComponent<Transform>();
+        //cinemachineFreeLook = cam.GetComponent<CinemachineFreeLook>();
+        //transformCinemachineFreeLook = cam.GetComponent<Transform>();
     }
 
      // Update is called once per frame
@@ -77,7 +77,7 @@ public class ThirdPersonInput : MonoBehaviour
           cameraAngle += fixedTouchField.TouchDist.x * cameraAngleSpeed;
 
         //transformCinemachineFreeLook.position = transform.position + Quaternion.AngleAxis(cameraAngle, Vector3.up) * offset;
-        cinemachineFreeLook.m_XAxis.Value = cameraAngle;
+        //cinemachineFreeLook.m_XAxis.Value = cameraAngle;
 
         /*Camera.main.transform.position = transform.position + Quaternion.AngleAxis(cameraAngle, Vector3.up) * offset;
         Camera.main.transform.rotation = Quaternion.LookRotation(transform.position + Vector3.up * 2f - Camera.main.transform.position, Vector3.up);
