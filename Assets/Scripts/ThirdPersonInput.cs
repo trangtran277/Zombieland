@@ -74,8 +74,8 @@ public class ThirdPersonInput : MonoBehaviour
         {
             riu.SetActive(false);
         }
-        Debug.Log(enemys.Length);
-        foreach(GameObject e in enemys)
+       // Debug.Log(enemys.Length);
+        /*foreach(GameObject e in enemys)
         {
             if (e.GetComponent<EnemyControlPatrolPath>() != null)
             {
@@ -87,7 +87,7 @@ public class ThirdPersonInput : MonoBehaviour
                 Debug.Log(e.GetComponent<EnemyController>().detectionDistance);
                 Debug.Log(e.GetComponent<EnemyController>().fieldOfVision);
             }
-        }
+        }*/
         
         if(ani.GetBool("crouch"))
         {
