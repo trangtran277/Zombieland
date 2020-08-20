@@ -11,8 +11,8 @@ public class EnemyController : MonoBehaviour
     [SerializeField] public Transform player;
     [SerializeField] float speed = 0.2f;
     [SerializeField] float damageToPlayer = 1f;
-    [SerializeField] float detectionDistance = 10f;
-    [SerializeField] float fieldOfVision = 120f;
+    [SerializeField] public float detectionDistance = 10f;
+    [SerializeField] public float fieldOfVision = 120f;
     [SerializeField] float playerDetectTime = 8f;
     [SerializeField] float chaseTime = 10f;
     [SerializeField] float attachRange = 0.9f;
@@ -53,6 +53,7 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+      
         //player = GameObject.FindGameObjectWithTag("Player").transform;
         //Debug.Log(healthofPlayer);
         EnemyControl();

@@ -9,8 +9,8 @@ public class EnemyControlPatrolPath : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField] public Transform player;
-    [SerializeField] float detectionDistance = 10f;
-    [SerializeField] float fieldOfVision = 120f;
+    [SerializeField] public float detectionDistance = 10f;
+    [SerializeField] public float fieldOfVision = 120f;
     public ThirdPersonCharacter thirdPersonCharacter;
     public bool isAlive = true;
 
@@ -51,6 +51,7 @@ public class EnemyControlPatrolPath : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         //player = GameObject.FindGameObjectWithTag("Player").transform;
         //Debug.Log(healthofPlayer);
         EnemyControl(); 
