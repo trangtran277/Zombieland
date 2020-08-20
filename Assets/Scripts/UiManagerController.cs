@@ -42,7 +42,7 @@ public class UiManagerController : MonoBehaviour
         crouch.onClick.AddListener(CrouchClick);
         collect.onClick.AddListener(AttackClick);
 
-        ani = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
+        ani = human.GetComponent<Animator>();
         enemys = GameObject.FindGameObjectsWithTag("Enemy");
         if (enemys[0].GetComponent<EnemyControlPatrolPath>() != null)
         {

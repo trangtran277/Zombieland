@@ -5,14 +5,16 @@ using UnityEngine;
 public class SecondTipTrigger : MonoBehaviour
 {
     public GameObject secondTip;
+    bool activated = false;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            if (secondTip != null)
+            if (secondTip != null && activated == false)
             {
                 secondTip.SetActive(true);
+                activated = true;
                 StartCoroutine(DisableTip());
             }
 

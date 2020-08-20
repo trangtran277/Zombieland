@@ -16,6 +16,8 @@ public class EnemyControlPatrolPath : MonoBehaviour
     public ThirdPersonCharacter thirdPersonCharacter;
     public bool isAlive = true;
 
+    DetectionManager detectionManager;
+
     private Animator anim;
     private NavMeshAgent agent;
     private float healthofPlayer;
@@ -24,12 +26,14 @@ public class EnemyControlPatrolPath : MonoBehaviour
     public Transform[] PatrolPoints;
     bool checkZombieFollow = false;
     public int index = 0;
+    public float speed;
 
     float detectionDistanceInit;
 
     // Start is called before the first frame update
     void Start()
     {
+        detectionManager = DetectionManager.instance;
         //healthofPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<ThirdPersonCharacter>().health;
         if (player == null)
         {
@@ -41,7 +45,7 @@ public class EnemyControlPatrolPath : MonoBehaviour
         }
         anim = this.GetComponent<Animator>();
         agent = this.GetComponent<NavMeshAgent>();
-        agent.speed = 0.5f;
+        agent.speed = speed;
         //index = Random.Range(0, PatrolPoints.Length);
         if(PatrolPoints.Length > 0)
         {
@@ -74,22 +78,23 @@ public class EnemyControlPatrolPath : MonoBehaviour
             Vector3 direction = player.position - this.transform.position;
             float angle = Vector3.Angle(direction, this.transform.forward);
             float distFromPlayer = Vector3.Distance(player.position, this.transform.position);
+            float curDistance = UiManagerController.instance.curDistance;
 
-            if(agent.remainingDistance <= 0.5f && PatrolPoints.Length > 0)
+            if (agent.remainingDistance <= 0.5f && PatrolPoints.Length > 0)
             {
                 GotoNextPoint();
             }
             if (distFromPlayer > detectionDistance)
             {
                 //detectionDistance = detectionDistanceInit;
-                detectionDistance = UiManagerController.instance.curDistance;
+                detectionDistance = curDistance;
                 agent.destination = this.transform.position;
                 anim.SetBool("isWalking", false);
                 anim.SetBool("isAttacking", false);
                 if (checkZombieFollow)
                 {
-                    DetectionManager.instance.SetChase(false);
-                    DetectionManager.instance.isBeingChased = false;
+                    detectionManager.SetChase(false);
+                    detectionManager.isBeingChased = false;
                     checkZombieFollow = false;
                 }
                 if (PatrolPoints.Length > 0)
@@ -102,14 +107,14 @@ public class EnemyControlPatrolPath : MonoBehaviour
             if (angle > fieldOfVision / 2)
             {
                 //detectionDistance = detectionDistanceInit;
-                detectionDistance = UiManagerController.instance.curDistance;
+                detectionDistance = curDistance;
                 agent.destination = this.transform.position;
                 anim.SetBool("isWalking", false);
                 anim.SetBool("isAttacking", false);
                 if (checkZombieFollow)
                 {
-                    DetectionManager.instance.SetChase(false);
-                    DetectionManager.instance.isBeingChased = false;
+                    detectionManager.SetChase(false);
+                    detectionManager.isBeingChased = false;
                     checkZombieFollow = false;
                 }
                 if (PatrolPoints.Length > 0)
@@ -129,12 +134,12 @@ public class EnemyControlPatrolPath : MonoBehaviour
                     detectionDistance = distanceWhileChase;
                     agent.destination = player.position;
                     checkZombieFollow = true;
-                    if (!DetectionManager.instance.isBeingChased)
+                    if (!detectionManager.isBeingChased)
                     {
-                        DetectionManager.instance.isBeingChased = true;
-                        DetectionManager.instance.SetChase(true);
-                        DetectionManager.instance.isNearDetected = false;
-                        DetectionManager.instance.SetDitection(false);
+                        detectionManager.isBeingChased = true;
+                        detectionManager.SetChase(true);
+                        detectionManager.isNearDetected = false;
+                        detectionManager.SetDitection(false);
                     }
                     FaceTarget();
                     anim.SetBool("isWalking", true);

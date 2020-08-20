@@ -1785,6 +1785,7 @@ MonoBehaviour:
   player: {fileID: 0}
   detectionDistance: 10
   fieldOfVision: 120
+  distanceWhileChase: 17
   thirdPersonCharacter: {fileID: 0}
   isAlive: 1
   playerAlive: 1
@@ -1857,6 +1858,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   index: 0
+  speed: 0.5
 --- !u!1 &5668589386342390669
 GameObject:
   m_ObjectHideFlags: 0
