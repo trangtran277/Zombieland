@@ -7,12 +7,17 @@ public class FindZombiesInRadius : MonoBehaviour
     // Start is called before the first frame update
     public GameObject player;
 
+    private void Start()
+    {
+        player = this.gameObject;
+    }
+
     // Update is called once per frame
     void Update()
     {
         if(!FindZombies(player.transform.position,10f))
         {
-            if (DetectionManager.instance.isNearDetected)
+            if(DetectionManager.instance.isNearDetected)
             {
                 DetectionManager.instance.isNearDetected = false;
                 DetectionManager.instance.SetDitection(false);
@@ -22,7 +27,8 @@ public class FindZombiesInRadius : MonoBehaviour
                 DetectionManager.instance.isBeingChased = false;
                 DetectionManager.instance.SetChase(false);
             }
-        }else
+        }
+        else
         {
             
             if(!DetectionManager.instance.isBeingChased)

@@ -20,7 +20,7 @@ public class ToggleOutline : MonoBehaviour
             if (Physics.Raycast(transform.position, (Camera.main.transform.position - transform.position), out hit, maxRange))
             {
                 Debug.DrawLine(transform.position, Camera.main.transform.position, Color.red);
-                if (hit.transform.CompareTag("Camera"))
+                if (hit.transform.CompareTag("Camera") || hit.transform.CompareTag("Player"))
                 {
                     outline.enabled = true;
                 }

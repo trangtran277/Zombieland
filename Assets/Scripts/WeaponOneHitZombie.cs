@@ -9,8 +9,8 @@ public class WeaponOneHitZombie : MonoBehaviour
     Animator animator;
     void Start()
     {
-        GameObject[] getPlayer = GameObject.FindGameObjectsWithTag("Player");
-        animator = getPlayer[0].GetComponent<Animator>();
+        GameObject getPlayer = GameObject.FindGameObjectWithTag("Player");
+        animator = getPlayer.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -29,8 +29,10 @@ public class WeaponOneHitZombie : MonoBehaviour
             if (GetComponent<BoxCollider>().enabled)
             {
                 //Destroy(other.gameObject);
-                other.gameObject.GetComponent<EnemyController>().isAlive = false;
-                GameObject.FindGameObjectsWithTag("Weapon")[0].SetActive(false);
+                other.gameObject.GetComponent<EnemyControlPatrolPath>().isAlive = false;
+                Destroy(EquipmentManager.instance.currentEquipment[3]);
+                //GameObject.FindGameObjectsWithTag("Weapon")[0].SetActive(false);
+                
             }
             else
                 GetComponent<BoxCollider>().enabled = false;

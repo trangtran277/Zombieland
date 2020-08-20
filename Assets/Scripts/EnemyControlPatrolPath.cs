@@ -21,7 +21,7 @@ public class EnemyControlPatrolPath : MonoBehaviour
 
     public Transform[] PatrolPoints;
     bool checkZombieFollow = false;
-    int index = 0;
+    public int index = 0;
 
 
     // Start is called before the first frame update
@@ -39,9 +39,13 @@ public class EnemyControlPatrolPath : MonoBehaviour
         anim = this.GetComponent<Animator>();
         agent = this.GetComponent<NavMeshAgent>();
         agent.speed = 0.5f;
-        index = Random.Range(0, PatrolPoints.Length);
-        agent.destination = PatrolPoints[index].position;
-        anim.SetBool("isWalk", true);
+        //index = Random.Range(0, PatrolPoints.Length);
+        if(PatrolPoints.Length > 0)
+        {
+            agent.destination = PatrolPoints[index].position;
+            anim.SetBool("isWalk", true);
+        }
+        
     }
 
     // Update is called once per frame
@@ -67,7 +71,7 @@ public class EnemyControlPatrolPath : MonoBehaviour
             float angle = Vector3.Angle(direction, this.transform.forward);
             float distFromPlayer = Vector3.Distance(player.position, this.transform.position);
 
-            if(agent.remainingDistance <= 1f)
+            if(agent.remainingDistance <= 1f && PatrolPoints.Length > 0)
             {
                 GotoNextPoint();
             }
@@ -82,8 +86,12 @@ public class EnemyControlPatrolPath : MonoBehaviour
                     DetectionManager.instance.isBeingChased = false;
                     checkZombieFollow = false;
                 }
-                anim.SetBool("isWalk", true);
-                agent.destination = PatrolPoints[index].position;
+                if (PatrolPoints.Length > 0)
+                {
+                    anim.SetBool("isWalk", true);
+                    agent.destination = PatrolPoints[index].position;
+                }
+                
             }
             if (angle > fieldOfVision / 2)
             {
@@ -96,8 +104,11 @@ public class EnemyControlPatrolPath : MonoBehaviour
                     DetectionManager.instance.isBeingChased = false;
                     checkZombieFollow = false;
                 }
-                anim.SetBool("isWalk", true);
-                agent.destination = PatrolPoints[index].position;
+                if (PatrolPoints.Length > 0)
+                {
+                    anim.SetBool("isWalk", true);
+                    agent.destination = PatrolPoints[index].position;
+                }
             }
 
             if (distFromPlayer <= detectionDistance && FindPlayer(this.transform))
@@ -138,7 +149,11 @@ public class EnemyControlPatrolPath : MonoBehaviour
                         agent.destination = this.transform.position;
                         anim.SetBool("isWalking", false);
                         anim.SetBool("isAttacking", false);
-                        agent.destination = PatrolPoints[index].position;
+                        //agent.destination = PatrolPoints[index].position;
+                        if (PatrolPoints.Length > 0)
+                        {
+                            agent.destination = PatrolPoints[index].position;
+                        }
                     }
                 }
             }
@@ -146,8 +161,8 @@ public class EnemyControlPatrolPath : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (GameObject.FindGameObjectWithTag("Player"))
-            healthofPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<ThirdPersonCharacter>().health;
+        //if (GameObject.FindGameObjectWithTag("Player"))
+            healthofPlayer = player.GetComponent<ThirdPersonCharacter>().health;
         if (healthofPlayer <= 0)
         {
             anim.SetBool("isWalking", false);
@@ -184,7 +199,13 @@ public class EnemyControlPatrolPath : MonoBehaviour
     void GotoNextPoint()
     {
         anim.SetBool("isWalk", true);
-        index = Random.Range(0, PatrolPoints.Length);
+        //index = Random.Range(0, PatrolPoints.Length);
+        //agent.destination = PatrolPoints[index].position;
+
+        index += 1;
+        if (index > PatrolPoints.Length - 1)
+            index = 0;
         agent.destination = PatrolPoints[index].position;
+        
     }
 }

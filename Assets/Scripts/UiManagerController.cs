@@ -103,7 +103,7 @@ public class UiManagerController : MonoBehaviour
         }
         else 
         {
-            if (weapon.activeInHierarchy)
+            if (weapon.activeSelf)
             {
                 if (ator.GetBool("crouch"))
                 {
@@ -116,10 +116,16 @@ public class UiManagerController : MonoBehaviour
                     weapon.GetComponent<BoxCollider>().enabled = true;
                 }
 
+                StartCoroutine(DisableBoxCollider());
             }
         }
 
         
+    }
+    IEnumerator DisableBoxCollider()
+    {
+        yield return new WaitForSeconds(1.5f);
+        weapon.GetComponent<BoxCollider>().enabled = false;
     }
     IEnumerable WaitOneHitWeapon()
     {
