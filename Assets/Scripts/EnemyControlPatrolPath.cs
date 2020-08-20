@@ -24,6 +24,7 @@ public class EnemyControlPatrolPath : MonoBehaviour
     bool checkZombieFollow = false;
     public int index = 0;
 
+    float detectionDistanceInit;
 
     // Start is called before the first frame update
     void Start()
@@ -46,7 +47,7 @@ public class EnemyControlPatrolPath : MonoBehaviour
             agent.destination = PatrolPoints[index].position;
             anim.SetBool("isWalk", true);
         }
-        detectionDistance += timeToContinueChase;
+        detectionDistanceInit = detectionDistance;
     }
 
     // Update is called once per frame
@@ -79,6 +80,7 @@ public class EnemyControlPatrolPath : MonoBehaviour
             }
             if (distFromPlayer > detectionDistance)
             {
+                detectionDistance = detectionDistanceInit;
                 agent.destination = this.transform.position;
                 anim.SetBool("isWalking", false);
                 anim.SetBool("isAttacking", false);
@@ -97,6 +99,7 @@ public class EnemyControlPatrolPath : MonoBehaviour
             }
             if (angle > fieldOfVision / 2)
             {
+                detectionDistance = detectionDistanceInit;
                 agent.destination = this.transform.position;
                 anim.SetBool("isWalking", false);
                 anim.SetBool("isAttacking", false);
@@ -119,6 +122,7 @@ public class EnemyControlPatrolPath : MonoBehaviour
                 anim.SetBool("isWalk", false);
                 if (angle <= fieldOfVision / 2)
                 {
+                    detectionDistance += timeToContinueChase;
                     agent.destination = player.position;
                     checkZombieFollow = true;
                     if (!DetectionManager.instance.isBeingChased)

@@ -31,7 +31,7 @@ public class EnemyController : MonoBehaviour
     public Transform[] PatrolPoints;
     bool checkZombieFollow = false;
 
-
+    float detectionDistanceInit;
     // Start is called before the first frame update
     void Start()
     {
@@ -47,7 +47,7 @@ public class EnemyController : MonoBehaviour
         anim = this.GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         timeToNextAttack = Time.time;
-        detectionDistance += timeToContinueChase;
+        detectionDistanceInit = detectionDistance;
     }
 
     // Update is called once per frame
@@ -78,6 +78,7 @@ public class EnemyController : MonoBehaviour
 
             if (distFromPlayer > detectionDistance)
             {
+                detectionDistance = detectionDistanceInit;
                 agent.destination = this.transform.position;
                 anim.SetBool("isWalking", false);
                 anim.SetBool("isAttacking", false);
@@ -90,6 +91,7 @@ public class EnemyController : MonoBehaviour
             }
             if (angle > fieldOfVision / 2)
             {
+                detectionDistance = detectionDistanceInit;
                 agent.destination = this.transform.position;
                 anim.SetBool("isWalking", false);
                 anim.SetBool("isAttacking", false);
@@ -106,6 +108,7 @@ public class EnemyController : MonoBehaviour
                 //
                 if (angle <= fieldOfVision / 2)
                 {
+                    detectionDistance += timeToContinueChase;
                     agent.destination = player.position;
                     checkZombieFollow = true;
                     if (!DetectionManager.instance.isBeingChased)

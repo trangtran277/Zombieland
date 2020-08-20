@@ -30,13 +30,6 @@ public class ThirdPersonInput : MonoBehaviour
     private CinemachineFreeLook cinemachineFreeLook;
     private Transform transformCinemachineFreeLook;
 
-    EnemyControlPatrolPath enemyControlPatrolPath;
-    EnemyController enemyController;
-    Animator ani;
-    GameObject[] enemys = new GameObject[1000];
-
-    float distancePlayertoZombieInit;
-    float fieldOfVisionInit;
     void Start()
      {
          control = GetComponent<ThirdPersonUserControl>();
@@ -48,19 +41,6 @@ public class ThirdPersonInput : MonoBehaviour
         //healthCharacter = 60;
         cinemachineFreeLook = cam.GetComponent<CinemachineFreeLook>();
         transformCinemachineFreeLook = cam.GetComponent<Transform>();
-
-        ani = GetComponent<Animator>();
-        enemys = GameObject.FindGameObjectsWithTag("Enemy");
-        if(enemys[0].GetComponent<EnemyControlPatrolPath>() !=null)
-        {
-            distancePlayertoZombieInit = enemys[0].GetComponent<EnemyControlPatrolPath>().detectionDistance;
-            fieldOfVisionInit = enemys[0].GetComponent<EnemyControlPatrolPath>().fieldOfVision;
-        }
-        else
-        {
-            distancePlayertoZombieInit = enemys[0].GetComponent<EnemyController>().detectionDistance;
-            fieldOfVisionInit = enemys[0].GetComponent<EnemyController>().fieldOfVision;
-        }
     }
 
      // Update is called once per frame
@@ -89,37 +69,7 @@ public class ThirdPersonInput : MonoBehaviour
             }
         }*/
         
-        if(ani.GetBool("crouch"))
-        {
-            foreach(GameObject e in enemys)
-            {
-                if(e.GetComponent<EnemyControlPatrolPath>() !=null)
-                {
-                    e.GetComponent<EnemyControlPatrolPath>().fieldOfVision =  fieldOfVisionInit/2;
-                    e.GetComponent<EnemyControlPatrolPath>().detectionDistance = distancePlayertoZombieInit/2;
-                }
-                else
-                {
-                    e.GetComponent<EnemyController>().fieldOfVision = fieldOfVisionInit/2;
-                    e.GetComponent<EnemyController>().detectionDistance =distancePlayertoZombieInit/2;
-                }
-            }
-        }else
-        {
-            foreach (GameObject e in enemys)
-            {
-                if (e.GetComponent<EnemyControlPatrolPath>() != null)
-                {
-                    e.GetComponent<EnemyControlPatrolPath>().fieldOfVision = fieldOfVisionInit;
-                    e.GetComponent<EnemyControlPatrolPath>().detectionDistance = distancePlayertoZombieInit;
-                }
-                else
-                {
-                    e.GetComponent<EnemyController>().fieldOfVision = fieldOfVisionInit;
-                    e.GetComponent<EnemyController>().detectionDistance = distancePlayertoZombieInit;
-                }
-            }
-        }
+        
 
         control.Hinput = leftJoystick.Horizontal * 1.5f;
         control.Vinput = leftJoystick.Vertical * 1.5f;

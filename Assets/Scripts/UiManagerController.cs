@@ -26,6 +26,11 @@ public class UiManagerController : MonoBehaviour
     public ThingsToInteract curInteract;
     public GameObject human;
     public GameObject weapon;
+
+    GameObject[] enemys = new GameObject[1000];
+    Animator ani;
+    float distancePlayertoZombieInit;
+    float fieldOfVisionInit;
     void Start()
     {
         ator = human.GetComponent<Animator>();
@@ -35,6 +40,19 @@ public class UiManagerController : MonoBehaviour
         //interact.onClick.AddListener(InteractClick);
         crouch.onClick.AddListener(CrouchClick);
         collect.onClick.AddListener(AttackClick);
+
+        ani = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
+        enemys = GameObject.FindGameObjectsWithTag("Enemy");
+        if (enemys[0].GetComponent<EnemyControlPatrolPath>() != null)
+        {
+            distancePlayertoZombieInit = enemys[0].GetComponent<EnemyControlPatrolPath>().detectionDistance;
+            fieldOfVisionInit = enemys[0].GetComponent<EnemyControlPatrolPath>().fieldOfVision;
+        }
+        else
+        {
+            distancePlayertoZombieInit = enemys[0].GetComponent<EnemyController>().detectionDistance;
+            fieldOfVisionInit = enemys[0].GetComponent<EnemyController>().fieldOfVision;
+        }
     }
 
     private void Update()
@@ -141,6 +159,38 @@ public class UiManagerController : MonoBehaviour
     }
     public void CrouchClick()
     {
+        if (ani.GetBool("crouch"))
+        {
+            foreach (GameObject e in enemys)
+            {
+                if (e.GetComponent<EnemyControlPatrolPath>() != null)
+                {
+                    e.GetComponent<EnemyControlPatrolPath>().fieldOfVision = fieldOfVisionInit / 2;
+                    e.GetComponent<EnemyControlPatrolPath>().detectionDistance = distancePlayertoZombieInit / 2;
+                }
+                else
+                {
+                    e.GetComponent<EnemyController>().fieldOfVision = fieldOfVisionInit / 2;
+                    e.GetComponent<EnemyController>().detectionDistance = distancePlayertoZombieInit / 2;
+                }
+            }
+        }
+        else
+        {
+            foreach (GameObject e in enemys)
+            {
+                if (e.GetComponent<EnemyControlPatrolPath>() != null)
+                {
+                    e.GetComponent<EnemyControlPatrolPath>().fieldOfVision = fieldOfVisionInit;
+                    e.GetComponent<EnemyControlPatrolPath>().detectionDistance = distancePlayertoZombieInit;
+                }
+                else
+                {
+                    e.GetComponent<EnemyController>().fieldOfVision = fieldOfVisionInit;
+                    e.GetComponent<EnemyController>().detectionDistance = distancePlayertoZombieInit;
+                }
+            }
+        }
         //userControl.crouchswt = !userControl.crouchswt;
         if (!ator.GetBool("crouch"))
         {
