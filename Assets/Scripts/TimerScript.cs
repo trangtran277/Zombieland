@@ -9,7 +9,7 @@ public class TimerScript : MonoBehaviour
     //[SerializeField] float startNightTime = 10f;
     [SerializeField] Transform player;
     [SerializeField] GameObject enemy;
-    [SerializeField] float spawnNumber = 10f;
+    [SerializeField] float spawnNumber = 20f;
     [SerializeField] Transform centerPos;
     [SerializeField] float radius;
     public LightingManager lighting;
@@ -99,10 +99,8 @@ public class TimerScript : MonoBehaviour
 
     private Vector3 RandomizePosition()
     {
-        //float x = centerPos.position.x + Random.Range(- radius, radius);
-        //float z = centerPos.position.z + Random.Range(- radius, radius);
-        float x = centerPos.position.x + Random.Range(radius, radius + 10);
-        float z = centerPos.position.z + Random.Range(radius, radius + 10);
+        float x = centerPos.position.x + Random.Range(- radius, radius);
+        float z = centerPos.position.z + Random.Range(- radius, radius);
         return new Vector3(x, 0f, z);
     }
 }
