@@ -71,7 +71,7 @@ public class EnemyControlPatrolPath : MonoBehaviour
             float angle = Vector3.Angle(direction, this.transform.forward);
             float distFromPlayer = Vector3.Distance(player.position, this.transform.position);
 
-            if(agent.remainingDistance <= 1f && PatrolPoints.Length > 0)
+            if(agent.remainingDistance <= 0.5f && PatrolPoints.Length > 0)
             {
                 GotoNextPoint();
             }
@@ -185,7 +185,7 @@ public class EnemyControlPatrolPath : MonoBehaviour
         RaycastHit hit;
         for (float x = -1f; x <= 1f; x += 0.2f)
         {
-            if (Physics.Raycast(target.position, target.TransformDirection(new Vector3(x, 0f, 1f)), out hit, detectionDistance + 50))
+            if (Physics.Raycast(new Vector3(target.position.x, target.position.y+1, target.position.z), target.TransformDirection(new Vector3(x, 0f, 1f)), out hit, detectionDistance + 50))
             {
                 Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
                 if (hit.collider.gameObject.CompareTag("Player"))

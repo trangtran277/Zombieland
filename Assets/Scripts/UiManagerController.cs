@@ -108,19 +108,26 @@ public class UiManagerController : MonoBehaviour
                 if (ator.GetBool("crouch"))
                 {
                     ator.SetTrigger("sitAttack");
-                    weapon.GetComponent<BoxCollider>().enabled = true;
+                    //weapon.GetComponent<BoxCollider>().enabled = true;
                 }
                 else
                 {
                     ator.SetTrigger("standAttack");
-                    weapon.GetComponent<BoxCollider>().enabled = true;
+                    //weapon.GetComponent<BoxCollider>().enabled = true;
                 }
-
-                StartCoroutine(DisableBoxCollider());
+                StartCoroutine(EnableBoxCollider());
+                //StartCoroutine(DisableBoxCollider());
             }
         }
 
         
+    }
+    IEnumerator EnableBoxCollider()
+    {
+        yield return new WaitForSeconds(1f);
+        weapon.GetComponent<BoxCollider>().enabled = true;
+        yield return new WaitForSeconds(1.5f);
+        weapon.GetComponent<BoxCollider>().enabled = false;
     }
     IEnumerator DisableBoxCollider()
     {
