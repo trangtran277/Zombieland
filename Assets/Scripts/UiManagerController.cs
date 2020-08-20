@@ -27,10 +27,11 @@ public class UiManagerController : MonoBehaviour
     public GameObject human;
     public GameObject weapon;
 
-    GameObject[] enemys = new GameObject[1000];
+    GameObject[] enemys; //= new GameObject[1000];
     Animator ani;
     float distancePlayertoZombieInit;
     float fieldOfVisionInit;
+    public float curDistance;
     void Start()
     {
         ator = human.GetComponent<Animator>();
@@ -53,6 +54,7 @@ public class UiManagerController : MonoBehaviour
             distancePlayertoZombieInit = enemys[0].GetComponent<EnemyController>().detectionDistance;
             fieldOfVisionInit = enemys[0].GetComponent<EnemyController>().fieldOfVision;
         }
+        curDistance = distancePlayertoZombieInit;
     }
 
     private void Update()
@@ -159,7 +161,7 @@ public class UiManagerController : MonoBehaviour
     }
     public void CrouchClick()
     {
-        if (ani.GetBool("crouch"))
+        if (!ani.GetBool("crouch"))
         {
             foreach (GameObject e in enemys)
             {
@@ -174,6 +176,7 @@ public class UiManagerController : MonoBehaviour
                     e.GetComponent<EnemyController>().detectionDistance = distancePlayertoZombieInit / 2;
                 }
             }
+            curDistance = distancePlayertoZombieInit / 2;
         }
         else
         {
@@ -190,6 +193,7 @@ public class UiManagerController : MonoBehaviour
                     e.GetComponent<EnemyController>().detectionDistance = distancePlayertoZombieInit;
                 }
             }
+            curDistance = distancePlayertoZombieInit;
         }
         //userControl.crouchswt = !userControl.crouchswt;
         if (!ator.GetBool("crouch"))

@@ -11,7 +11,8 @@ public class EnemyControlPatrolPath : MonoBehaviour
     [SerializeField] public Transform player;
     [SerializeField] public float detectionDistance = 10f;
     [SerializeField] public float fieldOfVision = 120f;
-    [SerializeField] float timeToContinueChase = 2f;
+    //[SerializeField] float timeToContinueChase = 17f;
+    [SerializeField] float distanceWhileChase = 17f;
     public ThirdPersonCharacter thirdPersonCharacter;
     public bool isAlive = true;
 
@@ -80,7 +81,8 @@ public class EnemyControlPatrolPath : MonoBehaviour
             }
             if (distFromPlayer > detectionDistance)
             {
-                detectionDistance = detectionDistanceInit;
+                //detectionDistance = detectionDistanceInit;
+                detectionDistance = UiManagerController.instance.curDistance;
                 agent.destination = this.transform.position;
                 anim.SetBool("isWalking", false);
                 anim.SetBool("isAttacking", false);
@@ -99,7 +101,8 @@ public class EnemyControlPatrolPath : MonoBehaviour
             }
             if (angle > fieldOfVision / 2)
             {
-                detectionDistance = detectionDistanceInit;
+                //detectionDistance = detectionDistanceInit;
+                detectionDistance = UiManagerController.instance.curDistance;
                 agent.destination = this.transform.position;
                 anim.SetBool("isWalking", false);
                 anim.SetBool("isAttacking", false);
@@ -122,7 +125,8 @@ public class EnemyControlPatrolPath : MonoBehaviour
                 anim.SetBool("isWalk", false);
                 if (angle <= fieldOfVision / 2)
                 {
-                    detectionDistance += timeToContinueChase;
+                    //detectionDistance = timeToContinueChase;
+                    detectionDistance = distanceWhileChase;
                     agent.destination = player.position;
                     checkZombieFollow = true;
                     if (!DetectionManager.instance.isBeingChased)
