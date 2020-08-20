@@ -14,8 +14,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] public float detectionDistance = 10f;
     [SerializeField] public float fieldOfVision = 120f;
     [SerializeField] float playerDetectTime = 8f;
-    [SerializeField] float chaseTime = 10f;
-    [SerializeField] float attachRange = 0.9f;
+    [SerializeField] float timeToContinueChase = 2f;
     public ThirdPersonCharacter thirdPersonCharacter;
     public bool isAlive = true;
 
@@ -48,6 +47,7 @@ public class EnemyController : MonoBehaviour
         anim = this.GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         timeToNextAttack = Time.time;
+        detectionDistance += timeToContinueChase;
     }
 
     // Update is called once per frame

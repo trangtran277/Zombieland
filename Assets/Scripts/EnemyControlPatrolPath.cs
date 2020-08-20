@@ -11,6 +11,7 @@ public class EnemyControlPatrolPath : MonoBehaviour
     [SerializeField] public Transform player;
     [SerializeField] public float detectionDistance = 10f;
     [SerializeField] public float fieldOfVision = 120f;
+    [SerializeField] float timeToContinueChase = 2f;
     public ThirdPersonCharacter thirdPersonCharacter;
     public bool isAlive = true;
 
@@ -45,7 +46,7 @@ public class EnemyControlPatrolPath : MonoBehaviour
             agent.destination = PatrolPoints[index].position;
             anim.SetBool("isWalk", true);
         }
-        
+        detectionDistance += timeToContinueChase;
     }
 
     // Update is called once per frame

@@ -6,7 +6,7 @@ public class FindZombiesInRadius : MonoBehaviour
 {
     // Start is called before the first frame update
     public GameObject player;
-
+    public float distanceToaZombie =10f;
     private void Start()
     {
         player = this.gameObject;
@@ -15,7 +15,7 @@ public class FindZombiesInRadius : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!FindZombies(player.transform.position,10f))
+        if(!FindZombies(player.transform.position,distanceToaZombie))
         {
             if(DetectionManager.instance.isNearDetected)
             {
