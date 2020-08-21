@@ -68,6 +68,7 @@ public class EnemyControlPatrolPath : MonoBehaviour
         if (!isAlive)
         {
             isAlive = false;
+            agent.enabled = false;
             anim.SetTrigger("isDead");
             Invoke("DestroyEnemy", 3f);
         }
@@ -198,10 +199,10 @@ public class EnemyControlPatrolPath : MonoBehaviour
     private bool FindPlayer(Transform target)
     {
         RaycastHit hit;
-        //for (float x = -1f; x <= 1f; x += 0.2f)
-        //{
-        //if (Physics.Raycast(new Vector3(target.position.x, target.position.y+1, target.position.z), target.TransformDirection(new Vector3(x, 0f, 1f)), out hit, detectionDistance + 50))
-        if (Physics.Raycast(new Vector3(target.position.x, target.position.y + 1, target.position.z), new Vector3(player.position.x - target.position.x, player.position.y - target.position.y - 1, player.position.z - target.position.z), out hit, detectionDistance + 50))
+        for (float x = -1f; x <= 1f; x += 0.2f)
+        {
+        if (Physics.Raycast(new Vector3(target.position.x, target.position.y+1, target.position.z), target.TransformDirection(new Vector3(x, 0f, 1f)), out hit, detectionDistance + 50))
+        //if (Physics.Raycast(new Vector3(target.position.x, target.position.y + 1, target.position.z), new Vector3(player.position.x - target.position.x, player.position.y - target.position.y - 1, player.position.z - target.position.z), out hit, detectionDistance + 50))
         {
                 Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
                 if (hit.collider.gameObject.CompareTag("Player"))
@@ -209,7 +210,7 @@ public class EnemyControlPatrolPath : MonoBehaviour
                     return true;
                 }
             }
-        //}
+        }
         return false;
     }
     void GotoNextPoint()

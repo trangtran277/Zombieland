@@ -161,6 +161,7 @@ public class UiManagerController : MonoBehaviour
     }
     public void CrouchClick()
     {
+        enemys = GameObject.FindGameObjectsWithTag("Enemy");
         if (!ani.GetBool("crouch"))
         {
             foreach (GameObject e in enemys)
