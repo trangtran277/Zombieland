@@ -10,7 +10,8 @@ public class EnemyAI : MonoBehaviour
     {
         Patrol,
         Chase,
-        Attack
+        Attack,
+        GoToLastSighting
     }
     public Transform player;
     public float detectionDistance = 10f;
@@ -33,6 +34,7 @@ public class EnemyAI : MonoBehaviour
     private NavMeshAgent agent;
     private State curState;
     private float nextAttackTime = 0;
+    private Vector3 lastSighting;
 
     void Start()
     {
@@ -91,8 +93,6 @@ public class EnemyAI : MonoBehaviour
                 case State.Chase:
                     if (character.health > 0)
                     {
-
-
                         anim.SetBool("isWalk", false);
                         anim.SetBool("isWalking", true);
                         agent.isStopped = false;
@@ -104,10 +104,9 @@ public class EnemyAI : MonoBehaviour
                             agent.isStopped = true;
                             curState = State.Attack;
                         }
-                        if (Vector3.Distance(player.position, transform.position) > stopChasingDistance)
+                        if (!FindPlayer(stopChasingDistance))
                         {
-                            anim.SetBool("isWalking", false);
-                            curState = State.Patrol;
+                            curState = State.GoToLastSighting;
                         }
                     }
                     else
@@ -140,6 +139,15 @@ public class EnemyAI : MonoBehaviour
                         anim.SetBool("isAttacking", false);
                     }
                     break;
+                case State.GoToLastSighting:
+                    agent.destination = lastSighting;
+                    if(agent.remainingDistance < 0.5f)
+                    {
+                        anim.SetBool("isWalking", false);
+                        agent.isStopped = true;
+                        StartCoroutine(StopAndLook());
+                    }
+                    break;
 
             }
         }
@@ -147,11 +155,11 @@ public class EnemyAI : MonoBehaviour
 
     public void FindTarget()
     {
-        if (curState == State.Patrol)
+        if (curState == State.Patrol || curState == State.GoToLastSighting)
         {
             Vector3 direction = player.position - transform.position;
             float angle = Vector3.Angle(direction, transform.forward);
-            if (angle <= fieldOfVision * uiManager.fieldOfVisionModifier / 2 && FindPlayer())
+            if (angle <= fieldOfVision * uiManager.fieldOfVisionModifier / 2 && FindPlayer(detectionDistance * uiManager.detectionDistanceModifier))
             {
                 if (Vector3.Distance(transform.position, player.position) <= attackRange)
                 {
@@ -165,14 +173,15 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    private bool FindPlayer()
+    private bool FindPlayer(float distance)
     {
         RaycastHit hit;
         Debug.DrawRay(transform.position + Vector3.up * 1.5f, player.position + Vector3.up * uiManager.rayCastPointModifier - transform.position - Vector3.up * 1.5f, Color.red);
-        if (Physics.Raycast(transform.position + Vector3.up * 1.5f, player.position + Vector3.up * uiManager.rayCastPointModifier - transform.position - Vector3.up * 1.5f, out hit, detectionDistance * uiManager.detectionDistanceModifier))
+        if (Physics.Raycast(transform.position + Vector3.up * 1.5f, player.position + Vector3.up * uiManager.rayCastPointModifier - transform.position - Vector3.up * 1.5f, out hit, distance))
         {
             if (hit.collider.gameObject.CompareTag("Player"))
             {
+                lastSighting = hit.transform.position;
                 return true;
             }
         }
@@ -182,5 +191,11 @@ public class EnemyAI : MonoBehaviour
     private void DestroyEnemy()
     {
         Destroy(gameObject);
+    }
+
+    IEnumerator StopAndLook()
+    {
+        yield return new WaitForSeconds(3f);
+        curState = State.Patrol;
     }
 }
