@@ -33,7 +33,7 @@ public class Collectibles : MonoBehaviour, IInteractable
                 }
                 Destroy(comp);
             }
-            //transform.SetParent(GameObject.Find("GameManager").transform);
+            CollectedItemUI.instance.collectedItems.Enqueue(this);
         }
     }
 
