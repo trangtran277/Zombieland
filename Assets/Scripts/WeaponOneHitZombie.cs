@@ -6,11 +6,11 @@ using UnityEngine;
 public class WeaponOneHitZombie : MonoBehaviour
 {
     // Start is called before the first frame update
-    Animator animator;
+    //Animator animator;
     void Start()
     {
-        GameObject getPlayer = GameObject.FindGameObjectWithTag("Player");
-        animator = getPlayer.GetComponent<Animator>();
+        //GameObject getPlayer = GameObject.FindGameObjectWithTag("Player");
+        //animator = getPlayer.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -29,7 +29,8 @@ public class WeaponOneHitZombie : MonoBehaviour
             if (GetComponent<BoxCollider>().enabled)
             {
                 //Destroy(other.gameObject);
-                other.gameObject.GetComponent<EnemyControlPatrolPath>().isAlive = false;
+                //other.gameObject.GetComponent<EnemyControlPatrolPath>().isAlive = false;
+                other.gameObject.GetComponent<EnemyAI>().isAlive = false;
                 Destroy(EquipmentManager.instance.currentEquipment[3]);
                 InventoryUI.instance.UpdateEquipmentSlot(null, null);
                 //GameObject.FindGameObjectsWithTag("Weapon")[0].SetActive(false);

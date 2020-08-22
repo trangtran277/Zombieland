@@ -5,7 +5,10 @@ using UnityStandardAssets.Characters.ThirdPerson;
 
 public class LeftHandZombieAttack : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private void Start()
+    {
+        enabled = false;
+    }
     void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag.Equals("Player"))

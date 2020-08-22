@@ -538,7 +538,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2056020424218326964}
   - component: {fileID: 2056020424218326966}
-  - component: {fileID: 2056020424218326965}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -573,18 +572,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.47495833, y: 0.23326853, z: 0.15444753}
   m_Center: {x: 0.00697596, y: -0.040652145, z: 0.010397423}
---- !u!114 &2056020424218326965
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2056020424218326971}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afb548195e0e5b64b936a370deaf4ef8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2225053565169593281
 GameObject:
   m_ObjectHideFlags: 0
@@ -1680,6 +1667,7 @@ GameObject:
   - component: {fileID: 81566530}
   - component: {fileID: 279946319}
   - component: {fileID: 1662057124}
+  - component: {fileID: -2109702851028246030}
   m_Layer: 0
   m_Name: EnemyDay
   m_TagString: Enemy
@@ -1777,7 +1765,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5518853138295985823}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b2b4ba9ff399f04cacc9ecb43ba2c53, type: 3}
   m_Name: 
@@ -1859,6 +1847,30 @@ MonoBehaviour:
   - {fileID: 0}
   index: 0
   speed: 0.5
+--- !u!114 &-2109702851028246030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5518853138295985823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15da4f81c235f0e4c9af0f2c8644f069, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  detectionDistance: 10
+  fieldOfVision: 120
+  stopChasingDistance: 15
+  attackRange: 1
+  eachAttackTime: 2
+  damage: 10
+  speedWhileChase: 2
+  speedWhilePatrol: 0.7
+  isAlive: 1
+  PatrolPoints: []
+  curIndex: -1
 --- !u!1 &5668589386342390669
 GameObject:
   m_ObjectHideFlags: 0

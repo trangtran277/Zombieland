@@ -17,33 +17,38 @@ public class UiManagerController : MonoBehaviour
     }
     #endregion
 
-    public Button bag, attack, run, crouch, collect; //interact
+    public Button bag, attack, run, crouch, collect;
     public Sprite attackSprite, collectSprite, sleepSprite, readSprite;
     public InventoryUI inventoryUI;
     public ThirdPersonUserControl userControl;
-    private Animator ator;
     private EquipmentManager equipmentManager;
     public ThingsToInteract curInteract;
-    public GameObject human;
     public GameObject weapon;
+    public Animator ator;
 
-    GameObject[] enemys; //= new GameObject[1000];
-    Animator ani;
-    float distancePlayertoZombieInit;
-    float fieldOfVisionInit;
+    //GameObject[] enemys; //= new GameObject[1000];
+    //Animator ani;
     public float curDistance;
+    public float detectionDistanceModifier;
+    public float fieldOfVisionModifier;
+    public float rayCastPointModifier;
+
+    float nextAttackTime = 0;
+    public float eachAttackTime = 2f;
     void Start()
     {
-        ator = human.GetComponent<Animator>();
+        //ator = human.GetComponent<Animator>();
         equipmentManager = EquipmentManager.instance;
         bag.onClick.AddListener(BagClick);
         attack.onClick.AddListener(AttackClick);
-        //interact.onClick.AddListener(InteractClick);
         crouch.onClick.AddListener(CrouchClick);
         collect.onClick.AddListener(AttackClick);
 
-        ani = human.GetComponent<Animator>();
-        enemys = GameObject.FindGameObjectsWithTag("Enemy");
+        detectionDistanceModifier = 1f;
+        fieldOfVisionModifier = 1f;
+        rayCastPointModifier = 1.5f;
+        //ani = human.GetComponent<Animator>();
+        /*enemys = GameObject.FindGameObjectsWithTag("Enemy");
         if (enemys[0].GetComponent<EnemyControlPatrolPath>() != null)
         {
             distancePlayertoZombieInit = enemys[0].GetComponent<EnemyControlPatrolPath>().detectionDistance;
@@ -53,8 +58,8 @@ public class UiManagerController : MonoBehaviour
         {
             distancePlayertoZombieInit = enemys[0].GetComponent<EnemyController>().detectionDistance;
             fieldOfVisionInit = enemys[0].GetComponent<EnemyController>().fieldOfVision;
-        }
-        curDistance = distancePlayertoZombieInit;
+        }*/
+        //curDistance = distancePlayertoZombieInit;
     }
 
     private void Update()
@@ -64,7 +69,6 @@ public class UiManagerController : MonoBehaviour
         {
             if (itemFound is ThingsToInteract)
             {
-                //curInteract = itemFound as ThingsToInteract;
                 attack.GetComponentsInChildren<Image>()[1].sprite = collectSprite;
             }
             if(itemFound is Collectibles)
@@ -99,18 +103,17 @@ public class UiManagerController : MonoBehaviour
     {
         inventoryUI.ToggleInventory();
     }
-    public void InteractClick()
+    /*public void InteractClick()
     {
         IInteractable itemFound = userControl.CheckItemAround();
         if (itemFound != null)
         {
-            //userControl.interactionCircle.SetActive(false);
             if (itemFound is ThingsToInteract)
                 curInteract = itemFound as ThingsToInteract;
             itemFound.Interact();
         }
-        collect.gameObject.SetActive(false);
-    }
+        //collect.gameObject.SetActive(false);
+    }*/
      public void AttackClick()
      {
         IInteractable itemFound = userControl.CheckItemAround();
@@ -123,20 +126,21 @@ public class UiManagerController : MonoBehaviour
         }
         else 
         {
-            if (weapon.activeSelf)
+            if (Time.time > nextAttackTime)
             {
-                if (ator.GetBool("crouch"))
+                if (weapon.activeSelf)
                 {
-                    ator.SetTrigger("sitAttack");
-                    //weapon.GetComponent<BoxCollider>().enabled = true;
+                    if (ator.GetBool("crouch"))
+                    {
+                        ator.SetTrigger("sitAttack");
+                    }
+                    else
+                    {
+                        ator.SetTrigger("standAttack");
+                    }
+                    StartCoroutine(EnableBoxCollider());
+                    nextAttackTime = Time.time + eachAttackTime;
                 }
-                else
-                {
-                    ator.SetTrigger("standAttack");
-                    //weapon.GetComponent<BoxCollider>().enabled = true;
-                }
-                StartCoroutine(EnableBoxCollider());
-                //StartCoroutine(DisableBoxCollider());
             }
         }
 
@@ -149,19 +153,14 @@ public class UiManagerController : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         weapon.GetComponent<BoxCollider>().enabled = false;
     }
-    IEnumerator DisableBoxCollider()
-    {
-        yield return new WaitForSeconds(1.5f);
-        weapon.GetComponent<BoxCollider>().enabled = false;
-    }
-    IEnumerable WaitOneHitWeapon()
+    /*IEnumerable WaitOneHitWeapon()
     {
         yield return new WaitForSeconds(1.367f);
         ator.SetBool("sitAttack", false);
-    }
+    }*/
     public void CrouchClick()
     {
-        enemys = GameObject.FindGameObjectsWithTag("Enemy");
+        /*enemys = GameObject.FindGameObjectsWithTag("Enemy");
         if (!ani.GetBool("crouch"))
         {
             foreach (GameObject e in enemys)
@@ -195,17 +194,24 @@ public class UiManagerController : MonoBehaviour
                 }
             }
             curDistance = distancePlayertoZombieInit;
-        }
+        }*/
         //userControl.crouchswt = !userControl.crouchswt;
         if (!ator.GetBool("crouch"))
         {
-            userControl.GetComponent<CapsuleCollider>().height = 2.5f;
-            userControl.GetComponent<CapsuleCollider>().center = new Vector3(-0.01751587f, 1f, 0.02719201f);
+            userControl.GetComponent<CapsuleCollider>().height = 2.7f;
+            userControl.GetComponent<CapsuleCollider>().center = new Vector3(-0.01751587f, 1.3f, 0.02719201f);
+            detectionDistanceModifier = 0.5f;
+            fieldOfVisionModifier = 0.7f;
+            rayCastPointModifier = 0.7f;
+            
         }
         else
         {
-            userControl.GetComponent<CapsuleCollider>().height = 5f;
+            userControl.GetComponent<CapsuleCollider>().height = 4.8f;
             userControl.GetComponent<CapsuleCollider>().center = new Vector3(-0.01751587f, 2.4f, 0.02719201f);
+            detectionDistanceModifier = 1f;
+            fieldOfVisionModifier = 0.7f;
+            rayCastPointModifier = 1.4f;
         }
         
         ator.SetBool("crouch", !ator.GetBool("crouch"));

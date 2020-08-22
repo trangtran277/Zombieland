@@ -59,8 +59,8 @@ public class DetectionManager : MonoBehaviour
     {
         detectWarning.SetActive(state);
     }
-    public void SetChase(bool state1)
+    public void SetChase(bool state)
     {
-        chaseWarning.SetActive(state1);
+        chaseWarning.SetActive(state);
     }
 }
