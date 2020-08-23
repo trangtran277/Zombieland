@@ -84,7 +84,7 @@ public class EnemyController : MonoBehaviour
                 anim.SetBool("isAttacking", false);
                 if (checkZombieFollow)
                 {
-                    DetectionManager.instance.SetChase(false);
+                    //DetectionManager.instance.SetChase(false);
                     DetectionManager.instance.isBeingChased = false;
                     checkZombieFollow = false;
                 }
@@ -97,7 +97,7 @@ public class EnemyController : MonoBehaviour
                 anim.SetBool("isAttacking", false);
                 if (checkZombieFollow)
                 {
-                    DetectionManager.instance.SetChase(false);
+                    //DetectionManager.instance.SetChase(false);
                     DetectionManager.instance.isBeingChased = false;
                     checkZombieFollow = false;
                 }
@@ -114,9 +114,9 @@ public class EnemyController : MonoBehaviour
                     if (!DetectionManager.instance.isBeingChased)
                     {
                         DetectionManager.instance.isBeingChased = true;
-                        DetectionManager.instance.SetChase(true);
+                        //DetectionManager.instance.SetChase(true);
                         DetectionManager.instance.isNearDetected = false;
-                        DetectionManager.instance.SetDitection(false);
+                        //DetectionManager.instance.SetDitection(false);
                     }
                     FaceTarget();
                     anim.SetBool("isWalking", true);

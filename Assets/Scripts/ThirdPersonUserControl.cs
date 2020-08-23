@@ -12,7 +12,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
      {
           public GameObject collectButton;
           public float interactionRadius = 1f;
-          public float findEnemyRadius = 13f;
+          public float findEnemyRadius = 10f;
           public ThirdPersonCharacter m_Character; // A reference to the ThirdPersonCharacter on the object
           private Transform m_Cam;                  // A reference to the main camera in the scenes transform
           private Vector3 m_CamForward;             // The current forward direction of the camera
@@ -89,7 +89,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
           public IInteractable CheckItemAround()
           {
-               Collider[] hits = Physics.OverlapSphere(transform.position, interactionRadius);
+               Collider[] hits = Physics.OverlapSphere(transform.position, interactionRadius, LayerMask.GetMask("Interactable"));
                foreach (Collider hit in hits)
                {
                     IInteractable interactable = hit.GetComponent<IInteractable>();
@@ -124,15 +124,24 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
           public void CheckEnemyAround()
           {
-            Collider[] hits = Physics.OverlapSphere(transform.position, findEnemyRadius);
+            Collider[] hits = Physics.OverlapSphere(transform.position, findEnemyRadius, LayerMask.GetMask("Enemy"));
+            if(hits.Length <= 0)
+            {
+                DetectionManager.instance.isNearDetected = false;
+                return;
+            }
             foreach (Collider hit in hits)
             {
                 EnemyAI enemy = hit.GetComponent<EnemyAI>();
                 if (enemy != null)
                 {
-                    enemy.FindTarget();
+                    enemy.FindTarget();    
                 }
             }
-          }
+            if (!DetectionManager.instance.isBeingChased)
+                DetectionManager.instance.isNearDetected = true;
+            else
+                DetectionManager.instance.isNearDetected = false;
+        }
      }
 }

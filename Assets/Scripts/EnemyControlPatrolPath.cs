@@ -94,7 +94,7 @@ public class EnemyControlPatrolPath : MonoBehaviour
                 anim.SetBool("isAttacking", false);
                 if (checkZombieFollow)
                 {
-                    detectionManager.SetChase(false);
+                    //detectionManager.SetChase(false);
                     detectionManager.isBeingChased = false;
                     checkZombieFollow = false;
                 }
@@ -114,7 +114,7 @@ public class EnemyControlPatrolPath : MonoBehaviour
                 anim.SetBool("isAttacking", false);
                 if (checkZombieFollow)
                 {
-                    detectionManager.SetChase(false);
+                    //detectionManager.SetChase(false);
                     detectionManager.isBeingChased = false;
                     checkZombieFollow = false;
                 }
@@ -138,9 +138,9 @@ public class EnemyControlPatrolPath : MonoBehaviour
                     if (!detectionManager.isBeingChased)
                     {
                         detectionManager.isBeingChased = true;
-                        detectionManager.SetChase(true);
+                        //detectionManager.SetChase(true);
                         detectionManager.isNearDetected = false;
-                        detectionManager.SetDitection(false);
+                        //detectionManager.SetDitection(false);
                     }
                     FaceTarget();
                     anim.SetBool("isWalking", true);

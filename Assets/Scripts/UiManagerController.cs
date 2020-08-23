@@ -18,6 +18,7 @@ public class UiManagerController : MonoBehaviour
     #endregion
 
     public Button bag, attack, run, crouch, collect;
+    public Image attackButtonIcon;
     public Sprite attackSprite, collectSprite, sleepSprite, readSprite;
     public InventoryUI inventoryUI;
     public ThirdPersonUserControl userControl;
@@ -69,27 +70,27 @@ public class UiManagerController : MonoBehaviour
         {
             if (itemFound is ThingsToInteract)
             {
-                attack.GetComponentsInChildren<Image>()[1].sprite = collectSprite;
+                attackButtonIcon.sprite = collectSprite;
             }
             if(itemFound is Collectibles)
             {
-                attack.GetComponentsInChildren<Image>()[1].sprite = collectSprite ;
+                attackButtonIcon.sprite = collectSprite ;
             }
             if(itemFound is Bed)
             {
-                attack.GetComponentsInChildren<Image>()[1].sprite = sleepSprite;
+                attackButtonIcon.sprite = sleepSprite;
             }
             if (itemFound is NoteObject)
             {
-                attack.GetComponentsInChildren<Image>()[1].sprite = readSprite;
+                attackButtonIcon.sprite = readSprite;
             }
         }
         else
         {
-            attack.GetComponentsInChildren<Image>()[1].sprite = attackSprite;
+            attackButtonIcon.sprite = attackSprite;
         }
 
-        if (equipmentManager.currentEquipment[3] == null && attack.GetComponentsInChildren<Image>()[1].sprite == attackSprite)
+        if (equipmentManager.currentEquipment[3] == null && attackButtonIcon.sprite == attackSprite)
         {
             attack.interactable = false;
         }
@@ -138,6 +139,7 @@ public class UiManagerController : MonoBehaviour
                     {
                         ator.SetTrigger("standAttack");
                     }
+                    weapon.GetComponent<BoxCollider>().enabled = true;
                     StartCoroutine(EnableBoxCollider());
                     nextAttackTime = Time.time + eachAttackTime;
                 }
@@ -148,8 +150,8 @@ public class UiManagerController : MonoBehaviour
     }
     IEnumerator EnableBoxCollider()
     {
-        yield return new WaitForSeconds(1f);
-        weapon.GetComponent<BoxCollider>().enabled = true;
+        //yield return new WaitForSeconds(1f);
+        //weapon.GetComponent<BoxCollider>().enabled = true;
         yield return new WaitForSeconds(1.5f);
         weapon.GetComponent<BoxCollider>().enabled = false;
     }

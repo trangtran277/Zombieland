@@ -1,0 +1,250 @@
+fileFormatVersion: 2
+guid: 797ae7fa4c7ca554fa5d4466923124d0
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2880507604200749346
+    second: toppng.com-red-arrow-pointing-left-png-1122x1122_0
+  - first:
+      213: 9028819612465582811
+    second: toppng.com-red-arrow-pointing-left-png-1122x1122_1
+  - first:
+      213: -8566427530181810067
+    second: toppng.com-red-arrow-pointing-left-png-1122x1122_2
+  - first:
+      213: -5667819158177571422
+    second: toppng.com-red-arrow-pointing-left-png-1122x1122_3
+  - first:
+      213: -8045825125321257688
+    second: toppng.com-red-arrow-pointing-left-png-1122x1122_4
+  - first:
+      213: 7763338356875055012
+    second: toppng.com-red-arrow-pointing-left-png-1122x1122_0
+  - first:
+      213: 7888647573783097843
+    second: toppng.com-red-arrow-pointing-left-png-1122x1122_1
+  - first:
+      213: 4875328707765997441
+    second: toppng.com-red-arrow-pointing-left-png-1122x1122_2
+  - first:
+      213: -476663408585452186
+    second: toppng.com-red-arrow-pointing-left-png-1122x1122_3
+  - first:
+      213: 2715204419103668615
+    second: toppng.com-red-arrow-pointing-left-png-1122x1122_4
+  externalObjects: {}
+  serializedVersion: 10
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 512
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 512
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 512
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: toppng.com-red-arrow-pointing-left-png-1122x1122_0
+      rect:
+        serializedVersion: 2
+        x: 125
+        y: 484
+        width: 882
+        height: 332
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed68dc678916608d0800000000000000
+      internalID: -2880507604200749346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: toppng.com-red-arrow-pointing-left-png-1122x1122_1
+      rect:
+        serializedVersion: 2
+        x: 293
+        y: 481
+        width: 181
+        height: 335
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd2571ec99fcc4d70800000000000000
+      internalID: 9028819612465582811
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: toppng.com-red-arrow-pointing-left-png-1122x1122_2
+      rect:
+        serializedVersion: 2
+        x: 470
+        y: 483
+        width: 184
+        height: 333
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d68e2655c8fed1980800000000000000
+      internalID: -8566427530181810067
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: toppng.com-red-arrow-pointing-left-png-1122x1122_3
+      rect:
+        serializedVersion: 2
+        x: 648
+        y: 484
+        width: 181
+        height: 332
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ad1ca9418cd751b0800000000000000
+      internalID: -5667819158177571422
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: toppng.com-red-arrow-pointing-left-png-1122x1122_4
+      rect:
+        serializedVersion: 2
+        x: 825
+        y: 484
+        width: 182
+        height: 332
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82d40585dac775090800000000000000
+      internalID: -8045825125321257688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 1ba53421458d4084289ab128213ee26c
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
