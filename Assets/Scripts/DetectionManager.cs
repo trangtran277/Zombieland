@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 public class DetectionManager : MonoBehaviour
 {
@@ -94,7 +95,7 @@ public class DetectionManager : MonoBehaviour
             if (!audios[0].isPlaying)
             {
                 audios[0].Play();
-                audios[1].Stop();
+                StartCoroutine(FadeAudio());
             }
         }
         if (isNearDetected && !isBeingChased)
@@ -105,5 +106,16 @@ public class DetectionManager : MonoBehaviour
         {
             detectWarning.SetActive(false);
         }
+    }
+
+    IEnumerator FadeAudio()
+    {
+        for (float i = 1; i >= 0; i -= 0.1f)
+        {
+            audios[1].volume = i;
+            yield return new WaitForSeconds(0.1f);
+        }
+        audios[1].Stop();
+        audios[1].volume = 1;
     }
 }
