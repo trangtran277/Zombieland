@@ -43,15 +43,14 @@ public class EnemyAI : MonoBehaviour
 
     void Start()
     {
-        playerAnimator = player.GetComponent<Animator>();
-        detectionManager = DetectionManager.instance;
-        uiManager = UiManagerController.instance;
         if (player == null)
         {
             player = GameObject.FindGameObjectWithTag("Player").transform;
         }
-        character = GameObject.FindGameObjectWithTag("Player").GetComponent<ThirdPersonCharacter>();
-        
+        playerAnimator = player.GetComponent<Animator>();
+        detectionManager = DetectionManager.instance;
+        uiManager = UiManagerController.instance;
+        character = player.GetComponent<ThirdPersonCharacter>();
         anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         agent.speed = speedWhilePatrol;
