@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityStandardAssets.Characters.ThirdPerson;
+using UnityEngine.Audio;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -38,6 +39,7 @@ public class EnemyAI : MonoBehaviour
     private float nextAttackTime = 0;
     private Vector3 lastSighting;
     private Animator playerAnimator;
+    private AudioSource[] audios;
 
     void Start()
     {
@@ -59,11 +61,21 @@ public class EnemyAI : MonoBehaviour
         }
         curState = State.Patrol;
         nextAttackTime = Time.time;
+        audios = GetComponents<AudioSource>();
+        if (audios.Length > 0)
+            audios[0].Play();
+
     }
     void Update()
     {
         if (!isAlive)
         {
+            if (audios.Length > 0)
+            {
+                audios[0].Stop();
+                audios[1].Stop();
+                audios[2].Play();
+            }
             agent.isStopped = true;
             anim.SetTrigger("isDead");
             detectionManager.ActivateDetectionPointer(false, null, null, this);
@@ -116,6 +128,11 @@ public class EnemyAI : MonoBehaviour
                         {
                             curState = State.GoToLastSighting;
                             detectionManager.ActivateDetectionPointer(false, null, null, this);
+                            if (audios.Length > 0)
+                            {
+                                audios[1].Stop();
+                                audios[0].Play();
+                            }
                         }
                     }
                     else
@@ -178,6 +195,11 @@ public class EnemyAI : MonoBehaviour
                 {
                     curState = State.Chase;
                 }
+                if (audios.Length > 0)
+                {
+                    audios[0].Stop();
+                    audios[1].Play();
+                }
             }
             else if(Vector3.Distance(player.position, transform.position) <= soundDetectionDistance && playerAnimator.GetFloat("Forward") >= 0.8 && !playerAnimator.GetBool("crouch"))
             {
@@ -190,6 +212,11 @@ public class EnemyAI : MonoBehaviour
                     curState = State.Chase;
                 }
                 lastSighting = player.position;
+                if (audios.Length > 0)
+                {
+                    audios[0].Stop();
+                    audios[1].Play();
+                }
             }
         }
     }

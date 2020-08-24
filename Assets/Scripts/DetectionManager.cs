@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 public class DetectionManager : MonoBehaviour
 {
@@ -17,12 +18,16 @@ public class DetectionManager : MonoBehaviour
     public bool isNearDetected = false;
     public bool isBeingChased = false;
     public GameObject detectWarning;
-    //public GameObject chaseWarning;
-    //public RectTransform detectionPointer;
+    
 
     public List<RectTransform> detectionPointers = new List<RectTransform>();
-    //private List<EnemyAI> chasingEnemies = new List<EnemyAI>();
     private Dictionary<EnemyAI, int> chasingEnemies = new Dictionary<EnemyAI, int>();
+    private AudioSource[] audios;
+
+    private void Start()
+    {
+        audios = GetComponents<AudioSource>();
+    }
 
     public void ActivateDetectionPointer(bool state, Transform enemy, Transform player, EnemyAI enemyAI)
     {
@@ -68,36 +73,29 @@ public class DetectionManager : MonoBehaviour
                 chasingEnemies.Remove(enemyAI);
             }
         }
+            
     }
 
-    /*public void ActivateWarning(bool state)
-    {
-        if(chasingEnemies.Count > 0)
-        {
-            isBeingChased = true;
-        }
-        else
-        {
-            isBeingChased = false;
-        }
-        if (state && !isBeingChased)
-        {
-            detectWarning.SetActive(true);
-        }
-        else
-        {
-            detectWarning.SetActive(false);
-        }
-    }*/
     void Update()
     {
         if (chasingEnemies.Count > 0)
         {
             isBeingChased = true;
+            if (!audios[1].isPlaying)
+            {
+                audios[0].Pause();
+                audios[1].Play();
+            }
+
         }
         else
         {
             isBeingChased = false;
+            if (!audios[0].isPlaying)
+            {
+                audios[0].Play();
+                audios[1].Stop();
+            }
         }
         if (isNearDetected && !isBeingChased)
         {
@@ -108,12 +106,4 @@ public class DetectionManager : MonoBehaviour
             detectWarning.SetActive(false);
         }
     }
-    /*public void SetDitection(bool state)
-    {
-        detectWarning.SetActive(state);
-    }
-    public void SetChase(bool state)
-    {
-        chaseWarning.SetActive(state);
-    }*/
 }
