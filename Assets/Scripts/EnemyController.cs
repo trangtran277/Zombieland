@@ -106,8 +106,10 @@ public class EnemyController : MonoBehaviour
             if (distFromPlayer <= detectionDistance && FindPlayer(this.transform))
             {
                 //
+                
                 if (angle <= fieldOfVision / 2)
                 {
+                    
                     detectionDistance += timeToContinueChase;
                     agent.destination = player.position;
                     checkZombieFollow = true;
