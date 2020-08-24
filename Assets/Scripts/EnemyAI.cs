@@ -179,7 +179,7 @@ public class EnemyAI : MonoBehaviour
                     curState = State.Chase;
                 }
             }
-            else if(Vector3.Distance(player.position, transform.position) <= soundDetectionDistance && playerAnimator.GetFloat("Forward") >= 0.9 && !playerAnimator.GetBool("crouch"))
+            else if(Vector3.Distance(player.position, transform.position) <= soundDetectionDistance && playerAnimator.GetFloat("Forward") >= 0.8 && !playerAnimator.GetBool("crouch"))
             {
                 if (Vector3.Distance(transform.position, player.position) <= attackRange)
                 {
@@ -189,6 +189,7 @@ public class EnemyAI : MonoBehaviour
                 {
                     curState = State.Chase;
                 }
+                lastSighting = player.position;
             }
         }
     }
@@ -202,7 +203,6 @@ public class EnemyAI : MonoBehaviour
             if (hit.collider.gameObject.CompareTag("Player"))
             {
                 lastSighting = hit.transform.position;
-                //detectionManager.isBeingChased = true;
                 detectionManager.ActivateDetectionPointer(true, transform, hit.transform, this);
                 return true;
             }
