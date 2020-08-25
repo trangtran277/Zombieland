@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     public GameObject gameOverUI;
-    private bool gameEnded = false;
+    public bool gameEnded = false;
 
     public void ActivateGameOverUI()
     {

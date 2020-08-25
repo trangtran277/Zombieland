@@ -26,9 +26,8 @@ public class UiManagerController : MonoBehaviour
     public ThingsToInteract curInteract;
     public GameObject weapon;
     public Animator ator;
+    private GameManager manager;
 
-    //GameObject[] enemys; //= new GameObject[1000];
-    //Animator ani;
     public float curDistance;
     public float detectionDistanceModifier;
     public float fieldOfVisionModifier;
@@ -38,7 +37,7 @@ public class UiManagerController : MonoBehaviour
     public float eachAttackTime = 2f;
     void Start()
     {
-        //ator = human.GetComponent<Animator>();
+        manager = GameManager.instance;
         equipmentManager = EquipmentManager.instance;
         bag.onClick.AddListener(BagClick);
         attack.onClick.AddListener(AttackClick);
@@ -48,19 +47,6 @@ public class UiManagerController : MonoBehaviour
         detectionDistanceModifier = 1f;
         fieldOfVisionModifier = 1f;
         rayCastPointModifier = 1.5f;
-        //ani = human.GetComponent<Animator>();
-        /*enemys = GameObject.FindGameObjectsWithTag("Enemy");
-        if (enemys[0].GetComponent<EnemyControlPatrolPath>() != null)
-        {
-            distancePlayertoZombieInit = enemys[0].GetComponent<EnemyControlPatrolPath>().detectionDistance;
-            fieldOfVisionInit = enemys[0].GetComponent<EnemyControlPatrolPath>().fieldOfVision;
-        }
-        else
-        {
-            distancePlayertoZombieInit = enemys[0].GetComponent<EnemyController>().detectionDistance;
-            fieldOfVisionInit = enemys[0].GetComponent<EnemyController>().fieldOfVision;
-        }*/
-        //curDistance = distancePlayertoZombieInit;
     }
 
     private void Update()
@@ -102,6 +88,8 @@ public class UiManagerController : MonoBehaviour
   
     public void BagClick()
     {
+        if (manager.gameEnded)
+            return;
         inventoryUI.ToggleInventory();
     }
     /*public void InteractClick()
@@ -117,6 +105,8 @@ public class UiManagerController : MonoBehaviour
     }*/
      public void AttackClick()
      {
+        if (manager.gameEnded)
+            return;
         IInteractable itemFound = userControl.CheckItemAround();
         if (itemFound != null)
         {
@@ -139,7 +129,7 @@ public class UiManagerController : MonoBehaviour
                     {
                         ator.SetTrigger("standAttack");
                     }
-                    weapon.GetComponent<BoxCollider>().enabled = true;
+                    //weapon.GetComponent<BoxCollider>().enabled = true;
                     StartCoroutine(EnableBoxCollider());
                     nextAttackTime = Time.time + eachAttackTime;
                 }
@@ -150,8 +140,8 @@ public class UiManagerController : MonoBehaviour
     }
     IEnumerator EnableBoxCollider()
     {
-        //yield return new WaitForSeconds(1f);
-        //weapon.GetComponent<BoxCollider>().enabled = true;
+        yield return new WaitForSeconds(0.5f);
+        weapon.GetComponent<BoxCollider>().enabled = true;
         yield return new WaitForSeconds(1.5f);
         weapon.GetComponent<BoxCollider>().enabled = false;
     }
@@ -162,6 +152,8 @@ public class UiManagerController : MonoBehaviour
     }*/
     public void CrouchClick()
     {
+        if (manager.gameEnded)
+            return;
         /*enemys = GameObject.FindGameObjectsWithTag("Enemy");
         if (!ani.GetBool("crouch"))
         {
