@@ -43,9 +43,16 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
           private void Update()
           {
-               if (!m_Jump)
+               /*if (!m_Jump)
                {
                     m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
+               }*/
+               if(m_Character.health > 0)
+                    CheckEnemyAround();
+               else
+               {
+                  GameManager.instance.ActivateGameOverUI();
+                  enabled = false;
                }
           }
 
@@ -82,7 +89,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             //m_Jump = false;
 
             //CheckItemAround();
-               CheckEnemyAround();
+               
 
                
           }
