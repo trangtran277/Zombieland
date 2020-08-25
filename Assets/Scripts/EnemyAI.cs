@@ -158,6 +158,9 @@ public class EnemyAI : MonoBehaviour
                         if (Time.time > nextAttackTime)
                         {
                             character.health -= damage;
+                            // sound hit
+                            GameObject.FindGameObjectWithTag("Player").GetComponents<AudioSource>()[0].Play();
+                            //
                             nextAttackTime = Time.time + eachAttackTime;
                         }
                         if (Vector3.Distance(player.position, transform.position) > attackRange)

@@ -9,7 +9,8 @@ using UnityStandardAssets.Characters.ThirdPerson;
 
 public class ThirdPersonInput : MonoBehaviour
 {
-     // Start is called before the first frame update
+    // Start is called before the first frame update
+     public AudioSource[] audioSources;
      public FixedJoystick leftJoystick;
      public FixedTouchField fixedTouchField;
      protected ThirdPersonUserControl control;
@@ -26,10 +27,16 @@ public class ThirdPersonInput : MonoBehaviour
     public HealthBar healthBar;
     private Animator animatorThirdperson;
     private float healthCharacter;
+
+    bool healthLower = false;
+    bool isAlive = true;
     //public GameObject cam;
     //private CinemachineFreeLook cinemachineFreeLook;
     //private Transform transformCinemachineFreeLook;
-
+    private void Awake()
+    {
+        
+    }
     void Start()
      {
          control = GetComponent<ThirdPersonUserControl>();
@@ -87,10 +94,24 @@ public class ThirdPersonInput : MonoBehaviour
         healthBar.SetHealth(healthCharacter);
         if (healthCharacter<=0)
         {
+            healthLower = false;
+            if(isAlive)
+            {
+                audioSources[3].Play();
+                StartCoroutine(WaitToGameOver());
+                isAlive = false;
+            }
+            
             animatorThirdperson.SetTrigger("die");
+
             StartCoroutine(WaitToSetActiveFalse());
 
+        }else if(healthCharacter<=30 && healthCharacter>0 && !healthLower)
+        {
+            healthLower = true;
+            StartCoroutine(WaitToHeart());
         }
+          
      }
     IEnumerator WaitToSetActiveFalse()
     {
@@ -98,5 +119,16 @@ public class ThirdPersonInput : MonoBehaviour
         gameObject.SetActive(false);
 
     }
-
+    IEnumerator WaitToGameOver()
+    {
+        yield return new WaitForSeconds(2f);
+        audioSources[2].Play();
+    }
+    IEnumerator WaitToHeart()
+    {
+        audioSources[1].Play();
+        yield return new WaitUntil(() => healthCharacter>30);
+        audioSources[1].Stop();
+        healthLower = false;
+    }
 }
