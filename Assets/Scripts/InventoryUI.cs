@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -29,12 +30,14 @@ public class InventoryUI : MonoBehaviour
     public InventorySlot equipmentSlot;
     public GameObject inventoryUI;
     InventorySlot currentSelected = null;
+    public AudioSource[] audios;
     void Start()
     {
         inventory = Inventory.instance;
         inventory.onItemChangedCallback += UpdateInventoryUI;
         EquipmentManager.instance.onEquipmentChanged += UpdateEquipmentSlot;
         inventorySlots = itemsParent.GetComponentsInChildren<InventorySlot>();
+        audios = GetComponents<AudioSource>();
     }
 
     public void ToggleInventory(int type = 0)
@@ -154,9 +157,12 @@ public class InventoryUI : MonoBehaviour
 
     public void OnButtonUse()
     {
+        if (currentSelected.item is Consumable)
+            audios[0].Play();
+        if (currentSelected.item is Equipment)
+            audios[1].Play();
         if (useButton.GetComponentInChildren<Text>().text.Equals("Unequip"))
         {
-            //Debug.Log("unequip");
             EquipmentManager.instance.Unequip(3);
             currentSelected.GetComponentInChildren<Image>().color = new Color32(255, 255, 255, 255);
             currentSelected = null;

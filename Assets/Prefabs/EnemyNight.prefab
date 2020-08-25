@@ -1813,7 +1813,7 @@ MonoBehaviour:
   attackRange: 1
   eachAttackTime: 2
   damage: 30
-  speedWhileChase: 4
+  speedWhileChase: 5
   speedWhilePatrol: 1
   isAlive: 1
   PatrolPoints: []
