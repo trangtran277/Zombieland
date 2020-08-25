@@ -2,10 +2,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.UI;
 
 public class MissionManager : MonoBehaviour
 {
+    #region Singleton
+    public static MissionManager instance;
+    private void Awake()
+    {
+        if (instance != null) return;
+        instance = this;
+    }
+    #endregion
     public Text dialog;
     public GameObject note1;
     public GameObject eastGate;
@@ -22,6 +31,8 @@ public class MissionManager : MonoBehaviour
     public Text mainMisson;
     public Text subMission;
     public Image icon;
+    public PlayableDirector directorGate1;
+    public PlayableDirector directorGate2;
     Inventory inventory;
     bool hasKeyA = false;
     bool hasKeyB = false;
@@ -131,44 +142,37 @@ public class MissionManager : MonoBehaviour
                 }    
             }  
         }
+    }
 
-        if (eastGate.GetComponent<ThingsToInteract>().completed)
+    public void OnCompleted(ThingsToInteract thingsToInteract)
+    {
+        thingsToInteract.completed = false;
+        thingsToInteract.enabled = false;
+        thingsToInteract.GetComponent<ToggleOutline>().enabled = false;
+        thingsToInteract.GetComponent<cakeslice.Outline>().enabled = false;
+        thingsToInteract.GetComponent<BoxCollider>().enabled = false;
+        if (thingsToInteract.name.Equals("East Gate"))
         {
-            Transform[] transforms = eastGate.GetComponentsInChildren<Transform>();
-            transforms[1].Rotate(new Vector3(0, 90f, 0));
-            transforms[2].Rotate(new Vector3(0, -90f, 0));
-            eastGate.GetComponent<ThingsToInteract>().completed = false;
-            eastGate.GetComponent<ThingsToInteract>().enabled = false;
-            eastGate.GetComponent<ToggleOutline>().enabled = false;
-            eastGate.GetComponent<cakeslice.Outline>().enabled = false;
-            eastGate.GetComponent<BoxCollider>().enabled = false;
-           
+            StartCoroutine(DelayCutscene(directorGate1));
         }
-
-        if (westGate.GetComponent<ThingsToInteract>().completed)
+        else
         {
-            Transform[] transforms = westGate.GetComponentsInChildren<Transform>();
-            transforms[1].Rotate(new Vector3(0, 90f, 0));
-            transforms[2].Rotate(new Vector3(0, -90f, 0));
-            westGate.GetComponent<ThingsToInteract>().completed = false;
-            westGate.GetComponent<ThingsToInteract>().enabled = false;
-            westGate.GetComponent<ToggleOutline>().enabled = false;
-            westGate.GetComponent<cakeslice.Outline>().enabled = false;
-            westGate.GetComponent<BoxCollider>().enabled = false;
+            StartCoroutine(DelayCutscene(directorGate2));
             mainMisson.text = "Completed";
             subMission.enabled = false;
             icon.enabled = false;
             westGatePOI.enabled = false;
-
-            StartCoroutine(ExitGame());
         }
+    }
 
-
-
+    IEnumerator DelayCutscene(PlayableDirector director)
+    {
+        yield return new WaitForSeconds(0.5f);
+        director.Play();
     }
     IEnumerator DisableTip()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5f);
         dialog.transform.parent.gameObject.SetActive(false);
     }
     IEnumerator ExitGame()
