@@ -128,6 +128,14 @@ public class ThirdPersonInput : MonoBehaviour
                 isMoving = true;
             }
         }
+        else
+        {
+            if (!isWalking)
+            {
+                audioSources[5].Play();
+                isWalking = true;
+            }
+        }
 
         
 

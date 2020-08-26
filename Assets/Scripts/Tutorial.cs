@@ -12,7 +12,7 @@ public class Tutorial : MonoBehaviour
     {
         Time.timeScale = 0f;
         //children = this.GetComponentsInChildren<RectTransform>();
-        index = 0;
+        index = -1;
         for(int i = 0; i < 2; i++)
         {
             //children[i].gameObject.SetActive(true);

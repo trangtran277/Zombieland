@@ -91,6 +91,11 @@ public class EnemyAI : MonoBehaviour
             {
                 default:
                 case State.Patrol:
+                    if (!audios[0].isPlaying)
+                    {
+                        audios[0].Play();
+                        audios[1].Stop();
+                    }
                     if (curIndex >= 0)
                     {
                         anim.SetBool("isWalk", true);
@@ -114,6 +119,11 @@ public class EnemyAI : MonoBehaviour
                 case State.Chase:
                     if (character.health > 0)
                     {
+                        if (!audios[1].isPlaying)
+                        {
+                            audios[1].Play();
+                            audios[0].Stop();
+                        }
                         anim.SetBool("isWalk", false);
                         anim.SetBool("isWalking", true);
                         agent.isStopped = false;
@@ -152,6 +162,11 @@ public class EnemyAI : MonoBehaviour
                 case State.Attack:
                     if (character.health > 0)
                     {
+                        if (!audios[1].isPlaying)
+                        {
+                            audios[1].Play();
+                            audios[0].Stop();
+                        }
                         anim.SetBool("isWalk", false);
                         agent.isStopped = true;
                         anim.SetBool("isAttacking", true);
@@ -160,7 +175,7 @@ public class EnemyAI : MonoBehaviour
                         {
                             character.health -= damage;
                             // sound hit
-                            GameObject.FindGameObjectWithTag("Player").GetComponents<AudioSource>()[0].Play();
+                            //GameObject.FindGameObjectWithTag("Player").GetComponents<AudioSource>()[0].Play();
                             //
                             nextAttackTime = Time.time + eachAttackTime;
                         }
@@ -182,7 +197,12 @@ public class EnemyAI : MonoBehaviour
                         }
                     }
                     break;
-                case State.GoToLastSighting:                  
+                case State.GoToLastSighting:
+                    if (!audios[1].isPlaying)
+                    {
+                        audios[1].Play();
+                        audios[0].Stop();
+                    }
                     agent.destination = lastSighting;
                     if(isStopAndLooking)
                         detectionManager.ActivateDetectionPointer(false, null, null, this);
@@ -215,11 +235,7 @@ public class EnemyAI : MonoBehaviour
                 {
                     curState = State.Chase;
                 }
-                if (audios.Length > 0)
-                {
-                    audios[0].Stop();
-                    audios[1].Play();
-                }
+                
             }
             else if (Mathf.Abs(player.position.y - transform.position.y) <= 1 && Vector3.Distance(player.position, transform.position) <= soundDetectionDistance && playerAnimator.GetFloat("Forward") >= 0.8 && !playerAnimator.GetBool("crouch"))
             {
@@ -233,11 +249,7 @@ public class EnemyAI : MonoBehaviour
                 }
                 lastSighting = player.position;
                 lastRotation = player.rotation;
-                if (audios.Length > 0)
-                {
-                    audios[0].Stop();
-                    audios[1].Play();
-                }
+                
             }
         }
     }
@@ -287,7 +299,7 @@ public class EnemyAI : MonoBehaviour
 
     IEnumerator StartAudio()
     {
-        float delayTime = Random.Range(0, 4);
+        float delayTime = Random.Range(0, 5);
         yield return new WaitForSeconds(delayTime);
         audios[0].Play();
     }
