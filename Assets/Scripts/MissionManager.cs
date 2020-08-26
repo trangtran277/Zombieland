@@ -143,10 +143,7 @@ public class MissionManager : MonoBehaviour
                 }    
             }  
         }
-        if (westGate.GetComponent<ThingsToInteract>().completed)
-        {
-            OnCompleted(westGate.GetComponent<ThingsToInteract>());
-        }
+        
     }
 
     public void OnCompleted(ThingsToInteract thingsToInteract)

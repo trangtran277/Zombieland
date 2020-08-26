@@ -40,6 +40,7 @@ public class TimerScript : MonoBehaviour
                 GetComponent<AudioSource>().Play();
                 Spawn();
                 hasSpawned = true;
+                hasRemoved = false;
             }
         } 
         else
@@ -49,6 +50,7 @@ public class TimerScript : MonoBehaviour
             {
                 Remove();
                 hasRemoved = true;
+                hasSpawned = false;
             }
         }
     }

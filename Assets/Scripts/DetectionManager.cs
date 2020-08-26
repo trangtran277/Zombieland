@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
+//using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 public class DetectionManager : MonoBehaviour
 {

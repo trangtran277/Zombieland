@@ -7,6 +7,7 @@ namespace cakeslice
 {
     public class OutlineAnimation : MonoBehaviour
     {
+        public OutlineEffect outline;
         bool pingPong = false;
 
         // Use this for initialization
@@ -18,26 +19,33 @@ namespace cakeslice
         // Update is called once per frame
         void Update()
         {
-            Color c = GetComponent<OutlineEffect>().lineColor0;
+            Color c = outline.lineColor0;
+            Color c2 = outline.lineColor2;
 
-            if(pingPong)
+            if (pingPong)
             {
                 c.a += Time.deltaTime;
-
-                if(c.a >= 1)
+                c2.a += Time.deltaTime;
+                if (c.a >= 1)
+                    pingPong = false;
+                if (c2.a >= 1)
                     pingPong = false;
             }
             else
             {
                 c.a -= Time.deltaTime;
-
-                if(c.a <= 0)
+                c2.a -= Time.deltaTime;
+                if (c.a <= 0)
+                    pingPong = true;
+                if (c2.a <= 0)
                     pingPong = true;
             }
 
             c.a = Mathf.Clamp01(c.a);
-            GetComponent<OutlineEffect>().lineColor0 = c;
-            GetComponent<OutlineEffect>().UpdateMaterialsPublicProperties();
+            c2.a = Mathf.Clamp01(c2.a);
+            outline.lineColor0 = c;
+            outline.lineColor2 = c2;
+            outline.UpdateMaterialsPublicProperties();
         }
     }
 }
