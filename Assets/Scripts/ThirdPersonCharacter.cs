@@ -32,8 +32,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		Vector3 m_CapsuleCenter;
 		CapsuleCollider m_Capsule;
 		bool m_Crouching;
-
-
+		
 		void Start()
 		{
 			m_Animator = GetComponent<Animator>();
@@ -44,9 +43,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 			m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 			m_OrigGroundCheckDistance = m_GroundCheckDistance;
+
+			
 		}
 
-
+		
 		public void Move(Vector3 move, bool crouch, bool jump)
 		{
 
@@ -155,6 +156,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				// don't use that while airborne
 				m_Animator.speed = 1;
 			}
+
+			
+
 		}
 
 

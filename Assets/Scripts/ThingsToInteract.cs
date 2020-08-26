@@ -106,7 +106,7 @@ public class ThingsToInteract : MonoBehaviour, IInteractable
         }
         else
         {
-            Debug.Log("Completed");
+            MissionManager.instance.OnCompleted(this);
         }
     } 
 }

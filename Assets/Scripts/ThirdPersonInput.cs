@@ -35,6 +35,10 @@ public class ThirdPersonInput : MonoBehaviour
     bool isWalking = false;
     float er = 0.7f;
     float stateMove;
+
+
+    float curHealth = 100;
+    
     //public GameObject cam;
     //private CinemachineFreeLook cinemachineFreeLook;
     //private Transform transformCinemachineFreeLook;
@@ -134,8 +138,16 @@ public class ThirdPersonInput : MonoBehaviour
         Camera.main.transform.rotation = Quaternion.LookRotation(transform.position + Vector3.up * 2f - Camera.main.transform.position, Vector3.up);
 */
         healthCharacter = GetComponent<ThirdPersonCharacter>().health;
-        //sliderHealth.value = healthCharacter;
-        healthBar.SetHealth(healthCharacter);
+
+        //add soundzombiehit
+        if (healthCharacter<curHealth)
+        {
+            audioSources[0].Play();
+            curHealth = healthCharacter;
+        }
+        //
+            //sliderHealth.value = healthCharacter;
+            healthBar.SetHealth(healthCharacter);
         if (healthCharacter<=0)
         {
             healthLower = false;

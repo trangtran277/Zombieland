@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityStandardAssets.Characters.ThirdPerson;
+using UnityEngine.Audio;
 
 public class UiManagerController : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class UiManagerController : MonoBehaviour
     #endregion
 
     public Button bag, attack, run, crouch, collect;
+    public GameObject inventoryFull;
     public Image attackButtonIcon;
     public Sprite attackSprite, collectSprite, sleepSprite, readSprite;
     public InventoryUI inventoryUI;
@@ -27,6 +29,7 @@ public class UiManagerController : MonoBehaviour
     public GameObject weapon;
     public Animator ator;
     private GameManager manager;
+    public AudioSource[] audios;
 
     public float curDistance;
     public float detectionDistanceModifier;
@@ -37,6 +40,7 @@ public class UiManagerController : MonoBehaviour
     public float eachAttackTime = 2f;
     void Start()
     {
+        audios = GetComponents<AudioSource>();
         manager = GameManager.instance;
         equipmentManager = EquipmentManager.instance;
         bag.onClick.AddListener(BagClick);
@@ -91,6 +95,8 @@ public class UiManagerController : MonoBehaviour
         if (manager.gameEnded)
             return;
         inventoryUI.ToggleInventory();
+        curInteract = null;
+        audios[1].Play();
     }
     /*public void InteractClick()
     {
@@ -112,6 +118,15 @@ public class UiManagerController : MonoBehaviour
         {
             if (itemFound is ThingsToInteract)
                 curInteract = itemFound as ThingsToInteract;
+            else if (itemFound is Collectibles)
+            {
+
+            }
+                //audios[0].Play();
+            else if (itemFound is NoteObject)
+                audios[2].Play();
+            else
+                audios[3].Play();
             itemFound.Interact();
             
         }
@@ -145,51 +160,12 @@ public class UiManagerController : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         weapon.GetComponent<BoxCollider>().enabled = false;
     }
-    /*IEnumerable WaitOneHitWeapon()
-    {
-        yield return new WaitForSeconds(1.367f);
-        ator.SetBool("sitAttack", false);
-    }*/
+    
     public void CrouchClick()
     {
         if (manager.gameEnded)
             return;
-        /*enemys = GameObject.FindGameObjectsWithTag("Enemy");
-        if (!ani.GetBool("crouch"))
-        {
-            foreach (GameObject e in enemys)
-            {
-                if (e.GetComponent<EnemyControlPatrolPath>() != null)
-                {
-                    e.GetComponent<EnemyControlPatrolPath>().fieldOfVision = fieldOfVisionInit / 2;
-                    e.GetComponent<EnemyControlPatrolPath>().detectionDistance = distancePlayertoZombieInit / 2;
-                }
-                else
-                {
-                    e.GetComponent<EnemyController>().fieldOfVision = fieldOfVisionInit / 2;
-                    e.GetComponent<EnemyController>().detectionDistance = distancePlayertoZombieInit / 2;
-                }
-            }
-            curDistance = distancePlayertoZombieInit / 2;
-        }
-        else
-        {
-            foreach (GameObject e in enemys)
-            {
-                if (e.GetComponent<EnemyControlPatrolPath>() != null)
-                {
-                    e.GetComponent<EnemyControlPatrolPath>().fieldOfVision = fieldOfVisionInit;
-                    e.GetComponent<EnemyControlPatrolPath>().detectionDistance = distancePlayertoZombieInit;
-                }
-                else
-                {
-                    e.GetComponent<EnemyController>().fieldOfVision = fieldOfVisionInit;
-                    e.GetComponent<EnemyController>().detectionDistance = distancePlayertoZombieInit;
-                }
-            }
-            curDistance = distancePlayertoZombieInit;
-        }*/
-        //userControl.crouchswt = !userControl.crouchswt;
+        
         if (!ator.GetBool("crouch"))
         {
             userControl.GetComponent<CapsuleCollider>().height = 2.7f;
