@@ -34,7 +34,22 @@ public class Collectibles : MonoBehaviour, IInteractable
                 Destroy(comp);
             }
             CollectedItemUI.instance.collectedItems.Enqueue(this);
+            UiManagerController.instance.audios[0].Play();
         }
+        else
+        {
+            if (!UiManagerController.instance.inventoryFull.activeSelf)
+            {
+                UiManagerController.instance.inventoryFull.SetActive(true);
+            }
+                
+        }
+    }
+
+    IEnumerator DeactivateInventoryFull()
+    {
+        yield return new WaitForSeconds(1.5f);
+        UiManagerController.instance.inventoryFull.SetActive(false);
     }
 
     public void RemoveFromInventory()

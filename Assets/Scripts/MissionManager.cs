@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MissionManager : MonoBehaviour
 {
@@ -142,6 +143,10 @@ public class MissionManager : MonoBehaviour
                 }    
             }  
         }
+        if (westGate.GetComponent<ThingsToInteract>().completed)
+        {
+            OnCompleted(westGate.GetComponent<ThingsToInteract>());
+        }
     }
 
     public void OnCompleted(ThingsToInteract thingsToInteract)
@@ -153,22 +158,27 @@ public class MissionManager : MonoBehaviour
         thingsToInteract.GetComponent<BoxCollider>().enabled = false;
         if (thingsToInteract.name.Equals("East Gate"))
         {
-            StartCoroutine(DelayCutscene(directorGate1));
+            StartCoroutine(DelayCutscene());
         }
         else
         {
-            StartCoroutine(DelayCutscene(directorGate2));
+            StartCoroutine(DelayCutscene2());
             mainMisson.text = "Completed";
             subMission.enabled = false;
             icon.enabled = false;
             westGatePOI.enabled = false;
+
         }
     }
-
-    IEnumerator DelayCutscene(PlayableDirector director)
+    IEnumerator DelayCutscene2()
     {
         yield return new WaitForSeconds(0.5f);
-        director.Play();
+        SceneManager.LoadScene("Cutscene2Scene");
+    }
+    IEnumerator DelayCutscene()
+    {
+        yield return new WaitForSeconds(0.5f);
+        directorGate1.Play();
     }
     IEnumerator DisableTip()
     {

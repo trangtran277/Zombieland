@@ -41,6 +41,7 @@ public class EnemyAI : MonoBehaviour
     private Quaternion lastRotation;
     private Animator playerAnimator;
     private AudioSource[] audios;
+    private bool isStopAndLooking = false;
 
     void Start()
     {
@@ -180,10 +181,14 @@ public class EnemyAI : MonoBehaviour
                     break;
                 case State.GoToLastSighting:                  
                     agent.destination = lastSighting;
-                    detectionManager.ActivateDetectionPointer(true, transform, player, this);
+                    if(isStopAndLooking)
+                        detectionManager.ActivateDetectionPointer(false, null, null, this);
+                    else
+                        detectionManager.ActivateDetectionPointer(true, transform, player, this);
                     if (agent.remainingDistance <= 1f)
                     {
-                        StartCoroutine(StopAndLook());
+                        if(!isStopAndLooking)
+                            StartCoroutine(StopAndLook());
                     }
                     break;
 
@@ -258,10 +263,11 @@ public class EnemyAI : MonoBehaviour
 
     IEnumerator StopAndLook()
     {
+        isStopAndLooking = true;
         agent.isStopped = true;
         anim.SetBool("isWalking", false);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, lastRotation, 5f);
-        detectionManager.ActivateDetectionPointer(false, null, null, this);
+        //detectionManager.ActivateDetectionPointer(false, null, null, this);
         if (audios.Length > 0)
         {
             audios[1].Stop();
@@ -269,7 +275,11 @@ public class EnemyAI : MonoBehaviour
         }
         yield return new WaitForSeconds(3f);
         if(curState == State.GoToLastSighting)
+        {
             curState = State.Patrol;
+            isStopAndLooking = false;
+        }
+            
     }
 
     IEnumerator StartAudio()

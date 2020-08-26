@@ -19,6 +19,7 @@ public class UiManagerController : MonoBehaviour
     #endregion
 
     public Button bag, attack, run, crouch, collect;
+    public GameObject inventoryFull;
     public Image attackButtonIcon;
     public Sprite attackSprite, collectSprite, sleepSprite, readSprite;
     public InventoryUI inventoryUI;
@@ -28,7 +29,7 @@ public class UiManagerController : MonoBehaviour
     public GameObject weapon;
     public Animator ator;
     private GameManager manager;
-    private AudioSource[] audios;
+    public AudioSource[] audios;
 
     public float curDistance;
     public float detectionDistanceModifier;
@@ -118,7 +119,10 @@ public class UiManagerController : MonoBehaviour
             if (itemFound is ThingsToInteract)
                 curInteract = itemFound as ThingsToInteract;
             else if (itemFound is Collectibles)
-                audios[0].Play();
+            {
+
+            }
+                //audios[0].Play();
             else if (itemFound is NoteObject)
                 audios[2].Play();
             else
