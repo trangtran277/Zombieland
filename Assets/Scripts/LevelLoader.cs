@@ -9,7 +9,7 @@ public class LevelLoader : MonoBehaviour
     public void LoadLevel()
     {
         Debug.Log("Attempt to load level?");
-        //mainMenuUI.SetActive(false);
+        mainMenuUI.SetActive(false);
         //loadingUI.SetActive(true);
         StartCoroutine("LoadAsynchronously");
     }
