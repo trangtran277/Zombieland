@@ -1,5 +1,6 @@
 ﻿using Cinemachine;
 using HutongGames.PlayMaker.Actions;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 //using System.Runtime.Remoting.Metadata.W3cXsd2001;
@@ -30,6 +31,10 @@ public class ThirdPersonInput : MonoBehaviour
 
     bool healthLower = false;
     bool isAlive = true;
+    bool isMoving = false;
+    bool isWalking = false;
+    float er = 0.7f;
+    float stateMove;
     //public GameObject cam;
     //private CinemachineFreeLook cinemachineFreeLook;
     //private Transform transformCinemachineFreeLook;
@@ -82,6 +87,45 @@ public class ThirdPersonInput : MonoBehaviour
         control.Vinput = leftJoystick.Vertical * 1.5f;
 
           cameraAngle += fixedTouchField.TouchDist.x * cameraAngleSpeed;
+
+        //Debug.Log(control.Hinput+" "+control.Vinput);
+        stateMove = Mathf.Max(Mathf.Abs(control.Hinput), Mathf.Abs(control.Vinput));
+        //Debug.Log(stateMove);
+        if(stateMove==0)
+        {
+            audioSources[4].Stop();
+            audioSources[5].Stop();
+            isMoving = false;
+            isWalking = false;
+        }
+        else if(stateMove<er)
+        {
+            if(isMoving)
+            {
+                audioSources[4].Stop();
+                isMoving = false;
+            }
+            if(!isWalking)
+            {
+                audioSources[5].Play();
+                isWalking = true;
+            }
+        }
+        else if (stateMove > er)
+        {
+            if (isWalking)
+            {
+                audioSources[5].Stop();
+                isWalking = false;
+            }
+            if (!isMoving)
+            {
+                audioSources[4].Play();
+                isMoving = true;
+            }
+        }
+
+        
 
         //transformCinemachineFreeLook.position = transform.position + Quaternion.AngleAxis(cameraAngle, Vector3.up) * offset;
         //cinemachineFreeLook.m_XAxis.Value = cameraAngle;
