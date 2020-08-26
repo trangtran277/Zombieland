@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 public class TimerScript : MonoBehaviour
 {
     [SerializeField] Text timerText;
-    //[SerializeField] float startNightTime = 10f;
-    [SerializeField] Transform player;
+    //[SerializeField] Transform player;
     [SerializeField] GameObject enemy;
-    [SerializeField] float spawnNumber = 20f;
-    [SerializeField] Transform centerPos;
+    [SerializeField] int spawnNumber = 20;
+    [SerializeField] List<Transform> spawnPos = new List<Transform>();
     [SerializeField] float radius;
     public LightingManager lighting;
     public GameObject nightWarning;
@@ -18,13 +18,7 @@ public class TimerScript : MonoBehaviour
     private bool hasSpawned = false;
     private bool hasRemoved = false;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        //startNightTime *= 60;
-    }
 
-    // Update is called once per frame
     void Update()
     {
         float curTime = lighting.TimeOfDay;
@@ -43,6 +37,7 @@ public class TimerScript : MonoBehaviour
             timerText.color = Color.red;
             if (!hasSpawned)
             {
+                GetComponent<AudioSource>().Play();
                 Spawn();
                 hasSpawned = true;
             }
@@ -56,34 +51,20 @@ public class TimerScript : MonoBehaviour
                 hasRemoved = true;
             }
         }
-        /*float timer = Time.timeSinceLevelLoad;
-        int minute = (int)timer / 60;
-        int sec = (int)timer % 60;
-        string displayMin = minute < 10 ? "0" + minute : "" + minute;
-        string displaySec = sec < 10 ? "0" + sec : "" + sec;
-        timerText.text = displayMin + " : " + displaySec;
-
-        if(timer >= startNightTime)
-        {
-            if(!hasSpawned)
-            {
-                Spawn();
-                hasSpawned = true;
-            }
-        }*/
     }
     public void Spawn()
     {
-        for (int i = 0; i < spawnNumber; i++)
+        for (int j = 0; j < spawnPos.Count; j++)
         {
-            //GameObject newEnemy = Instantiate(enemy, RandomizePosition(), Quaternion.identity);
-            //newEnemy.GetComponent<EnemyController>().player = player.transform;
-            GameObject nightEnemy = ObjectPooler.SharedInstance.GetPooledObject();
-            if (nightEnemy != null)
+            for (int i = 0; i < spawnNumber; i++)
             {
-                nightEnemy.transform.position = RandomizePosition();
-                nightEnemy.transform.rotation = Quaternion.identity;
-                nightEnemy.SetActive(true);
+                GameObject nightEnemy = ObjectPooler.SharedInstance.GetPooledObject();
+                if (nightEnemy != null)
+                {
+                    nightEnemy.transform.position = RandomizePosition(spawnPos[j]);
+                    nightEnemy.transform.rotation = Quaternion.identity;
+                    nightEnemy.SetActive(true);
+                }
             }
         }
     }
@@ -97,7 +78,7 @@ public class TimerScript : MonoBehaviour
         }
     }
 
-    private Vector3 RandomizePosition()
+    private Vector3 RandomizePosition(Transform centerPos)
     {
         float x = centerPos.position.x + Random.Range(- radius, radius);
         float z = centerPos.position.z + Random.Range(- radius, radius);

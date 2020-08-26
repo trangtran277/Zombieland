@@ -22,12 +22,12 @@ public class InventorySlot : MonoBehaviour
         icon.enabled = true;
         //removeButton.interactable = true;
         
-        if(collectibles is Consumable)
+        /*if(collectibles is Consumable)
         {
             numberPanel.GetComponent<Image>().enabled = true;
             numberPanel.GetComponentInChildren<Text>().text = collectibles.number.ToString();
             numberPanel.GetComponentInChildren<Text>().enabled = true;
-        }    
+        }*/    
     }
 
     public void ClearSlot()

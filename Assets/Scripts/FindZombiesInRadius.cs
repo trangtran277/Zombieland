@@ -20,12 +20,12 @@ public class FindZombiesInRadius : MonoBehaviour
             if(DetectionManager.instance.isNearDetected)
             {
                 DetectionManager.instance.isNearDetected = false;
-                DetectionManager.instance.SetDitection(false);
+                //DetectionManager.instance.SetDitection(false);
             }
             if(DetectionManager.instance.isBeingChased)
             {
                 DetectionManager.instance.isBeingChased = false;
-                DetectionManager.instance.SetChase(false);
+                //DetectionManager.instance.SetChase(false);
             }
         }
         else
@@ -34,7 +34,7 @@ public class FindZombiesInRadius : MonoBehaviour
             if(!DetectionManager.instance.isBeingChased)
             {
                 DetectionManager.instance.isNearDetected = true;
-                DetectionManager.instance.SetDitection(true);
+                //DetectionManager.instance.SetDitection(true);
             }
         }
     }

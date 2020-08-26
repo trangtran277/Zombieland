@@ -7,163 +7,148 @@ using UnityEngine.UI;
 namespace UnityStandardAssets.Characters.ThirdPerson
 {
 
-	 [RequireComponent(typeof(ThirdPersonCharacter))]
-	 public class ThirdPersonUserControl : MonoBehaviour
-	 {
-		//public GameObject interactionCircle;
-		  public GameObject collectButton;
-		  //public Button interactionButton;
-		  public float interactionRadius = 1f;
-		  public ThirdPersonCharacter m_Character; // A reference to the ThirdPersonCharacter on the object
-		  private Transform m_Cam;                  // A reference to the main camera in the scenes transform
-		  private Vector3 m_CamForward;             // The current forward direction of the camera
-		  private Vector3 m_Move;
-		  public bool m_Jump;
-		  [HideInInspector]
-		  public float Vinput, Hinput;                    // the world-relative desired move direction, calculated from the camForward and user input.
-														  //public UiManagerController UIcontroller;
-		  public bool crouchswt;
-		  private void Start()
-		  {
-			   //Cursor.lockState = CursorLockMode.Locked;
-			   // get the transform of the main camera
-			   if (Camera.main != null)
-			   {
-					m_Cam = Camera.main.transform;
-			   }
-			   else
-			   {
-					Debug.LogWarning(
-						 "Warning: no main camera found. Third person character needs a Camera tagged \"MainCamera\", for camera-relative controls.", gameObject);
-					// we use self-relative controls in this case, which probably isn't what the user wants, but hey, we warned them!
-			   }
+     [RequireComponent(typeof(ThirdPersonCharacter))]
+     public class ThirdPersonUserControl : MonoBehaviour
+     {
+          public GameObject collectButton;
+          public float interactionRadius = 1f;
+          public float findEnemyRadius = 10f;
+          public ThirdPersonCharacter m_Character; // A reference to the ThirdPersonCharacter on the object
+          private Transform m_Cam;                  // A reference to the main camera in the scenes transform
+          private Vector3 m_CamForward;             // The current forward direction of the camera
+          private Vector3 m_Move;
+          public bool m_Jump;
+          [HideInInspector]
+          public float Vinput, Hinput;                    // the world-relative desired move direction, calculated from the camForward and user input.
+                                                          //public UiManagerController UIcontroller;
+          public bool crouchswt;
+          private void Start()
+          {
+               // get the transform of the main camera
+               if (Camera.main != null)
+               {
+                    m_Cam = Camera.main.transform;
+               }
+               else
+               {
+                    Debug.LogWarning(
+                         "Warning: no main camera found. Third person character needs a Camera tagged \"MainCamera\", for camera-relative controls.", gameObject);
+                    // we use self-relative controls in this case, which probably isn't what the user wants, but hey, we warned them!
+               }
 
-			   // get the third person character ( this should never be null due to require component )
-			   m_Character = GetComponent<ThirdPersonCharacter>();
-		  }
+               // get the third person character ( this should never be null due to require component )
+               m_Character = GetComponent<ThirdPersonCharacter>();
+          }
 
 
-		  private void Update()
-		  {
-			   if (!m_Jump)
-			   {
-					m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
-			   }
-		  }
+          private void Update()
+          {
+               /*if (!m_Jump)
+               {
+                    m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
+               }*/
+               if(m_Character.health > 0)
+                    CheckEnemyAround();
+               else
+               {
+                  GameManager.instance.ActivateGameOverUI();
+                  enabled = false;
+               }
+          }
 
-		
-		  // Fixed update is called in sync with physics
-		  private void FixedUpdate()
-		  { 
-			// read inputs
-			//float h = CrossPlatformInputManager.GetAxis("Horizontal");
-			//float v = CrossPlatformInputManager.GetAxis("Vertical");
-			//bool crouch = Input.GetKey(KeyCode.C);
-				//bool crouch = crouchswt;
+        
+          // Fixed update is called in sync with physics
+          private void FixedUpdate()
+          { 
+            // read inputs
+            //float h = CrossPlatformInputManager.GetAxis("Horizontal");
+            //float v = CrossPlatformInputManager.GetAxis("Vertical");
+            //bool crouch = Input.GetKey(KeyCode.C);
+                //bool crouch = crouchswt;
 
-			   // calculate move direction to pass to character
-			   if (m_Cam != null)
-			   {
-					// calculate camera relative direction to move:
-					m_CamForward = Vector3.Scale(m_Cam.forward, new Vector3(1, 0, 1)).normalized;
-					m_Move = Vinput * m_CamForward + Hinput * m_Cam.right;
-			   }
-			   else
-			   {
-					// we use world-relative directions in the case of no main camera
-					m_Move = Vinput * Vector3.forward + Hinput * Vector3.right;
-			   }
+               // calculate move direction to pass to character
+               if (m_Cam != null)
+               {
+                    // calculate camera relative direction to move:
+                    m_CamForward = Vector3.Scale(m_Cam.forward, new Vector3(1, 0, 1)).normalized;
+                    m_Move = Vinput * m_CamForward + Hinput * m_Cam.right;
+               }
+               else
+               {
+                    // we use world-relative directions in the case of no main camera
+                    m_Move = Vinput * Vector3.forward + Hinput * Vector3.right;
+               }
 #if !MOBILE_INPUT
-			// walk speed multiplier
-			//if (Input.GetKey(KeyCode.LeftShift)) m_Move *= 0.5f;
+            // walk speed multiplier
+            //if (Input.GetKey(KeyCode.LeftShift)) m_Move *= 0.5f;
 #endif
 
-			// pass all parameters to the character control script
-			//m_Character.Move(m_Move, crouch, m_Jump);
-			m_Character.Move(m_Move, false, false);
-			//m_Jump = false;
+            // pass all parameters to the character control script
+            //m_Character.Move(m_Move, crouch, m_Jump);
+            m_Character.Move(m_Move, false, false);
+            //m_Jump = false;
 
-			CheckItemAround();
-			   //CheckEnemyAround();
+            //CheckItemAround();
+               
 
-			   
-		  }
+               
+          }
 
-		  public IInteractable CheckItemAround()
-		  {
-			   Collider[] hits = Physics.OverlapSphere(transform.position, interactionRadius);
-			   foreach (Collider hit in hits)
-			   {
-					IInteractable interactable = hit.GetComponent<IInteractable>();
-					if (interactable != null)
-					{
-						 /*float objectHeight = 0f;
-						 MeshFilter mesh = hit.GetComponent<MeshFilter>();
-						 if(mesh != null)
-						 {
-							objectHeight = mesh.sharedMesh.bounds.size.y * hit.transform.localScale.y;
-						 }*/
-
-					     //interactionCircle.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y - objectHeight/2 + 0.005f, hit.transform.position.z);
-					     //interactionCircle.SetActive(true);
-						 
-					     
-					     //interactionButton.interactable = true;
-						 collectButton.SetActive(true);
-					     Vector3 pos = Camera.main.WorldToScreenPoint(hit.transform.position);
-					     collectButton.transform.position = new Vector3(pos.x, pos.y + 15f, pos.z);
-					     if (interactable is NoteObject)
-					     {
-						     collectButton.GetComponentInChildren<Text>().text = "(Tap) Read";
-					     }
-						 else if (interactable is Bed)
-						 {
-							 collectButton.GetComponentInChildren<Text>().text = "(Tap) Sleep";
-						 }
-						 else if (interactable is ThingsToInteract)
-						 {
-							 collectButton.GetComponentInChildren<Text>().text = "(Tap) Interact";
-						 }
-						 else
-                         {
-						     collectButton.GetComponentInChildren<Text>().text = "(Tap) Collect";
-					     }
-					     return interactable;
-					}
-			   }
-
-			/*if (interactionCircle.activeSelf)
-			{
-				 interactionCircle.SetActive(false);
-			}*/
-			   collectButton.SetActive(false);
-			   //interactionButton.GetComponentInChildren<Text>().text = "Interact";
-			   //if(interactionButton.interactable == true)
-					//interactionButton.interactable = false;
-			   return null;
-		  }
-
-		  public EnemyController CheckEnemyAround()
+          public IInteractable CheckItemAround()
           {
-			/*float attackRange = m_Character.attackRange;
-			float damage = m_Character.baseDamge;
-			Equipment weapon = EquipmentManager.instance.currentEquipment[(int)EquipmentSlot.Weapon];
-			if (weapon != null)
-			{
-				attackRange += weapon.equipmentItem.range;
-				damage += weapon.equipmentItem.damage;
-			}
-			Collider[] hits = Physics.OverlapSphere(transform.position, attackRange);
-			foreach (Collider hit in hits)
-			{
-				//Debug.Log("Attacked");
-				EnemyController enemy = hit.GetComponent<EnemyController>();
-				if (enemy != null)
-				{
-					return enemy;
-				}
-			}*/
-			return null;
-		  }
-	 }
+               Collider[] hits = Physics.OverlapSphere(transform.position, interactionRadius, LayerMask.GetMask("Interactable"));
+               foreach (Collider hit in hits)
+               {
+                    IInteractable interactable = hit.GetComponent<IInteractable>();
+                    if (interactable != null)
+                    {
+                         collectButton.SetActive(true);
+                         Vector3 pos = Camera.main.WorldToScreenPoint(hit.transform.position);
+                         collectButton.transform.position = new Vector3(pos.x, pos.y + 15f, pos.z);
+                         if (interactable is NoteObject)
+                         {
+                             collectButton.GetComponentInChildren<Text>().text = "(Tap) Read";
+                         }
+                         else if (interactable is Bed)
+                         {
+                             collectButton.GetComponentInChildren<Text>().text = "(Tap) Sleep";
+                         }
+                         else if (interactable is ThingsToInteract)
+                         {
+                             collectButton.GetComponentInChildren<Text>().text = "(Tap) Interact";
+                         }
+                         else
+                         {
+                             collectButton.GetComponentInChildren<Text>().text = "(Tap) Collect";
+                         }
+                         return interactable;
+                    }
+               }
+
+               collectButton.SetActive(false);
+               return null;
+          }
+
+          public void CheckEnemyAround()
+          {
+            Collider[] hits = Physics.OverlapSphere(transform.position, findEnemyRadius, LayerMask.GetMask("Enemy"));
+            if(hits.Length <= 0)
+            {
+                DetectionManager.instance.isNearDetected = false;
+                return;
+            }
+            foreach (Collider hit in hits)
+            {
+                EnemyAI enemy = hit.GetComponent<EnemyAI>();
+                if (enemy != null)
+                {
+                    enemy.FindTarget();    
+                }
+            }
+            if (!DetectionManager.instance.isBeingChased)
+                DetectionManager.instance.isNearDetected = true;
+            else
+                DetectionManager.instance.isNearDetected = false;
+        }
+     }
 }

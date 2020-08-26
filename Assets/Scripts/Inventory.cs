@@ -76,7 +76,6 @@ public class Inventory : MonoBehaviour
                     onItemChangedCallback.Invoke();
             }
         }
-        CollectedItemUI.instance.collectedItems.Enqueue(collectibles);
         return true;
            
     }

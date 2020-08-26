@@ -19,13 +19,17 @@ public class MissionItem : Collectibles
                     interact.completed = true;
                     interact.OnCompleted();
                 }
-                
+                InventoryUI.instance.audios[2].Play();
             }
             else
             {
-                Debug.Log("Cannot use on this");
+                InventoryUI.instance.audios[3].Play();
             }
             
+        }
+        else
+        {
+            InventoryUI.instance.audios[3].Play();
         }
     }
     /*List<PickUpable> enough = new List<PickUpable>();

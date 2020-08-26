@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityStandardAssets.Characters.ThirdPerson;
+using UnityEngine.Audio;
 
 public class UiManagerController : MonoBehaviour
 {
@@ -17,44 +18,39 @@ public class UiManagerController : MonoBehaviour
     }
     #endregion
 
-    public Button bag, attack, run, crouch, collect; //interact
+    public Button bag, attack, run, crouch, collect;
+    public GameObject inventoryFull;
+    public Image attackButtonIcon;
     public Sprite attackSprite, collectSprite, sleepSprite, readSprite;
     public InventoryUI inventoryUI;
     public ThirdPersonUserControl userControl;
-    private Animator ator;
     private EquipmentManager equipmentManager;
     public ThingsToInteract curInteract;
-    public GameObject human;
     public GameObject weapon;
+    public Animator ator;
+    private GameManager manager;
+    public AudioSource[] audios;
 
-    GameObject[] enemys; //= new GameObject[1000];
-    Animator ani;
-    float distancePlayertoZombieInit;
-    float fieldOfVisionInit;
     public float curDistance;
+    public float detectionDistanceModifier;
+    public float fieldOfVisionModifier;
+    public float rayCastPointModifier;
+
+    float nextAttackTime = 0;
+    public float eachAttackTime = 2f;
     void Start()
     {
-        ator = human.GetComponent<Animator>();
+        audios = GetComponents<AudioSource>();
+        manager = GameManager.instance;
         equipmentManager = EquipmentManager.instance;
         bag.onClick.AddListener(BagClick);
         attack.onClick.AddListener(AttackClick);
-        //interact.onClick.AddListener(InteractClick);
         crouch.onClick.AddListener(CrouchClick);
         collect.onClick.AddListener(AttackClick);
 
-        ani = human.GetComponent<Animator>();
-        enemys = GameObject.FindGameObjectsWithTag("Enemy");
-        if (enemys[0].GetComponent<EnemyControlPatrolPath>() != null)
-        {
-            distancePlayertoZombieInit = enemys[0].GetComponent<EnemyControlPatrolPath>().detectionDistance;
-            fieldOfVisionInit = enemys[0].GetComponent<EnemyControlPatrolPath>().fieldOfVision;
-        }
-        else
-        {
-            distancePlayertoZombieInit = enemys[0].GetComponent<EnemyController>().detectionDistance;
-            fieldOfVisionInit = enemys[0].GetComponent<EnemyController>().fieldOfVision;
-        }
-        curDistance = distancePlayertoZombieInit;
+        detectionDistanceModifier = 1f;
+        fieldOfVisionModifier = 1f;
+        rayCastPointModifier = 1.5f;
     }
 
     private void Update()
@@ -64,28 +60,27 @@ public class UiManagerController : MonoBehaviour
         {
             if (itemFound is ThingsToInteract)
             {
-                //curInteract = itemFound as ThingsToInteract;
-                attack.GetComponentsInChildren<Image>()[1].sprite = collectSprite;
+                attackButtonIcon.sprite = collectSprite;
             }
             if(itemFound is Collectibles)
             {
-                attack.GetComponentsInChildren<Image>()[1].sprite = collectSprite ;
+                attackButtonIcon.sprite = collectSprite ;
             }
             if(itemFound is Bed)
             {
-                attack.GetComponentsInChildren<Image>()[1].sprite = sleepSprite;
+                attackButtonIcon.sprite = sleepSprite;
             }
             if (itemFound is NoteObject)
             {
-                attack.GetComponentsInChildren<Image>()[1].sprite = readSprite;
+                attackButtonIcon.sprite = readSprite;
             }
         }
         else
         {
-            attack.GetComponentsInChildren<Image>()[1].sprite = attackSprite;
+            attackButtonIcon.sprite = attackSprite;
         }
 
-        if (equipmentManager.currentEquipment[3] == null && attack.GetComponentsInChildren<Image>()[1].sprite == attackSprite)
+        if (equipmentManager.currentEquipment[3] == null && attackButtonIcon.sprite == attackSprite)
         {
             attack.interactable = false;
         }
@@ -97,46 +92,62 @@ public class UiManagerController : MonoBehaviour
   
     public void BagClick()
     {
+        if (manager.gameEnded)
+            return;
         inventoryUI.ToggleInventory();
+        curInteract = null;
+        audios[1].Play();
     }
-    public void InteractClick()
+    /*public void InteractClick()
     {
         IInteractable itemFound = userControl.CheckItemAround();
         if (itemFound != null)
         {
-            //userControl.interactionCircle.SetActive(false);
             if (itemFound is ThingsToInteract)
                 curInteract = itemFound as ThingsToInteract;
             itemFound.Interact();
         }
-        collect.gameObject.SetActive(false);
-    }
+        //collect.gameObject.SetActive(false);
+    }*/
      public void AttackClick()
      {
+        if (manager.gameEnded)
+            return;
         IInteractable itemFound = userControl.CheckItemAround();
         if (itemFound != null)
         {
             if (itemFound is ThingsToInteract)
                 curInteract = itemFound as ThingsToInteract;
+            else if (itemFound is Collectibles)
+            {
+
+            }
+                //audios[0].Play();
+            else if (itemFound is NoteObject)
+                audios[2].Play();
+            else
+                audios[3].Play();
             itemFound.Interact();
             
         }
         else 
         {
-            if (weapon.activeSelf)
+            if (Time.time > nextAttackTime)
             {
-                if (ator.GetBool("crouch"))
+                if (weapon.activeSelf)
                 {
-                    ator.SetTrigger("sitAttack");
+                    if (ator.GetBool("crouch"))
+                    {
+                        ator.SetTrigger("sitAttack");
+                    }
+                    else
+                    {
+                        ator.SetTrigger("standAttack");
+                    }
                     //weapon.GetComponent<BoxCollider>().enabled = true;
+                    StartCoroutine(EnableBoxCollider());
+                    nextAttackTime = Time.time + eachAttackTime;
                 }
-                else
-                {
-                    ator.SetTrigger("standAttack");
-                    //weapon.GetComponent<BoxCollider>().enabled = true;
-                }
-                StartCoroutine(EnableBoxCollider());
-                //StartCoroutine(DisableBoxCollider());
             }
         }
 
@@ -144,68 +155,33 @@ public class UiManagerController : MonoBehaviour
     }
     IEnumerator EnableBoxCollider()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         weapon.GetComponent<BoxCollider>().enabled = true;
         yield return new WaitForSeconds(1.5f);
         weapon.GetComponent<BoxCollider>().enabled = false;
     }
-    IEnumerator DisableBoxCollider()
-    {
-        yield return new WaitForSeconds(1.5f);
-        weapon.GetComponent<BoxCollider>().enabled = false;
-    }
-    IEnumerable WaitOneHitWeapon()
-    {
-        yield return new WaitForSeconds(1.367f);
-        ator.SetBool("sitAttack", false);
-    }
+    
     public void CrouchClick()
     {
-        enemys = GameObject.FindGameObjectsWithTag("Enemy");
-        if (!ani.GetBool("crouch"))
-        {
-            foreach (GameObject e in enemys)
-            {
-                if (e.GetComponent<EnemyControlPatrolPath>() != null)
-                {
-                    e.GetComponent<EnemyControlPatrolPath>().fieldOfVision = fieldOfVisionInit / 2;
-                    e.GetComponent<EnemyControlPatrolPath>().detectionDistance = distancePlayertoZombieInit / 2;
-                }
-                else
-                {
-                    e.GetComponent<EnemyController>().fieldOfVision = fieldOfVisionInit / 2;
-                    e.GetComponent<EnemyController>().detectionDistance = distancePlayertoZombieInit / 2;
-                }
-            }
-            curDistance = distancePlayertoZombieInit / 2;
-        }
-        else
-        {
-            foreach (GameObject e in enemys)
-            {
-                if (e.GetComponent<EnemyControlPatrolPath>() != null)
-                {
-                    e.GetComponent<EnemyControlPatrolPath>().fieldOfVision = fieldOfVisionInit;
-                    e.GetComponent<EnemyControlPatrolPath>().detectionDistance = distancePlayertoZombieInit;
-                }
-                else
-                {
-                    e.GetComponent<EnemyController>().fieldOfVision = fieldOfVisionInit;
-                    e.GetComponent<EnemyController>().detectionDistance = distancePlayertoZombieInit;
-                }
-            }
-            curDistance = distancePlayertoZombieInit;
-        }
-        //userControl.crouchswt = !userControl.crouchswt;
+        if (manager.gameEnded)
+            return;
+        
         if (!ator.GetBool("crouch"))
         {
-            userControl.GetComponent<CapsuleCollider>().height = 2.5f;
-            userControl.GetComponent<CapsuleCollider>().center = new Vector3(-0.01751587f, 1f, 0.02719201f);
+            userControl.GetComponent<CapsuleCollider>().height = 2.7f;
+            userControl.GetComponent<CapsuleCollider>().center = new Vector3(-0.01751587f, 1.3f, 0.02719201f);
+            detectionDistanceModifier = 0.5f;
+            fieldOfVisionModifier = 0.7f;
+            rayCastPointModifier = 0.7f;
+            
         }
         else
         {
-            userControl.GetComponent<CapsuleCollider>().height = 5f;
+            userControl.GetComponent<CapsuleCollider>().height = 4.8f;
             userControl.GetComponent<CapsuleCollider>().center = new Vector3(-0.01751587f, 2.4f, 0.02719201f);
+            detectionDistanceModifier = 1f;
+            fieldOfVisionModifier = 0.7f;
+            rayCastPointModifier = 1.4f;
         }
         
         ator.SetBool("crouch", !ator.GetBool("crouch"));

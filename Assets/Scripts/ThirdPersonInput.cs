@@ -1,5 +1,6 @@
 ﻿using Cinemachine;
 using HutongGames.PlayMaker.Actions;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 //using System.Runtime.Remoting.Metadata.W3cXsd2001;
@@ -9,7 +10,8 @@ using UnityStandardAssets.Characters.ThirdPerson;
 
 public class ThirdPersonInput : MonoBehaviour
 {
-     // Start is called before the first frame update
+    // Start is called before the first frame update
+     public AudioSource[] audioSources;
      public FixedJoystick leftJoystick;
      public FixedTouchField fixedTouchField;
      protected ThirdPersonUserControl control;
@@ -26,10 +28,24 @@ public class ThirdPersonInput : MonoBehaviour
     public HealthBar healthBar;
     private Animator animatorThirdperson;
     private float healthCharacter;
+
+    bool healthLower = false;
+    bool isAlive = true;
+    bool isMoving = false;
+    bool isWalking = false;
+    float er = 0.7f;
+    float stateMove;
+
+
+    float curHealth = 100;
+    
     //public GameObject cam;
     //private CinemachineFreeLook cinemachineFreeLook;
     //private Transform transformCinemachineFreeLook;
-
+    private void Awake()
+    {
+        
+    }
     void Start()
      {
          control = GetComponent<ThirdPersonUserControl>();
@@ -76,6 +92,45 @@ public class ThirdPersonInput : MonoBehaviour
 
           cameraAngle += fixedTouchField.TouchDist.x * cameraAngleSpeed;
 
+        //Debug.Log(control.Hinput+" "+control.Vinput);
+        stateMove = Mathf.Max(Mathf.Abs(control.Hinput), Mathf.Abs(control.Vinput));
+        //Debug.Log(stateMove);
+        if(stateMove==0)
+        {
+            audioSources[4].Stop();
+            audioSources[5].Stop();
+            isMoving = false;
+            isWalking = false;
+        }
+        else if(stateMove<er && !animatorThirdperson.GetBool("crouch"))
+        {
+            if(isMoving)
+            {
+                audioSources[4].Stop();
+                isMoving = false;
+            }
+            if(!isWalking)
+            {
+                audioSources[5].Play();
+                isWalking = true;
+            }
+        }
+        else if (stateMove > er && !animatorThirdperson.GetBool("crouch"))
+        {
+            if (isWalking)
+            {
+                audioSources[5].Stop();
+                isWalking = false;
+            }
+            if (!isMoving)
+            {
+                audioSources[4].Play();
+                isMoving = true;
+            }
+        }
+
+        
+
         //transformCinemachineFreeLook.position = transform.position + Quaternion.AngleAxis(cameraAngle, Vector3.up) * offset;
         //cinemachineFreeLook.m_XAxis.Value = cameraAngle;
 
@@ -83,14 +138,36 @@ public class ThirdPersonInput : MonoBehaviour
         Camera.main.transform.rotation = Quaternion.LookRotation(transform.position + Vector3.up * 2f - Camera.main.transform.position, Vector3.up);
 */
         healthCharacter = GetComponent<ThirdPersonCharacter>().health;
-        //sliderHealth.value = healthCharacter;
-        healthBar.SetHealth(healthCharacter);
+
+        //add soundzombiehit
+        if (healthCharacter<curHealth)
+        {
+            audioSources[0].Play();
+            curHealth = healthCharacter;
+        }
+        //
+            //sliderHealth.value = healthCharacter;
+            healthBar.SetHealth(healthCharacter);
         if (healthCharacter<=0)
         {
+            healthLower = false;
+            if(isAlive)
+            {
+                audioSources[3].Play();
+                StartCoroutine(WaitToGameOver());
+                isAlive = false;
+            }
+            
             animatorThirdperson.SetTrigger("die");
+
             StartCoroutine(WaitToSetActiveFalse());
 
+        }else if(healthCharacter<=30 && healthCharacter>0 && !healthLower)
+        {
+            healthLower = true;
+            StartCoroutine(WaitToHeart());
         }
+          
      }
     IEnumerator WaitToSetActiveFalse()
     {
@@ -98,5 +175,16 @@ public class ThirdPersonInput : MonoBehaviour
         gameObject.SetActive(false);
 
     }
-
+    IEnumerator WaitToGameOver()
+    {
+        yield return new WaitForSeconds(2f);
+        audioSources[2].Play();
+    }
+    IEnumerator WaitToHeart()
+    {
+        audioSources[1].Play();
+        yield return new WaitUntil(() => healthCharacter>30);
+        audioSources[1].Stop();
+        healthLower = false;
+    }
 }

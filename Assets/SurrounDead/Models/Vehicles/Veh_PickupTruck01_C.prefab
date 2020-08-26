@@ -988,6 +988,8 @@ GameObject:
   - component: {fileID: 3397046}
   - component: {fileID: 2381926}
   - component: {fileID: 6492060}
+  - component: {fileID: 4125447212090331826}
+  - component: {fileID: 445108549694131812}
   m_Layer: 0
   m_Name: Veh_PickupTruck01_C
   m_TagString: Untagged
@@ -1086,6 +1088,32 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: c3301cd0e1b66864faee47f7660c4d5d, type: 3}
+--- !u!65 &4125447212090331826
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 177742}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.8903817, y: 1, z: 5.089459}
+  m_Center: {x: -0.0003727675, y: 0.5, z: 0.0041242843}
+--- !u!65 &445108549694131812
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 177742}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.8903817, y: 0.5, z: 2.6}
+  m_Center: {x: -0.0003727675, y: 1.25, z: 1.25}
 --- !u!1 &183090
 GameObject:
   m_ObjectHideFlags: 0
