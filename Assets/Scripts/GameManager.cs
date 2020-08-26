@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
 
     public void OnButtonRestart()
     {
-        SceneManager.LoadScene("Mission1Scene");
+        SceneManager.LoadScene("AudioPlayer");
     }
 
     public void OnButtonExit()
