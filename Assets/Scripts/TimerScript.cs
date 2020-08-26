@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 public class TimerScript : MonoBehaviour
 {
@@ -36,6 +37,7 @@ public class TimerScript : MonoBehaviour
             timerText.color = Color.red;
             if (!hasSpawned)
             {
+                GetComponent<AudioSource>().Play();
                 Spawn();
                 hasSpawned = true;
             }
