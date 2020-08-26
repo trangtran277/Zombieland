@@ -33,6 +33,7 @@ public class WeaponOneHitZombie : MonoBehaviour
                 other.gameObject.GetComponent<EnemyAI>().isAlive = false;
                 Destroy(EquipmentManager.instance.currentEquipment[3]);
                 InventoryUI.instance.UpdateEquipmentSlot(null, null);
+                GameObject.FindGameObjectWithTag("Player").GetComponents<AudioSource>()[6].Play();
                 //GameObject.FindGameObjectsWithTag("Weapon")[0].SetActive(false);
                 
             }

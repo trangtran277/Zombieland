@@ -98,7 +98,7 @@ public class ThirdPersonInput : MonoBehaviour
             isMoving = false;
             isWalking = false;
         }
-        else if(stateMove<er)
+        else if(stateMove<er && !animatorThirdperson.GetBool("crouch"))
         {
             if(isMoving)
             {
@@ -111,7 +111,7 @@ public class ThirdPersonInput : MonoBehaviour
                 isWalking = true;
             }
         }
-        else if (stateMove > er)
+        else if (stateMove > er && !animatorThirdperson.GetBool("crouch"))
         {
             if (isWalking)
             {
