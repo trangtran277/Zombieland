@@ -36,7 +36,6 @@ namespace UnityStandardAssets.Cameras
             m_RayHitComparer = new RayHitComparer();
         }
 
-
         private void LateUpdate()
         {
             // initially set the target distance
@@ -47,6 +46,7 @@ namespace UnityStandardAssets.Cameras
 
             // initial check to see if start of spherecast intersects anything
             var cols = Physics.OverlapSphere(m_Ray.origin, sphereCastRadius);
+            
 
             bool initialIntersect = false;
             bool hitSomething = false;
@@ -101,7 +101,7 @@ namespace UnityStandardAssets.Cameras
             // visualise the cam clip effect in the editor
             if (hitSomething)
             {
-                Debug.DrawRay(m_Ray.origin, -m_Pivot.forward*(targetDist + sphereCastRadius), Color.red);
+                Debug.DrawRay(m_Ray.origin, -m_Pivot.forward*(targetDist + sphereCastRadius), Color.blue);
                 //Debug.Log("camera hit something");
             }
 

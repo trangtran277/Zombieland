@@ -208,7 +208,7 @@ public class EnemyAI : MonoBehaviour
                         detectionManager.ActivateDetectionPointer(false, null, null, this);
                     else
                         detectionManager.ActivateDetectionPointer(true, transform, player, this);
-                    if (agent.remainingDistance <= 1f)
+                    if (agent.remainingDistance <= 2f)
                     {
                         if(!isStopAndLooking)
                             StartCoroutine(StopAndLook());
@@ -283,11 +283,11 @@ public class EnemyAI : MonoBehaviour
         anim.SetBool("isWalking", false);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, lastRotation, 5f);
         //detectionManager.ActivateDetectionPointer(false, null, null, this);
-        if (audios.Length > 0)
+        /*if (audios.Length > 0)
         {
             audios[1].Stop();
             audios[0].Play();
-        }
+        }*/
         yield return new WaitForSeconds(3f);
         if(curState == State.GoToLastSighting)
         {
