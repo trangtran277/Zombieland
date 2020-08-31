@@ -88,13 +88,13 @@ public class MissionManager : MonoBehaviour
             icon.enabled = false;
         }
 
-        /*if (!isTriggerEastGate)
+        if (!isTriggerEastGate)
         {
-            isTriggerWestGate = false;
+            //isTriggerWestGate = false;
             westGate.GetComponent<ThingsToInteract>().enabled = false;
             westGate.GetComponent<ToggleOutline>().enabled = false;
             westGate.GetComponent<cakeslice.Outline>().enabled = false;
-        }*/
+        }
         if (isTriggerEastGate)
         {
             if(dialog.text.Equals("You: Hey! That's maybe the East Gate"))

@@ -102,7 +102,37 @@ public class ThirdPersonInput : MonoBehaviour
             isMoving = false;
             isWalking = false;
         }
-        else if(stateMove<er && !animatorThirdperson.GetBool("crouch"))
+        else
+        {
+            if (animatorThirdperson.GetBool("crouch"))
+            {
+                if (!audioSources[5].isPlaying)
+                {
+                    audioSources[4].Stop();
+                    audioSources[5].Play();
+                } 
+            }
+            else
+            {
+                if (stateMove < er)
+                {
+                    if (!audioSources[5].isPlaying)
+                    {
+                        audioSources[4].Stop();
+                        audioSources[5].Play();
+                    }
+                }
+                else
+                {
+                    if (!audioSources[4].isPlaying)
+                    {
+                        audioSources[5].Stop();
+                        audioSources[4].Play();
+                    }
+                }
+            }
+        }
+        /*else if(stateMove<er && !animatorThirdperson.GetBool("crouch"))
         {
             if(isMoving)
             {
@@ -135,7 +165,7 @@ public class ThirdPersonInput : MonoBehaviour
                 audioSources[5].Play();
                 isWalking = true;
             }
-        }
+        }*/
 
         
 
