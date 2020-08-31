@@ -162,6 +162,7 @@ public class EnemyAI : MonoBehaviour
                 case State.Attack:
                     if (character.health > 0)
                     {
+                        FaceTarget();
                         if (!audios[1].isPlaying)
                         {
                             audios[1].Play();
@@ -174,9 +175,6 @@ public class EnemyAI : MonoBehaviour
                         if (Time.time > nextAttackTime)
                         {
                             character.health -= damage;
-                            // sound hit
-                            //GameObject.FindGameObjectWithTag("Player").GetComponents<AudioSource>()[0].Play();
-                            //
                             nextAttackTime = Time.time + eachAttackTime;
                         }
                         if (Vector3.Distance(player.position, transform.position) > attackRange)
@@ -302,5 +300,12 @@ public class EnemyAI : MonoBehaviour
         float delayTime = Random.Range(0, 5);
         yield return new WaitForSeconds(delayTime);
         audios[0].Play();
+    }
+
+    void FaceTarget()
+    {
+        Vector3 direction = (player.position - transform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
     }
 }
