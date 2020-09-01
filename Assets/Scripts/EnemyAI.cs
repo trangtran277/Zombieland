@@ -93,7 +93,7 @@ public class EnemyAI : MonoBehaviour
                 case State.Patrol:
                     if (!audios[0].isPlaying)
                     {
-                        audios[0].Play();
+                        StartCoroutine(StartAudio());
                         audios[1].Stop();
                     }
                     anim.SetBool("isWalking", false);
@@ -204,11 +204,14 @@ public class EnemyAI : MonoBehaviour
                         audios[1].Play();
                         audios[0].Stop();
                     }
-                    agent.destination = lastSighting;
-                    if(isStopAndLooking)
+                    
+                    if (isStopAndLooking)
                         detectionManager.ActivateDetectionPointer(false, null, null, this);
                     else
+                    {
+                        agent.destination = lastSighting;
                         detectionManager.ActivateDetectionPointer(true, transform, player, this);
+                    }
                     if (agent.remainingDistance <= 2f || Vector3.Distance(transform.position, lastSighting) <= 2f)
                     {
                         if(!isStopAndLooking)
