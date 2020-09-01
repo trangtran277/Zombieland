@@ -96,13 +96,14 @@ public class EnemyAI : MonoBehaviour
                         audios[0].Play();
                         audios[1].Stop();
                     }
+                    anim.SetBool("isWalking", false);
                     if (curIndex >= 0)
                     {
                         anim.SetBool("isWalk", true);
                         agent.isStopped = false;
                         agent.destination = PatrolPoints[curIndex].position;
                         agent.speed = speedWhilePatrol;
-                        if (agent.remainingDistance <= 0.5f)
+                        if (Vector3.Distance(transform.position, PatrolPoints[curIndex].position) <= 1f)
                         {
                             curIndex += 1;
                             if (curIndex > PatrolPoints.Length - 1)
@@ -112,7 +113,7 @@ public class EnemyAI : MonoBehaviour
                     }
                     else
                     {
-                        agent.isStopped = true;
+                        agent.destination = transform.position;
                     }
                     //FindTarget();
                     break;
@@ -124,6 +125,7 @@ public class EnemyAI : MonoBehaviour
                             audios[1].Play();
                             audios[0].Stop();
                         }
+                        isStopAndLooking = false;
                         anim.SetBool("isWalk", false);
                         anim.SetBool("isWalking", true);
                         agent.isStopped = false;
@@ -162,6 +164,7 @@ public class EnemyAI : MonoBehaviour
                 case State.Attack:
                     if (character.health > 0)
                     {
+                        isStopAndLooking = false;
                         FaceTarget();
                         if (!audios[1].isPlaying)
                         {
@@ -206,7 +209,7 @@ public class EnemyAI : MonoBehaviour
                         detectionManager.ActivateDetectionPointer(false, null, null, this);
                     else
                         detectionManager.ActivateDetectionPointer(true, transform, player, this);
-                    if (agent.remainingDistance <= 2f)
+                    if (agent.remainingDistance <= 2f || Vector3.Distance(transform.position, lastSighting) <= 2f)
                     {
                         if(!isStopAndLooking)
                             StartCoroutine(StopAndLook());
@@ -277,7 +280,7 @@ public class EnemyAI : MonoBehaviour
     IEnumerator StopAndLook()
     {
         isStopAndLooking = true;
-        agent.isStopped = true;
+        agent.destination = transform.position;
         anim.SetBool("isWalking", false);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, lastRotation, 5f);
         //detectionManager.ActivateDetectionPointer(false, null, null, this);
@@ -290,9 +293,9 @@ public class EnemyAI : MonoBehaviour
         if(curState == State.GoToLastSighting)
         {
             curState = State.Patrol;
-            isStopAndLooking = false;
         }
-            
+        isStopAndLooking = false;
+
     }
 
     IEnumerator StartAudio()
