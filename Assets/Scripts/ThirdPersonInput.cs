@@ -13,11 +13,11 @@ public class ThirdPersonInput : MonoBehaviour
     // Start is called before the first frame update
      public AudioSource[] audioSources;
      public FixedJoystick leftJoystick;
-     public FixedTouchField fixedTouchField;
+     //public FixedTouchField fixedTouchField;
      protected ThirdPersonUserControl control;
 
-     protected float cameraAngle;
-     protected float cameraAngleSpeed = .5f;
+     //protected float cameraAngle;
+     //protected float cameraAngleSpeed = .5f;
      //public Vector3 offset = new Vector3(0f, 2f, 4f);
 
     //public EquipmentManager equipmentManager;
@@ -87,10 +87,10 @@ public class ThirdPersonInput : MonoBehaviour
         
         
 
-        control.Hinput = leftJoystick.Horizontal * 1.5f;
-        control.Vinput = leftJoystick.Vertical * 1.5f;
+        control.Hinput = leftJoystick.Horizontal * 2f;
+        control.Vinput = leftJoystick.Vertical * 2f;
 
-          cameraAngle += fixedTouchField.TouchDist.x * cameraAngleSpeed;
+          //cameraAngle += fixedTouchField.TouchDist.x * cameraAngleSpeed;
 
         //Debug.Log(control.Hinput+" "+control.Vinput);
         stateMove = Mathf.Max(Mathf.Abs(control.Hinput), Mathf.Abs(control.Vinput));
@@ -102,7 +102,37 @@ public class ThirdPersonInput : MonoBehaviour
             isMoving = false;
             isWalking = false;
         }
-        else if(stateMove<er && !animatorThirdperson.GetBool("crouch"))
+        else
+        {
+            if (animatorThirdperson.GetBool("crouch"))
+            {
+                if (!audioSources[5].isPlaying)
+                {
+                    audioSources[4].Stop();
+                    audioSources[5].Play();
+                } 
+            }
+            else
+            {
+                if (stateMove < er)
+                {
+                    if (!audioSources[5].isPlaying)
+                    {
+                        audioSources[4].Stop();
+                        audioSources[5].Play();
+                    }
+                }
+                else
+                {
+                    if (!audioSources[4].isPlaying)
+                    {
+                        audioSources[5].Stop();
+                        audioSources[4].Play();
+                    }
+                }
+            }
+        }
+        /*else if(stateMove<er && !animatorThirdperson.GetBool("crouch"))
         {
             if(isMoving)
             {
@@ -135,7 +165,7 @@ public class ThirdPersonInput : MonoBehaviour
                 audioSources[5].Play();
                 isWalking = true;
             }
-        }
+        }*/
 
         
 

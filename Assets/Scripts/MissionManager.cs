@@ -33,11 +33,14 @@ public class MissionManager : MonoBehaviour
     public Text subMission;
     public Image icon;
     public PlayableDirector directorGate1;
-    public PlayableDirector directorGate2;
+    //public PlayableDirector directorGate2;
     Inventory inventory;
     bool hasKeyA = false;
     bool hasKeyB = false;
     bool hasKeyC = false;
+    public GameObject triggerDeadEnd1;
+    public GameObject triggerDeadEnd2;
+    public bool isTriggerDeadEnd = false;
 
     private void Start()
     {
@@ -87,7 +90,7 @@ public class MissionManager : MonoBehaviour
 
         if (!isTriggerEastGate)
         {
-            isTriggerWestGate = false;
+            //isTriggerWestGate = false;
             westGate.GetComponent<ThingsToInteract>().enabled = false;
             westGate.GetComponent<ToggleOutline>().enabled = false;
             westGate.GetComponent<cakeslice.Outline>().enabled = false;
@@ -105,11 +108,26 @@ public class MissionManager : MonoBehaviour
                 westGate.GetComponent<ThingsToInteract>().enabled = true;
                 westGate.GetComponent<ToggleOutline>().enabled = true;
                 westGate.GetComponent<cakeslice.Outline>().enabled = true;
+                triggerDeadEnd1.SetActive(true);
+                triggerDeadEnd2.SetActive(true);
+
             }
             
             
         }
-
+        if (isTriggerDeadEnd)
+        {
+            if (dialog.text.Equals("You: Damn! A dead end. There maybe another gate somewhere"))
+            {
+                dialog.transform.parent.gameObject.SetActive(true);
+                dialog.text = "You: Must find another way around";
+                StartCoroutine(DisableTip());
+            }
+            if (triggerDeadEnd1 != null)
+                Destroy(triggerDeadEnd1);
+            if (triggerDeadEnd2 != null)
+                Destroy(triggerDeadEnd2);
+        }
         if (inventory.items.Contains(keyCardA))
         {
             hasKeyA = true;
@@ -124,7 +142,11 @@ public class MissionManager : MonoBehaviour
         }
         if (isTriggerEastGate && isTriggerWestGate)
         {
-            if(hasKeyA && hasKeyB && hasKeyC)
+            if (triggerDeadEnd1 != null)
+                Destroy(triggerDeadEnd1);
+            if (triggerDeadEnd2 != null)
+                Destroy(triggerDeadEnd2);
+            if (hasKeyA && hasKeyB && hasKeyC)
             {
                 icon.enabled = true;
                 subMission.text = "Unlock the West Gate";
@@ -133,7 +155,7 @@ public class MissionManager : MonoBehaviour
 }
             else
             {
-                if (dialog.text.Equals("You: Damn! A dead end. There maybe another gate somewhere"))
+                if (dialog.text.Equals("You: Damn! A dead end. There maybe another gate somewhere") || dialog.text.Equals("You: Must find another way around"))
                 {
                     dialog.transform.parent.gameObject.SetActive(true);
                     dialog.text = "You: Gotta find the key cards";
