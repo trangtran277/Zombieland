@@ -8,7 +8,7 @@ public class LevelLoader : MonoBehaviour
     public GameObject loadingUI;
     public void LoadLevel()
     {
-        Debug.Log("Attempt to load level?");
+        //Debug.Log("Attempt to load level?");
         mainMenuUI.SetActive(false);
         //loadingUI.SetActive(true);
         StartCoroutine("LoadAsynchronously");
@@ -16,12 +16,12 @@ public class LevelLoader : MonoBehaviour
 
     IEnumerator LoadAsynchronously()
     {
-        //AsyncOperation operation = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
-        AsyncOperation operation = SceneManager.LoadSceneAsync("FixCam");
-        Debug.Log("Running coroutine");
+        AsyncOperation operation = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
+        //AsyncOperation operation = SceneManager.LoadSceneAsync("FixCam");
+        //Debug.Log("Running coroutine");
         while (!operation.isDone)
         {
-            Debug.Log(operation.progress);
+            //Debug.Log(operation.progress);
 
             yield return null;
         }

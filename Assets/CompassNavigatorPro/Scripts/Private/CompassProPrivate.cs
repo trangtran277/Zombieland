@@ -164,7 +164,7 @@ namespace CompassNavigatorPro
 			lastCamRot = Camera.main.transform.eulerAngles;
 
 			float visibleDistanceSQR = _visibleDistance * _visibleDistance;
-			float visitedDistanceSQR = (_visitedDistance-7) * (_visitedDistance-7);
+			float visitedDistanceSQR = (_visitedDistance-5) * (_visitedDistance-5);
 			float nearDistanceSQR = _nearDistance * _nearDistance;
 			float barMax = _width * 0.5f - _endCapsWidth / Camera.main.pixelWidth;
 			const float visibleDistanceFallOffSQR = 25f * 25f;

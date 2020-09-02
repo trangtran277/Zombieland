@@ -170,7 +170,7 @@ public class UiManagerController : MonoBehaviour
         {
             userControl.GetComponent<CapsuleCollider>().height = 2.7f;
             userControl.GetComponent<CapsuleCollider>().center = new Vector3(-0.01751587f, 1.3f, 0.02719201f);
-            detectionDistanceModifier = 0.5f;
+            detectionDistanceModifier = 0.6f;
             fieldOfVisionModifier = 0.7f;
             rayCastPointModifier = 0.7f;
             

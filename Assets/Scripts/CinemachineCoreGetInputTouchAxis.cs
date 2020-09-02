@@ -8,13 +8,13 @@ public class CinemachineCoreGetInputTouchAxis : MonoBehaviour
     public float TouchSensitivity_x = 10f;
     public float TouchSensitivity_y = 10f;
     public FixedTouchField fixedTouchField;
-    float ScreenWidth;
+    //float ScreenWidth;
 
     // Use this for initialization
     void Start()
     {
         CinemachineCore.GetInputAxis = HandleAxisInputDelegate;
-        ScreenWidth = Screen.width/2;
+        //ScreenWidth = Screen.width/2;
     }
 
     float HandleAxisInputDelegate(string axisName)
@@ -23,7 +23,10 @@ public class CinemachineCoreGetInputTouchAxis : MonoBehaviour
         {
 
             case "Mouse X":
-                return fixedTouchField.TouchDist.x / TouchSensitivity_x;
+                if (Mathf.Abs(fixedTouchField.TouchDist.x) > 0.01)
+                    return fixedTouchField.TouchDist.x / TouchSensitivity_x;
+                else
+                    return 0f;
             /*if (Input.touchCount > 0)
             {
                 for(int i=0;i<Input.touchCount;i++)
@@ -42,7 +45,10 @@ public class CinemachineCoreGetInputTouchAxis : MonoBehaviour
             }*/
 
             case "Mouse Y":
-                return fixedTouchField.TouchDist.y / TouchSensitivity_y;
+                if (Mathf.Abs(fixedTouchField.TouchDist.y) > 0.01)
+                    return fixedTouchField.TouchDist.y / TouchSensitivity_y;
+                else
+                    return 0f;
             /*if (Input.touchCount > 0)
             {
                 for (int i = 0; i < Input.touchCount; i++)

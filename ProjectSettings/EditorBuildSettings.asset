@@ -14,7 +14,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Cutscene2Scene.unity
     guid: f48fc4a1ddc131841adb931c45e12885
-  - enabled: 1
-    path: Assets/Scenes/FixCam.unity
-    guid: b47fef8f4f4486549a8de27a5a6ff969
   m_configObjects: {}
